@@ -9,6 +9,7 @@ Public Class frmMain
         MsgBox("This is a test.")
         MsgBox("This hoster is: " & ReadINI("Main", "HostedBy", "Config.ini"))
 
+        'This is a new comment
         'Call LoadConfig()
 
 
