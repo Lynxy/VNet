@@ -7,6 +7,7 @@ Public Class frmMain
         WriteINI("Main", "HostedBy", "Vector", "Config.ini")
 
         MsgBox("This hoster is: " & ReadINI("Main", "HostedBy", "Config.ini"))
+
         'Call LoadConfig()
 
 
