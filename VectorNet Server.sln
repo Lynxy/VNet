@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "WindowsApplication1", "WindowsApplication1\WindowsApplication1.vbproj", "{6C2745C4-88FE-4C86-BD08-465FEF53486B}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VectorNetServer", "VectorNetServer\VectorNetServer.vbproj", "{6C2745C4-88FE-4C86-BD08-465FEF53486B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
