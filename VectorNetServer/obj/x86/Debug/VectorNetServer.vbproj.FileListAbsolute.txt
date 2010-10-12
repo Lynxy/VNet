@@ -1,4 +1,0 @@
-C:\Documents and Settings\willi725\My Documents\My Dropbox\Visual Studio 2010\VectorNet\VectorNetServer\obj\x86\Debug\VectorNetServer.vbproj.ResolveComReference.cache
-C:\Documents and Settings\willi725\My Documents\My Dropbox\Visual Studio 2010\VectorNet\VectorNetServer\obj\x86\Debug\VectorNetServer.exe
-C:\Documents and Settings\willi725\My Documents\My Dropbox\Visual Studio 2010\VectorNet\VectorNetServer\obj\x86\Debug\VectorNetServer.xml
-C:\Documents and Settings\willi725\My Documents\My Dropbox\Visual Studio 2010\VectorNet\VectorNetServer\obj\x86\Debug\VectorNetServer.pdb
