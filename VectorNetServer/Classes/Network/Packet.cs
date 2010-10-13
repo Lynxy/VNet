@@ -24,16 +24,13 @@ namespace Lynxy.Network
         public delegate byte[] EncryptorDelegate(byte[] data);
 
         private StringBuilder buffer;
+        private TcpClientWrapper socket;
 
-        public Packet() 
+        public Packet(TcpClientWrapper client) 
         {
             buffer = new StringBuilder();
+            socket = client;
         }
-
-        //public Packet(byte[] packet) : this()
-        //{
-        //    buffer.Append(Parse(packet));
-        //}
 
         static public byte[] Parse(byte[] packet)
         {
@@ -79,6 +76,14 @@ namespace Lynxy.Network
             if (buffer.Length > 0)
                 buffer.Clear();
             return this;
+        }
+
+        public void Send(byte packetId)
+        {
+            InsertByte(packetId, 0);
+            byte[] ret = this;
+            socket.AsyncSend(ret, ret.Length);
+            Clear();
         }
 
         public int Length { get { return buffer.Length; } }

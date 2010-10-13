@@ -19,7 +19,6 @@ namespace VectorNetServer
     public partial class frmMain : Form
     {
         TcpListenerWrapper listener;
-        Packet packet = new Packet();
 
         public frmMain()
         {
@@ -58,17 +57,21 @@ namespace VectorNetServer
 
         void listener_OnClientConnected(TcpClientWrapper client)
         {
-            ClientHandler.AddNewClient(client);
+            User user = ClientHandler.AddNewClient(client);
 
-            byte[] dat = packet.Clear().InsertByte(5).InsertStringNT("test").InsertString("hehe");
-            client.AsyncSend(dat, dat.Length);
+            user.Packet.Clear().InsertStringNT("test").InsertString("hehe").Send(0);
         }
 
         void ClientHandler_UserPacketReceived(User user, PacketReader reader)
         {
             byte packetId = reader.ReadByte();
 
-            MessageBox.Show("Data recv: packet id: " + packetId.ToString() + ": " + Encoding.ASCII.GetString(reader.ReadToEnd()));
+            switch (packetId)
+            {
+                case 0x00:
+                    MessageBox.Show("Data recv: packet id: " + packetId.ToString() + ": " + Encoding.ASCII.GetString(reader.ReadToEnd()).Replace((char)0, '.'));
+                    break;
+            }
 
             //byte[] dat = packet.Clear().InsertString("rawr");
             //user.Socket.AsyncSend(dat, dat.Length);

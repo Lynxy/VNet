@@ -6,4 +6,5 @@
 *.dll
 *.exe
 *.pdb
+*.manifest
 VectorNetServer/obj/
