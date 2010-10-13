@@ -10,14 +10,12 @@ namespace VectorNetServer
     public class User
     {
         protected TcpClientWrapper socket;
-        protected PacketWrapper packet;
-
-        public byte[] Buffer = new byte[0]; //this cannot be a property
+        protected Packet packet;
 
         public User(TcpClientWrapper clientSocket)
         {
             socket = clientSocket;
-            packet = new PacketWrapper(clientSocket);
+            packet = new Packet(clientSocket);
         }
 
         public TcpClientWrapper Socket
@@ -25,7 +23,7 @@ namespace VectorNetServer
             get { return socket; }
         }
 
-        public PacketWrapper Packet
+        public Packet Packet
         {
             get { return packet; }
         }

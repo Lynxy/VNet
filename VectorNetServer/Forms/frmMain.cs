@@ -19,7 +19,6 @@ namespace VectorNetServer
     public partial class frmMain : Form
     {
         TcpListenerWrapper listener;
-        Packet packet = new Packet();
 
         public frmMain()
         {
@@ -60,8 +59,9 @@ namespace VectorNetServer
         {
             User user = ClientHandler.AddNewClient(client);
 
-            byte[] dat = packet.Clear().InsertByte(5).InsertStringNT("test").InsertString("hehe");
-            client.AsyncSend(dat, dat.Length);
+
+            user.Packet.Clear().InsertStringNT("test").InsertString("hehe").Send(5);
+            
         }
 
         void ClientHandler_UserPacketReceived(User user, PacketReader reader)
