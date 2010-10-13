@@ -16,8 +16,8 @@ namespace VectorNetServer
 
         public Channel(string name, byte flags)
         {
-            _Flags = flags;
             _Name = name;
+            _Flags = flags;
         }
 
 
