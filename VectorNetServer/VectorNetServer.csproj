@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\AESEncryption.cs" />
-    <Compile Include="Classes\ClientHandler.cs" />
-    <Compile Include="Classes\CryptographicScheme.cs" />
-    <Compile Include="Classes\TCPClientWrapper.cs" />
-    <Compile Include="Classes\TCPListenerWrapper.cs" />
+    <Compile Include="Classes\Encryption\AESEncryption.cs" />
+    <Compile Include="Classes\VectorNet\ClientHandler.cs" />
+    <Compile Include="Classes\Encryption\CryptographicScheme.cs" />
+    <Compile Include="Classes\Network\TCPClientWrapper.cs" />
+    <Compile Include="Classes\Network\TCPListenerWrapper.cs" />
     <Compile Include="Classes\VectorNet\Channel.cs" />
     <Compile Include="Classes\VectorNet\User.cs" />
     <Compile Include="Forms\frmMain.cs">
@@ -59,7 +59,7 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Packet.cs" />
+    <Compile Include="Classes\Network\Packet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
