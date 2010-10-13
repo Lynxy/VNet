@@ -3,7 +3,6 @@ Imports VectorNetServer.Lynxy.Network
 Imports VectorNetServer.Lynxy.Security
 
 Public Class frmMain
-    Dim rnd As Random = New Random(CInt(DateTime.Now.Ticks))
     Dim cs As New CryptographicScheme(1024)
     Dim WithEvents socket As New SocketWrapper(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp)
     Dim packet As New Packet()
