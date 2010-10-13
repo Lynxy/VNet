@@ -90,7 +90,7 @@ namespace Lynxy.Network
         public EncryptorDelegate Encryptor { get; set; }
 
 
-
+        
 
 
         #region String
