@@ -19,7 +19,7 @@ namespace Lynxy.Network
         }
     }
 
-    public sealed class Packet
+    public class Packet
     {
         public delegate byte[] EncryptorDelegate(byte[] data);
 
@@ -29,11 +29,6 @@ namespace Lynxy.Network
         {
             buffer = new StringBuilder();
         }
-
-        //public Packet(byte[] packet) : this()
-        //{
-        //    buffer.Append(Parse(packet));
-        //}
 
         static public byte[] Parse(byte[] packet)
         {

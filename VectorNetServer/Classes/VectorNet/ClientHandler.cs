@@ -14,11 +14,13 @@ namespace VectorNetServer
 
         static public Dictionary<TcpClientWrapper, User> Users = new Dictionary<TcpClientWrapper, User>();
 
-        static public void AddNewClient(TcpClientWrapper client)
+        static public User AddNewClient(TcpClientWrapper client)
         {
-            Users.Add(client, new User(client));
+            User newUser = new User(client);
+            Users.Add(client, newUser);
             client.DataRead += new TcpClientWrapper.DataReadDelegate(client_DataRead);
             client.AsyncRead(1024, true);
+            return newUser;
         }
 
         static private void client_DataRead(TcpClientWrapper sender, byte[] data)

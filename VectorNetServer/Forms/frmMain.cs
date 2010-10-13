@@ -58,7 +58,7 @@ namespace VectorNetServer
 
         void listener_OnClientConnected(TcpClientWrapper client)
         {
-            ClientHandler.AddNewClient(client);
+            User user = ClientHandler.AddNewClient(client);
 
             byte[] dat = packet.Clear().InsertByte(5).InsertStringNT("test").InsertString("hehe");
             client.AsyncSend(dat, dat.Length);
