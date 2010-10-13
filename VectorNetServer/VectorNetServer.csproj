@@ -55,6 +55,12 @@
     <Compile Include="Classes\VectorNet\Channel.cs" />
     <Compile Include="Classes\VectorNet\User.cs" />
     <Compile Include="Classes\VectorNet\ConfigClass.cs" />
+    <Compile Include="Forms\frmClientTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmClientTest.Designer.cs">
+      <DependentUpon>frmClientTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +76,9 @@
     <Compile Include="Classes\Network\Packet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\frmClientTest.resx">
+      <DependentUpon>frmClientTest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmConfig.resx">
       <DependentUpon>frmConfig.cs</DependentUpon>
     </EmbeddedResource>

@@ -19,6 +19,7 @@ namespace VectorNetServer
     public partial class frmMain : Form
     {
         TcpListenerWrapper listener;
+        ClientHandler clients = new ClientHandler();
 
         public frmMain()
         {
@@ -33,7 +34,9 @@ namespace VectorNetServer
 
             listener.Listen(10);
 
-            ConductTests();
+            //tests
+            frmClientTest cli = new frmClientTest();
+            cli.Show();
         }
 
         void SetupVars()
@@ -45,21 +48,12 @@ namespace VectorNetServer
         {
             listener.OnClientConnected += new TcpListenerWrapper.ClientConnectedDelegate(listener_OnClientConnected);
 
-            ClientHandler.UserPacketReceived += new ClientHandler.UserPacketReceivedDelegate(ClientHandler_UserPacketReceived);
-        }
-
-        void ConductTests()
-        {
-            TcpClientWrapper client = new TcpClientWrapper();
-            client.Connect("127.0.0.1", 4800);
-            ClientHandler.AddNewClient(client);
+            clients.UserPacketReceived += new ClientHandler.UserPacketReceivedDelegate(ClientHandler_UserPacketReceived);
         }
 
         void listener_OnClientConnected(TcpClientWrapper client)
         {
-            User user = ClientHandler.AddNewClient(client);
-
-            user.Packet.Clear().InsertStringNT("test").InsertString("hehe").Send(0);
+            User user = clients.AddNewClient(client);
         }
 
         void ClientHandler_UserPacketReceived(User user, PacketReader reader)
@@ -69,7 +63,14 @@ namespace VectorNetServer
             switch (packetId)
             {
                 case 0x00:
-                    MessageBox.Show("Data recv: packet id: " + packetId.ToString() + ": " + Encoding.ASCII.GetString(reader.ReadToEnd()).Replace((char)0, '.'));
+                    user.Packet.Clear();
+                    user.Packet.InsertByte(0); //logon result
+                    user.Packet.InsertByte(0); //chalenge byte
+                    user.Packet.InsertStringNT("VectorNet Server");
+                    user.Packet.InsertStringNT("TestEnv");
+                    user.Packet.InsertDWord(1337);
+                    user.Packet.InsertByte(0);
+                    user.Packet.Send(0);
                     break;
             }
 

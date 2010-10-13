@@ -29,6 +29,7 @@ namespace VectorNetServer
         {
             socket = clientSocket;
             packet = new Packet(clientSocket);
+            Flags = UserFlags.Normal;
         }
 
         public TcpClientWrapper Socket
