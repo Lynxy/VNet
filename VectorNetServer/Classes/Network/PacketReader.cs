@@ -17,9 +17,10 @@ namespace Lynxy.Network
             _data = data;
         }
 
-        public void Seek(int position)
+        public PacketReader Seek(int position)
         {
             _position = position;
+            return this;
         }
 
         public byte ReadByte()
