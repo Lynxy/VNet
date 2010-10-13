@@ -7,6 +7,19 @@ using Lynxy.Network;
 
 namespace VectorNetServer
 {
+    [Flags]
+    public enum UserFlags
+    {
+        Normal =    0x00,
+        Admin =     0x01,
+        Operator =  0x02,
+        Moderator = 0x04,
+        Ignored =   0x08,
+        Muted =     0x10,
+        Invisible = 0x20
+    }
+
+
     public class User
     {
         protected TcpClientWrapper socket;
@@ -27,5 +40,7 @@ namespace VectorNetServer
         {
             get { return packet; }
         }
+
+        public UserFlags Flags { get; set; }
     }
 }
