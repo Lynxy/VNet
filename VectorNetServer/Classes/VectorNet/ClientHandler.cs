@@ -7,15 +7,15 @@ using Lynxy.Network;
 
 namespace VectorNetServer
 {
-    static public class ClientHandler
+    public class ClientHandler
     {
         public delegate void UserPacketReceivedDelegate(User user, PacketReader reader);
-        static public event UserPacketReceivedDelegate UserPacketReceived;
+        public event UserPacketReceivedDelegate UserPacketReceived;
 
-        static public Dictionary<TcpClientWrapper, User> Users = new Dictionary<TcpClientWrapper, User>();
-        static public Dictionary<User, byte[]> UserBuffers = new Dictionary<User, byte[]>();
+        public Dictionary<TcpClientWrapper, User> Users = new Dictionary<TcpClientWrapper, User>();
+        public Dictionary<User, byte[]> UserBuffers = new Dictionary<User, byte[]>();
 
-        static public User AddNewClient(TcpClientWrapper client)
+        public User AddNewClient(TcpClientWrapper client)
         {
             User newUser = new User(client);
             Users.Add(client, newUser);
@@ -25,7 +25,7 @@ namespace VectorNetServer
             return newUser;
         }
 
-        static private void client_DataRead(TcpClientWrapper sender, byte[] data)
+        protected void client_DataRead(TcpClientWrapper sender, byte[] data)
         {
             User user = Users[sender];
             byte[] buffer = UserBuffers[user];
