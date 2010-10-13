@@ -20,7 +20,7 @@ namespace VNET.Config
         public string HostedBy { get; set; }
         public string MOTD { get; set; }
 
-        public object ReadINI(string pSection, string pName, string pPath, object pDefault)
+        public string ReadINI(string pSection, string pName, string pPath, object pDefault)
         {
              string rString = "";
              int clen = GetPrivateProfileString(pSection, pName, null, rString, 255, pPath);
