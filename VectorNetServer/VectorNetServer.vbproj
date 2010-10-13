@@ -89,6 +89,7 @@
     <Compile Include="Modules\modCryptographicScheme.vb" />
     <Compile Include="Modules\modPacket.vb" />
     <Compile Include="Modules\modSocketWrapper.vb" />
+    <Compile Include="Modules\modtcpListenerWrapper.vb" />
     <Compile Include="Modules\modText.vb" />
     <Compile Include="Modules\modOtherCode.vb" />
     <Compile Include="Modules\modFileHandling.vb" />
