@@ -19,5 +19,17 @@ namespace VectorNetServer
             _Flags = flags;
             _Name = name;
         }
+
+
+        public string Name
+        {
+            get { return _Name; }
+        }
+
+        public byte Flags
+        {
+            get { return _Flags; }
+            set { _Flags = value; }
+        }
     }
 }
