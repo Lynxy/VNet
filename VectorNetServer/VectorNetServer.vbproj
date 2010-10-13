@@ -72,6 +72,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\clsTcpClientWrapper.vb" />
     <Compile Include="Forms\frmMain.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -85,11 +86,11 @@
     <Compile Include="Forms\frmConfig.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\modAESEncryption.vb" />
-    <Compile Include="Modules\modCryptographicScheme.vb" />
+    <Compile Include="Modules\Encryption\modAESEncryption.vb" />
+    <Compile Include="Modules\Encryption\modCryptographicScheme.vb" />
     <Compile Include="Modules\modPacket.vb" />
-    <Compile Include="Modules\modSocketWrapper.vb" />
-    <Compile Include="Modules\modtcpListenerWrapper.vb" />
+    <Compile Include="Classes\modSocketWrapper.vb" />
+    <Compile Include="Classes\clsTcpListenerWrapper.vb" />
     <Compile Include="Modules\modText.vb" />
     <Compile Include="Modules\modOtherCode.vb" />
     <Compile Include="Modules\modFileHandling.vb" />
