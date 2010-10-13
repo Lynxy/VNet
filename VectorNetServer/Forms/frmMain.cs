@@ -28,6 +28,7 @@ namespace VectorNetServer
         void FormLoad()
         {
             SetupVars();
+            SetupEvents();
 
             listener.Listen(10);
 
@@ -37,7 +38,13 @@ namespace VectorNetServer
         void SetupVars()
         {
             listener = new TcpListenerWrapper(this, 4800);
+        }
+
+        void SetupEvents()
+        {
             listener.OnClientConnected += new TcpListenerWrapper.ClientConnectedDelegate(listener_OnClientConnected);
+
+            ClientHandler.UserPacketReceived += new ClientHandler.UserPacketReceivedDelegate(ClientHandler_UserPacketReceived);
         }
 
         void ConductTests()
@@ -50,11 +57,17 @@ namespace VectorNetServer
         void listener_OnClientConnected(TcpClientWrapper client)
         {
             ClientHandler.AddNewClient(client);
-            
+
             byte[] dat = packet.Clear().InsertString("test");
             client.AsyncSend(dat, dat.Length);
-            //client.GetStream().BeginWrite(dat, 0, dat.Length, null, null);
+        }
 
+        void ClientHandler_UserPacketReceived(User user, byte[] data)
+        {
+            MessageBox.Show("Data recv: " + Encoding.ASCII.GetString(data));
+
+            //byte[] dat = packet.Clear().InsertString("rawr");
+            //user.Socket.AsyncSend(dat, dat.Length);
         }
     }
 }
