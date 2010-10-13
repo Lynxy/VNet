@@ -42,14 +42,18 @@ namespace VectorNetServer
 
         void ConductTests()
         {
-            TcpClient client = new TcpClient();
+            TcpClientWrapper client = new TcpClientWrapper();
             client.Connect("127.0.0.1", 4800);
+            ClientHandler.AddNewClient(client);
         }
 
-        void listener_OnClientConnected(System.Net.Sockets.TcpClient newSock)
+        void listener_OnClientConnected(TcpClientWrapper client)
         {
+            ClientHandler.AddNewClient(client);
+            
             byte[] dat = packet.Clear().InsertString("test");
-            newSock.GetStream().BeginWrite(dat, 0, dat.Length, null, null);
+            client.AsyncSend(dat, dat.Length);
+            //client.GetStream().BeginWrite(dat, 0, dat.Length, null, null);
 
         }
     }
