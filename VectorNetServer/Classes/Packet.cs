@@ -37,6 +37,8 @@ namespace Lynxy.Network
 
         static public byte[] Parse(byte[] packet)
         {
+            if (packet.Length < 4)
+                return null;
             int length = BitConverter.ToInt32(packet, 0);
             if (length > packet.Length)
                 return null;
