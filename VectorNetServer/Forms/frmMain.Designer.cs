@@ -1,4 +1,4 @@
-﻿namespace VectorNetServer
+﻿namespace VNET.Main
 {
     partial class frmMain
     {
@@ -37,9 +37,11 @@
             this.rtbChat.BackColor = System.Drawing.Color.Black;
             this.rtbChat.Location = new System.Drawing.Point(12, 12);
             this.rtbChat.Name = "rtbChat";
+            this.rtbChat.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.rtbChat.Size = new System.Drawing.Size(471, 274);
             this.rtbChat.TabIndex = 0;
             this.rtbChat.Text = " ";
+            this.rtbChat.TextChanged += new System.EventHandler(this.rtbChat_TextChanged);
             // 
             // lvVNUsers
             // 

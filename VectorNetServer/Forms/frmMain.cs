@@ -14,7 +14,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Lynxy.Network;
 using Lynxy.Security;
 
-namespace VectorNetServer
+using VNET.RichText;
+
+namespace VNET.Main
 {
     public partial class frmMain : Form
     {
@@ -37,6 +39,10 @@ namespace VectorNetServer
             //tests
             frmClientTest cli = new frmClientTest();
             cli.Show();
+
+            Config.Variables.HostedBy = "TestEnv";
+            Config.SaveConfig();
+            Config.LoadConfig();
         }
 
         void SetupVars()
@@ -63,19 +69,25 @@ namespace VectorNetServer
             switch (packetId)
             {
                 case 0x00:
-                    user.Packet.Clear();
-                    user.Packet.InsertByte(0); //logon result
-                    user.Packet.InsertByte(0); //chalenge byte
-                    user.Packet.InsertStringNT("VectorNet Server");
-                    user.Packet.InsertStringNT("TestEnv");
-                    user.Packet.InsertDWord(1337);
-                    user.Packet.InsertByte(0);
-                    user.Packet.Send(0);
+                    user.Packet.Clear()
+                        .InsertByte(0) //logon result
+                        .InsertByte(0) //chalenge byte
+                        .InsertStringNT("VectorNet Server")
+                        .InsertStringNT("TestEnv")
+                        .InsertDWord(1337)
+                        .InsertByte(0)
+                        .Send(0);
                     break;
             }
 
             //byte[] dat = packet.Clear().InsertString("rawr");
             //user.Socket.AsyncSend(dat, dat.Length);
         }
+
+        private void rtbChat_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
