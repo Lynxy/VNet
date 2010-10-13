@@ -3,10 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Lynxy.Network;
+
 namespace VectorNetServer
 {
     public class User
     {
-        public byte[] packetBuffer = new byte[0];
+        protected TcpClientWrapper socket;
+        public byte[] Buffer = new byte[0];
+
+        public User(TcpClientWrapper clientSocket)
+        {
+            socket = clientSocket;
+        }
+
+        public TcpClientWrapper Socket
+        {
+            get { return socket; }
+        }
     }
 }
