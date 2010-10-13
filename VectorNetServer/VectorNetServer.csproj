@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Encryption\AESEncryption.cs" />
+    <Compile Include="Classes\Network\PacketReader.cs" />
     <Compile Include="Classes\VectorNet\ClientHandler.cs" />
     <Compile Include="Classes\Encryption\CryptographicScheme.cs" />
     <Compile Include="Classes\Network\TCPClientWrapper.cs" />

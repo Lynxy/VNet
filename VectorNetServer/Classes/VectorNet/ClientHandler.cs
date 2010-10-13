@@ -9,7 +9,7 @@ namespace VectorNetServer
 {
     static public class ClientHandler
     {
-        public delegate void UserPacketReceivedDelegate(User user, byte[] data);
+        public delegate void UserPacketReceivedDelegate(User user, PacketReader reader);
         static public event UserPacketReceivedDelegate UserPacketReceived;
 
         static public Dictionary<TcpClientWrapper, User> Users = new Dictionary<TcpClientWrapper, User>();
@@ -32,7 +32,7 @@ namespace VectorNetServer
             byte[] completePacket;
             while ((completePacket = PacketBuffer.GetNextPacket(ref user.Buffer)) != null)
             {
-                UserPacketReceived(user, completePacket);
+                UserPacketReceived(user, new PacketReader(completePacket));
             }
         }
     }

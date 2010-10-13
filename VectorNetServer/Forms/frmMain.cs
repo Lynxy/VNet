@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 
 using System.Net.Sockets;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 using Lynxy.Network;
 using Lynxy.Security;
@@ -58,13 +60,15 @@ namespace VectorNetServer
         {
             ClientHandler.AddNewClient(client);
 
-            byte[] dat = packet.Clear().InsertString("test");
+            byte[] dat = packet.Clear().InsertByte(5).InsertStringNT("test").InsertString("hehe");
             client.AsyncSend(dat, dat.Length);
         }
 
-        void ClientHandler_UserPacketReceived(User user, byte[] data)
+        void ClientHandler_UserPacketReceived(User user, PacketReader reader)
         {
-            MessageBox.Show("Data recv: " + Encoding.ASCII.GetString(data));
+            byte packetId = reader.ReadByte();
+
+            MessageBox.Show("Data recv: packet id: " + packetId.ToString() + ": " + Encoding.ASCII.GetString(reader.ReadToEnd()));
 
             //byte[] dat = packet.Clear().InsertString("rawr");
             //user.Socket.AsyncSend(dat, dat.Length);
