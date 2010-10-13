@@ -7,17 +7,17 @@ namespace VectorNetServer
 {
     public class Channel
     {
-        private byte Flag;
-        private string name;
+        protected byte _Flags;
+        protected string _Name;
 
-        public Channel(string chan) : this(0x00, chan)
+        public Channel(string name) : this(name, 0x00)
         {
         }
 
-        public Channel(byte f, string chan)
+        public Channel(string name, byte flags)
         {
-            Flag = f;
-            name = chan;
+            _Flags = flags;
+            _Name = name;
         }
     }
 }
