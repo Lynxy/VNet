@@ -5,7 +5,7 @@ using System.Text;
 
 using Lynxy.Network;
 
-namespace VectorNetServer
+namespace VNET.Client
 {
     public class ClientHandler
     {
