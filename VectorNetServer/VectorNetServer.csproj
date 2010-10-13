@@ -53,6 +53,7 @@
     <Compile Include="Classes\Network\TCPClientWrapper.cs" />
     <Compile Include="Classes\Network\TCPListenerWrapper.cs" />
     <Compile Include="Classes\VectorNet\Channel.cs" />
+    <Compile Include="Classes\VectorNet\ConfigClass2.cs" />
     <Compile Include="Classes\VectorNet\User.cs" />
     <Compile Include="Classes\VectorNet\ConfigClass.cs" />
     <Compile Include="Forms\frmClientTest.cs">
