@@ -72,23 +72,27 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmMain.vb">
+    <Compile Include="Forms\frmMain.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMain.Designer.vb">
+    <Compile Include="Forms\frmMain.Designer.vb">
       <DependentUpon>frmMain.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmConfig.Designer.vb">
+    <Compile Include="Forms\frmConfig.Designer.vb">
       <DependentUpon>frmConfig.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmConfig.vb">
+    <Compile Include="Forms\frmConfig.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="modText.vb" />
-    <Compile Include="modOtherCode.vb" />
-    <Compile Include="modFileHandling.vb" />
-    <Compile Include="modVars.vb" />
+    <Compile Include="Modules\modAESEncryption.vb" />
+    <Compile Include="Modules\modCryptographicScheme.vb" />
+    <Compile Include="Modules\modPacket.vb" />
+    <Compile Include="Modules\modSocketWrapper.vb" />
+    <Compile Include="Modules\modText.vb" />
+    <Compile Include="Modules\modOtherCode.vb" />
+    <Compile Include="Modules\modFileHandling.vb" />
+    <Compile Include="Modules\modVars.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -106,10 +110,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmMain.resx">
+    <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmConfig.resx">
+    <EmbeddedResource Include="Forms\frmConfig.resx">
       <DependentUpon>frmConfig.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
