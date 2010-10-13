@@ -75,5 +75,9 @@ namespace Lynxy.Network
             int length = _data.Length - _position;
             return ReadBytes(length);
         }
+        public byte[] ReturnPacket()
+        {
+            return _data;
+        }
     }
 }
