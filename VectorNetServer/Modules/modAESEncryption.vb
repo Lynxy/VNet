@@ -32,7 +32,8 @@ Namespace Lynxy.Security
                 End If
                 Dim InitialVectorBytes As Byte() = Encoding.ASCII.GetBytes(InitialVector)
                 Dim SaltValueBytes As Byte() = Encoding.ASCII.GetBytes(Salt)
-                Dim DerivedPassword As New PasswordDeriveBytes(Password, SaltValueBytes, HashAlgorithm, PasswordIterations)
+                'Dim DerivedPassword As New PasswordDeriveBytes(Password, SaltValueBytes, HashAlgorithm, PasswordIterations)
+                Dim DerivedPassword As New Rfc2898DeriveBytes(Password, SaltValueBytes, PasswordIterations)
                 Dim KeyBytes As Byte() = DerivedPassword.GetBytes(KeySize \ 8)
                 Dim SymmetricKey As New RijndaelManaged()
                 SymmetricKey.Mode = CipherMode.CBC
@@ -74,7 +75,8 @@ Namespace Lynxy.Security
                 End If
                 Dim InitialVectorBytes As Byte() = Encoding.ASCII.GetBytes(InitialVector)
                 Dim SaltValueBytes As Byte() = Encoding.ASCII.GetBytes(Salt)
-                Dim DerivedPassword As New PasswordDeriveBytes(Password, SaltValueBytes, HashAlgorithm, PasswordIterations)
+                'Dim DerivedPassword As New PasswordDeriveBytes(Password, SaltValueBytes, HashAlgorithm, PasswordIterations)
+                Dim DerivedPassword As New Rfc2898DeriveBytes(Password, SaltValueBytes, PasswordIterations)
                 Dim KeyBytes As Byte() = DerivedPassword.GetBytes(KeySize \ 8)
                 Dim SymmetricKey As New RijndaelManaged()
                 SymmetricKey.Mode = CipherMode.CBC
