@@ -28,12 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.rtbChat = new System.Windows.Forms.RichTextBox();
+            this.lvVNUsers = new System.Windows.Forms.TreeView();
+            this.SuspendLayout();
+            // 
+            // rtbChat
+            // 
+            this.rtbChat.BackColor = System.Drawing.Color.Black;
+            this.rtbChat.Location = new System.Drawing.Point(12, 12);
+            this.rtbChat.Name = "rtbChat";
+            this.rtbChat.Size = new System.Drawing.Size(471, 274);
+            this.rtbChat.TabIndex = 0;
+            this.rtbChat.Text = " ";
+            // 
+            // lvVNUsers
+            // 
+            this.lvVNUsers.BackColor = System.Drawing.Color.Black;
+            this.lvVNUsers.Location = new System.Drawing.Point(489, 10);
+            this.lvVNUsers.Name = "lvVNUsers";
+            this.lvVNUsers.Size = new System.Drawing.Size(248, 274);
+            this.lvVNUsers.TabIndex = 1;
+            // 
+            // frmMain
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(749, 296);
+            this.Controls.Add(this.lvVNUsers);
+            this.Controls.Add(this.rtbChat);
+            this.Name = "frmMain";
+            this.Text = "VectorNet Server Listener";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.RichTextBox rtbChat;
+        private System.Windows.Forms.TreeView lvVNUsers;
     }
 }
 
