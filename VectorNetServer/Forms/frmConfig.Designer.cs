@@ -28,20 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("General Settings");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Idle System");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Advanced");
             System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("General Settings");
             System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Idle System");
             System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Advanced");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("General Settings");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Idle System");
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Advanced");
             this.GroupBox2 = new System.Windows.Forms.GroupBox();
             this.Label2 = new System.Windows.Forms.Label();
             this.rbIdleOff = new System.Windows.Forms.RadioButton();
             this.rbIdleOn = new System.Windows.Forms.RadioButton();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
-            this.rbIdleDisable = new System.Windows.Forms.RadioButton();
-            this.rbIdleEnable = new System.Windows.Forms.RadioButton();
-            this.Label3 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
             this.TextBox1 = new System.Windows.Forms.TextBox();
             this.TreeView1 = new System.Windows.Forms.TreeView();
@@ -59,12 +56,13 @@
             // 
             // GroupBox2
             // 
+            this.GroupBox2.Controls.Add(this.groupBox3);
             this.GroupBox2.Controls.Add(this.Label2);
             this.GroupBox2.Controls.Add(this.rbIdleOff);
             this.GroupBox2.Controls.Add(this.rbIdleOn);
-            this.GroupBox2.Location = new System.Drawing.Point(250, 141);
+            this.GroupBox2.Location = new System.Drawing.Point(268, 12);
             this.GroupBox2.Name = "GroupBox2";
-            this.GroupBox2.Size = new System.Drawing.Size(293, 171);
+            this.GroupBox2.Size = new System.Drawing.Size(327, 205);
             this.GroupBox2.TabIndex = 5;
             this.GroupBox2.TabStop = false;
             this.GroupBox2.Text = "Idle System";
@@ -106,9 +104,6 @@
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Controls.Add(this.rbIdleDisable);
-            this.GroupBox1.Controls.Add(this.rbIdleEnable);
-            this.GroupBox1.Controls.Add(this.Label3);
             this.GroupBox1.Controls.Add(this.Label1);
             this.GroupBox1.Controls.Add(this.TextBox1);
             this.GroupBox1.Location = new System.Drawing.Point(300, 141);
@@ -118,40 +113,6 @@
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "General Settings";
             this.GroupBox1.UseCompatibleTextRendering = true;
-            // 
-            // rbIdleDisable
-            // 
-            this.rbIdleDisable.AutoSize = true;
-            this.rbIdleDisable.Location = new System.Drawing.Point(184, 90);
-            this.rbIdleDisable.Name = "rbIdleDisable";
-            this.rbIdleDisable.Size = new System.Drawing.Size(66, 18);
-            this.rbIdleDisable.TabIndex = 4;
-            this.rbIdleDisable.TabStop = true;
-            this.rbIdleDisable.Text = "Disabled";
-            this.rbIdleDisable.UseCompatibleTextRendering = true;
-            this.rbIdleDisable.UseVisualStyleBackColor = true;
-            // 
-            // rbIdleEnable
-            // 
-            this.rbIdleEnable.AutoSize = true;
-            this.rbIdleEnable.Location = new System.Drawing.Point(114, 91);
-            this.rbIdleEnable.Name = "rbIdleEnable";
-            this.rbIdleEnable.Size = new System.Drawing.Size(64, 18);
-            this.rbIdleEnable.TabIndex = 3;
-            this.rbIdleEnable.TabStop = true;
-            this.rbIdleEnable.Text = "Enabled";
-            this.rbIdleEnable.UseCompatibleTextRendering = true;
-            this.rbIdleEnable.UseVisualStyleBackColor = true;
-            // 
-            // Label3
-            // 
-            this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(34, 93);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(67, 17);
-            this.Label3.TabIndex = 2;
-            this.Label3.Text = "Keep Alives:";
-            this.Label3.UseCompatibleTextRendering = true;
             // 
             // Label1
             // 
@@ -174,16 +135,16 @@
             // 
             this.TreeView1.Location = new System.Drawing.Point(-250, -46);
             this.TreeView1.Name = "TreeView1";
-            treeNode4.Name = "Node0";
-            treeNode4.Text = "General Settings";
-            treeNode5.Name = "Node1";
-            treeNode5.Text = "Idle System";
-            treeNode6.Name = "Node2";
-            treeNode6.Text = "Advanced";
+            treeNode1.Name = "Node0";
+            treeNode1.Text = "General Settings";
+            treeNode2.Name = "Node1";
+            treeNode2.Text = "Idle System";
+            treeNode3.Name = "Node2";
+            treeNode3.Text = "Advanced";
             this.TreeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode4,
-            treeNode5,
-            treeNode6});
+            treeNode1,
+            treeNode2,
+            treeNode3});
             this.TreeView1.Size = new System.Drawing.Size(253, 205);
             this.TreeView1.TabIndex = 3;
             // 
@@ -194,9 +155,9 @@
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.textBox2);
-            this.groupBox3.Location = new System.Drawing.Point(271, 67);
+            this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(322, 205);
+            this.groupBox3.Size = new System.Drawing.Size(327, 205);
             this.groupBox3.TabIndex = 7;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "General Settings";
@@ -205,7 +166,7 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(184, 90);
+            this.radioButton1.Location = new System.Drawing.Point(184, 93);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(66, 18);
             this.radioButton1.TabIndex = 4;
@@ -255,32 +216,31 @@
             // 
             // treeView2
             // 
-            this.treeView2.Location = new System.Drawing.Point(12, 67);
+            this.treeView2.Location = new System.Drawing.Point(9, 12);
             this.treeView2.Name = "treeView2";
-            treeNode7.Name = "Node0";
-            treeNode7.Text = "General Settings";
-            treeNode8.Name = "Node1";
-            treeNode8.Text = "Idle System";
-            treeNode9.Name = "Node2";
-            treeNode9.Text = "Advanced";
+            treeNode4.Name = "Node0";
+            treeNode4.Text = "General Settings";
+            treeNode5.Name = "Node1";
+            treeNode5.Text = "Idle System";
+            treeNode6.Name = "Node2";
+            treeNode6.Text = "Advanced";
             this.treeView2.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode7,
-            treeNode8,
-            treeNode9});
+            treeNode4,
+            treeNode5,
+            treeNode6});
             this.treeView2.Size = new System.Drawing.Size(253, 205);
             this.treeView2.TabIndex = 6;
             // 
-            // Form1
+            // frmConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(610, 322);
-            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.treeView2);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.TreeView1);
-            this.Name = "Form1";
+            this.Name = "frmConfig";
             this.Text = "Form1";
             this.GroupBox2.ResumeLayout(false);
             this.GroupBox2.PerformLayout();
@@ -299,9 +259,6 @@
         internal System.Windows.Forms.RadioButton rbIdleOff;
         internal System.Windows.Forms.RadioButton rbIdleOn;
         internal System.Windows.Forms.GroupBox GroupBox1;
-        internal System.Windows.Forms.RadioButton rbIdleDisable;
-        internal System.Windows.Forms.RadioButton rbIdleEnable;
-        internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.Label Label1;
         internal System.Windows.Forms.TextBox TextBox1;
         internal System.Windows.Forms.TreeView TreeView1;
