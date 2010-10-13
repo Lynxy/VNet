@@ -17,7 +17,7 @@ namespace Lynxy.Network
     public class TcpListenerWrapper : TcpListener
     {
 
-        public delegate void ClientConnectedDelegate(TcpClient newSock);
+        public delegate void ClientConnectedDelegate(TcpClientWrapper newSock);
         public event ClientConnectedDelegate OnClientConnected;
 
 
@@ -42,8 +42,9 @@ namespace Lynxy.Network
         public void AcceptTcpClientCallback(IAsyncResult ar)
 		{
 			TcpListenerWrapper listener = (TcpListenerWrapper)ar.AsyncState;
-			TcpClient client = listener.EndAcceptTcpClient(ar);
-            listener._invokeObject.Invoke((Action)delegate { listener.OnClientConnected(client); });
+            TcpClientWrapper client = new TcpClientWrapper(listener.EndAcceptTcpClient(ar));
+            //listener._invokeObject.Invoke((Action)delegate { listener.OnClientConnected(client); }); //on calling thread
+            listener.OnClientConnected(client); //not on calling thread
 			listener.StartListening();
 		}
 
