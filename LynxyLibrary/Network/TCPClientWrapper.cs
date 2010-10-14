@@ -172,8 +172,11 @@ namespace Lynxy.Network
 
         private void EndASConnect(IAsyncResult ar)
         {
-            EndConnect(ar);
-            OnConnectionEstablished();
+            if (Connected)
+            {
+                EndConnect(ar);
+                OnConnectionEstablished();
+            }
         }
 
         #endregion
