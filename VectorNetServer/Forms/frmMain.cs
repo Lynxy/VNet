@@ -15,6 +15,7 @@ using Lynxy.Network;
 using Lynxy.Security;
 
 using VNET.RichText;
+using VNET.Users;
 
 namespace VNET.Main
 {
@@ -36,13 +37,6 @@ namespace VNET.Main
 
             listener.Listen(10);
 
-            //tests
-            frmClientTest cli = new frmClientTest();
-            cli.Show();
-
-            Config.Variables.HostedBy = "TestEnv";
-            Config.SaveConfig();
-            Config.LoadConfig();
         }
 
         void SetupVars()
@@ -59,7 +53,7 @@ namespace VNET.Main
 
         void listener_OnClientConnected(TcpClientWrapper client)
         {
-            User user = clients.AddNewClient(client);
+            clients.AddNewClient(client);
         }
 
         void ClientHandler_UserPacketReceived(User user, PacketReader reader)
@@ -82,11 +76,6 @@ namespace VNET.Main
 
             //byte[] dat = packet.Clear().InsertString("rawr");
             //user.Socket.AsyncSend(dat, dat.Length);
-        }
-
-        private void rtbChat_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
     }
