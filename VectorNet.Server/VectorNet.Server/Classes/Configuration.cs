@@ -25,15 +25,15 @@ namespace VectorNet.Server
 
 
 
-        public ConfigurationData Config = new ConfigurationData();
-        public string ConfigurationFile = "config.xml";
+        protected ConfigurationData Config = new ConfigurationData();
+        protected string ConfigurationFile = "config.xml";
 
-        public void SaveConfig()
+        protected void SaveConfig()
         {
             SaveConfig(ConfigurationFile);
         }
 
-        public void SaveConfig(string filename)
+        protected void SaveConfig(string filename)
         {
             XmlSerializer x = new XmlSerializer(Config.GetType());
             using (StreamWriter sw = new StreamWriter(filename))
@@ -43,12 +43,12 @@ namespace VectorNet.Server
             }
         }
 
-        public void LoadConfig()
+        protected void LoadConfig()
         {
             LoadConfig(ConfigurationFile);
         }
 
-        public void LoadConfig(string filename)
+        protected void LoadConfig(string filename)
         {
             XmlSerializer x = new XmlSerializer(Config.GetType());
             using (StreamReader sr = new StreamReader(filename))

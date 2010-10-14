@@ -10,15 +10,20 @@ namespace VectorNet.Server
     public partial class Server
     {
         public Server(string XMLConfigFile)
-            : this()
         {
             ConfigurationFile = XMLConfigFile;
             LoadConfig();
+            ServerInit();
         }
-        public Server()
+        public Server(string XMLConfigFile, ConfigurationData configData)
         {
-            
-            
+            ConfigurationFile = XMLConfigFile;
+            Config = configData;
+            ServerInit();
+        }
+
+        public void ServerInit()
+        {
         }
     }
 }
