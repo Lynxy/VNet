@@ -7,7 +7,7 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        protected void HandleCommand(byte[] user, byte flag, byte[] cmd)
+        protected void HandleCommand(User user, string cmd)
         {
             string[] aryCmd = cmd.ToString().Split(' ');
 
