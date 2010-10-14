@@ -7,6 +7,6 @@
 *.exe
 *.pdb
 *.manifest
-VectorNetServer.Server/obj/
-VectorNetServer.Server.GUI/obj/
+VectorNet.Server/obj/
+VectorNet.Server.GUI/obj/
 LynxyLibrary/obj/
