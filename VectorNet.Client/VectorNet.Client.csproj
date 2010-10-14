@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1CB763FB-86F1-441D-9727-6A029009B825}</ProjectGuid>
+    <ProjectGuid>{0F469B0C-F085-488B-BB43-FD048A32A13F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VectorNet.Server.GUI</RootNamespace>
-    <AssemblyName>VectorNet.Server.GUI</AssemblyName>
+    <RootNamespace>VectorNet.Client</RootNamespace>
+    <AssemblyName>VectorNet.Client</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -46,25 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\RichTextBox.cs" />
-    <Compile Include="Forms\frmConfig.cs">
+    <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmConfig.Designer.cs">
-      <DependentUpon>frmConfig.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmMain.Designer.cs">
+    <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\frmConfig.resx">
-      <DependentUpon>frmConfig.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmMain.resx">
+    <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -75,9 +65,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="App.Config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -88,15 +76,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\VectorNet.Client\VectorNet.Client.csproj">
-      <Project>{0F469B0C-F085-488B-BB43-FD048A32A13F}</Project>
-      <Name>VectorNet.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VectorNet.Server\VectorNet.Server.csproj">
-      <Project>{9A6C21A0-E9A4-4FB7-A6A0-BEEE46600670}</Project>
-      <Name>VectorNet.Server</Name>
+    <ProjectReference Include="..\LynxyLibrary\LynxyLibrary.csproj">
+      <Project>{6D7E9160-813C-4EA1-8A4B-CD9428CA7BA4}</Project>
+      <Name>LynxyLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
