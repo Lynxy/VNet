@@ -8,5 +8,5 @@
 *.pdb
 *.manifest
 VectorNetServer.Server/obj/
-VectorNetServer.Server>GUI/obj/
+VectorNetServer.Server.GUI/obj/
 LynxyLibrary/obj/
