@@ -44,6 +44,7 @@ namespace VectorNet.Server
             }
 
             public UserFlags Flags { get; set; }
+            public bool IsConsole { get; set; }
         }
     }
 }
