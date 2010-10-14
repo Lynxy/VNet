@@ -23,14 +23,33 @@ namespace VectorNet.Server
 
         protected class User
         {
+            public event Action<byte[]> SendData;
+
             protected TcpClientWrapper socket;
             protected Packet packet;
+            protected bool _isConsole = false;
 
-            public User(TcpClientWrapper clientSocket)
+            public User(TcpClientWrapper clientSocket, bool isConsole)
             {
                 socket = clientSocket;
-                packet = new Packet(clientSocket);
+                _isConsole = isConsole;
+
+                packet = new Packet();
+                packet.skipHeaders = isConsole;
+                packet.DataSent += new Packet.SendDataDelegate(packet_SendData);
+
                 Flags = UserFlags.Normal;
+            }
+
+            protected void packet_SendData(byte[] data)
+            {
+                if (_isConsole)
+                {
+                    if (SendData != null)
+                        SendData(data);
+                }
+                else
+                    socket.AsyncSend(data, data.Length);
             }
 
             public TcpClientWrapper Socket

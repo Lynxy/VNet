@@ -63,7 +63,7 @@
     <Compile Include="VectorNet.Server\Server.cs" />
     <Compile Include="VectorNet.Server\AccountHandler.cs" />
     <Compile Include="VectorNet.Server\Classes\Channel.cs" />
-    <Compile Include="VectorNet.Server\CommandSystem.cs" />
+    <Compile Include="VectorNet.Server\CommandHandler.cs" />
     <Compile Include="UNUSED\ConfigurationOLD.cs" />
     <Compile Include="VectorNet.Server\QueueSharingPool.cs" />
     <Compile Include="VectorNet.Server\Classes\User.cs" />

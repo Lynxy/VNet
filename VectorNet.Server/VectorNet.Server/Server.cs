@@ -9,6 +9,8 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
+        public delegate void ReceiveDataDelegate(byte[] data);
+
         protected User console;
 
         public Server(string XMLConfigFile)
@@ -26,13 +28,13 @@ namespace VectorNet.Server
 
         protected void ServerInit()
         {
-            CreateConsoleUser();
+
         }
 
-        protected void CreateConsoleUser()
+        public void CreateConsoleUser(Action<byte[]> ReceiveDataEvent)
         {
-            console = new User(null);
-            console.IsConsole = true;
+            console = new User(null, true);
+            console.SendData += ReceiveDataEvent;
         }
     }
 }

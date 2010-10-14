@@ -27,7 +27,14 @@ namespace VectorNet.Server.GUI
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            VNet.CreateConsoleUser(RecvData);
             VNet.StartListening();
+            VNet.HandleConsoleCommand("test");
+        }
+
+        private void RecvData(byte[] data)
+        {
+            MessageBox.Show("recv: " + Encoding.ASCII.GetString(data).Replace((char)0, '.'));
         }
     }
 }

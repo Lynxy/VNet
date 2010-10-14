@@ -22,14 +22,15 @@ namespace Lynxy.Network
     public sealed class Packet
     {
         public delegate byte[] EncryptorDelegate(byte[] data);
+        public delegate void SendDataDelegate(byte[] data);
+        public event SendDataDelegate DataSent;
 
         private StringBuilder buffer;
-        private TcpClientWrapper socket;
+        public bool skipHeaders = false;
 
-        public Packet(TcpClientWrapper client) 
+        public Packet() 
         {
             buffer = new StringBuilder();
-            socket = client;
         }
 
         static public byte[] Parse(byte[] packet)
@@ -81,14 +82,18 @@ namespace Lynxy.Network
         public void Send(byte packetId)
         {
             InsertByte(packetId, 0);
-            byte[] ret = this;
-            socket.AsyncSend(ret, ret.Length);
+            byte[] ret;
+            if (skipHeaders)
+                ret = CharToByte(buffer.ToString().ToCharArray());
+            else
+                ret = this;
+            if (DataSent != null)
+                DataSent(ret);
             Clear();
         }
 
         public int Length { get { return buffer.Length; } }
         public EncryptorDelegate Encryptor { get; set; }
-
 
         
 

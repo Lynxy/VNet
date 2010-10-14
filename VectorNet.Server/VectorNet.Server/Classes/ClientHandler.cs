@@ -19,7 +19,7 @@ namespace VectorNet.Server
 
             public User AddNewClient(TcpClientWrapper client)
             {
-                User newUser = new User(client);
+                User newUser = new User(client, false);
                 Users.Add(client, newUser);
                 UserBuffers.Add(newUser, new byte[0]);
                 client.DataRead += new TcpClientWrapper.DataReadDelegate(client_DataRead);
