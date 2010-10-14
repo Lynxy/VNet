@@ -3,5 +3,5 @@
   <isAES>false</isAES>
   <isChallenge>false</isChallenge>
   <isIdleSystem>false</isIdleSystem>
-  <ListenPort>0</ListenPort>
+  <ListenPort>4800</ListenPort>
 </ConfigurationData>
