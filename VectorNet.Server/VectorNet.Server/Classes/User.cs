@@ -62,6 +62,7 @@ namespace VectorNet.Server
                 get { return packet; }
             }
 
+            public string Username { get; set; }
             public UserFlags Flags { get; set; }
             public bool IsConsole { get; set; }
         }
