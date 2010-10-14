@@ -17,6 +17,7 @@ namespace VectorNet.Server
             listener = new TcpListenerWrapper(Config.ListenPort);
             listener.OnClientConnected += new TcpListenerWrapper.ClientConnectedDelegate(listener_OnClientConnected);
             clients.UserPacketReceived += new ClientHandler.UserPacketReceivedDelegate(HandlePacket);
+            listener.Listen(10);
         }
 
         protected void listener_OnClientConnected(TcpClientWrapper client)
