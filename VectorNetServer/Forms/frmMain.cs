@@ -13,11 +13,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 using Lynxy.Network;
 using Lynxy.Security;
+using VectorNet.Server;
 
-using VNET.RichText;
-using VNET.Users;
-
-namespace VNET.Main
+namespace VectorNet.Server.GUI
 {
     public partial class frmMain : Form
     {

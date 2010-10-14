@@ -1,4 +1,4 @@
-﻿namespace VectorNetServer
+﻿namespace VectorNet.Server
 {
     partial class frmConfig
     {

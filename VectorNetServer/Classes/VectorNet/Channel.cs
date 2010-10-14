@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace VNET.Channel
+namespace VectorNet.Server
 {
     [Flags] public enum ChannelFlags
     {

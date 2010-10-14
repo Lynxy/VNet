@@ -1,4 +1,4 @@
-﻿namespace VNET.Main
+﻿namespace VectorNet.Server.GUI
 {
     partial class frmMain
     {
@@ -41,7 +41,6 @@
             this.rtbChat.Size = new System.Drawing.Size(471, 274);
             this.rtbChat.TabIndex = 0;
             this.rtbChat.Text = " ";
-            this.rtbChat.TextChanged += new System.EventHandler(this.rtbChat_TextChanged);
             // 
             // lvVNUsers
             // 

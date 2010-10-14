@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using VectorNetServer;
+using VectorNet.Server;
 
 namespace Lynxy.Network
 {
@@ -75,6 +75,7 @@ namespace Lynxy.Network
             int length = _data.Length - _position;
             return ReadBytes(length);
         }
+
         public byte[] ReturnPacket()
         {
             return _data;

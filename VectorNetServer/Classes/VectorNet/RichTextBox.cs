@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace VNET.RichText
+namespace VectorNet.Server.GUI
 {
     class RichTextClass
     {

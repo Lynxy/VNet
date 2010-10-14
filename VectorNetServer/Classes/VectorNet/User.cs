@@ -5,7 +5,7 @@ using System.Text;
 
 using Lynxy.Network;
 
-namespace VNET.Users
+namespace VectorNet.Server
 {
     [Flags]
     public enum UserFlags

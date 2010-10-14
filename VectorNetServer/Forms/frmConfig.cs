@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace VectorNetServer
+namespace VectorNet.Server
 {
     public partial class frmConfig : Form
     {
