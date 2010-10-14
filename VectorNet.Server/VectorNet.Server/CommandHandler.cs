@@ -9,7 +9,7 @@ namespace VectorNet.Server
     {
         protected void HandleCommand(User user, string cmd)
         {
-            string[] aryCmd = cmd.ToString().Split(' ');
+            string[] aryCmd = cmd.Split(' ');
 
             switch (aryCmd[0].ToLower())
             { 
