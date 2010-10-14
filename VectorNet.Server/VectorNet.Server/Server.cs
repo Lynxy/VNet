@@ -20,13 +20,16 @@ namespace VectorNet.Server
         {
             ConfigurationFile = XMLConfigFile;
             LoadConfig();
+            SaveConfig();
             ServerInit();
         }
         public Server(string XMLConfigFile, ConfigurationData configData)
         {
             ConfigurationFile = XMLConfigFile;
             Config = configData;
+            SaveConfig();
             ServerInit();
+            
         }
 
         protected void ServerInit()
