@@ -48,24 +48,18 @@
   <ItemGroup>
     <Compile Include="Classes\VectorNet\AccountHandler.cs" />
     <Compile Include="Classes\Network\PacketHandler.cs" />
+    <Compile Include="Classes\VectorNet\QueuePool.cs" />
+    <Compile Include="Classes\Network\ClientHandler.cs" />
     <Compile Include="Classes\VectorNet\RichTextBox.cs" />
     <Compile Include="Classes\VectorNet\CommandSystem.cs" />
     <Compile Include="Classes\Encryption\AESEncryption.cs" />
     <Compile Include="Classes\Network\PacketReader.cs" />
-    <Compile Include="Classes\VectorNet\ClientHandler.cs" />
     <Compile Include="Classes\Encryption\CryptographicScheme.cs" />
     <Compile Include="Classes\Network\TCPClientWrapper.cs" />
     <Compile Include="Classes\Network\TCPListenerWrapper.cs" />
     <Compile Include="Classes\VectorNet\Channel.cs" />
-    <Compile Include="Classes\VectorNet\ConfigClass2.cs" />
     <Compile Include="Classes\VectorNet\User.cs" />
     <Compile Include="Classes\VectorNet\ConfigClass.cs" />
-    <Compile Include="Forms\frmClientTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmClientTest.Designer.cs">
-      <DependentUpon>frmClientTest.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,9 +75,6 @@
     <Compile Include="Classes\Network\Packet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\frmClientTest.resx">
-      <DependentUpon>frmClientTest.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmConfig.resx">
       <DependentUpon>frmConfig.cs</DependentUpon>
     </EmbeddedResource>

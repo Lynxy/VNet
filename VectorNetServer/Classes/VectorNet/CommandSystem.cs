@@ -14,7 +14,7 @@ namespace VNET.Commands
             switch (aryCmd[0].ToLower())
             { 
                 case "test":
-                    addchat vbgreen, "Hiya ^_^!";
+                    //addchat vbgreen, "Hiya ^_^!";
                     break;
             }
         }
