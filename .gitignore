@@ -1,4 +1,5 @@
-*.suo
+VectorNetServer.suo
+
 *.csproj.user
 *.vbproj.user
 *.csproj.webinfo
