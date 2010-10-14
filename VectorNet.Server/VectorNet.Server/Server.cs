@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Lynxy.Network;
-//using System.Data.SQLite;
+using System.Data.SQLite;
 
 namespace VectorNet.Server
 {
@@ -18,17 +18,20 @@ namespace VectorNet.Server
         }
         public Server()
         {
-            //using (SQLiteConnection cn = new SQLiteConnection(@"DataSource=mydatabase.db"))
-            //{
-            //    cn.Open();
-            //    using (SQLiteCommand cmd = cn.CreateCommand())
-            //    {
-            //        cmd.CommandText = @"";
-            //        cmd.CommandType = System.Data.CommandType.Text;
-            //        cmd.ExecuteReader();
-            //    }
-            //    cn.Clone();
-            //}
+            string dbFile = @"vnet.db3";
+            if (!System.IO.File.Exists(dbFile))
+                SQLiteConnection.CreateFile(dbFile);
+            using (SQLiteConnection cn = new SQLiteConnection(@"Data Source=" + dbFile))
+            {
+                cn.Open();
+                using (SQLiteCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"";
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.ExecuteReader();
+                }
+                cn.Close();
+            }
         }
     }
 }
