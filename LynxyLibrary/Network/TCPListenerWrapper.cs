@@ -17,7 +17,7 @@ namespace Lynxy.Network
 
 
         public TcpListenerWrapper(int port)
-            : base(IPAddress.Parse("127.0.0.1"), port)
+            : base(IPAddress.Parse("0.0.0.0"), port)
         {
         }
 
