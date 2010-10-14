@@ -11,6 +11,9 @@ namespace VectorNet.Server
     {
         public delegate void ReceiveDataDelegate(byte[] data);
 
+        protected List<User> Users;
+        protected List<Channel> Channels;
+
         protected User console;
 
         public Server(string XMLConfigFile)
@@ -28,7 +31,8 @@ namespace VectorNet.Server
 
         protected void ServerInit()
         {
-
+            Users = new List<User>();
+            Channels = new List<Channel>();
         }
 
         public void CreateConsoleUser(Action<byte[]> ReceiveDataEvent)

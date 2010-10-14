@@ -14,13 +14,13 @@ namespace VectorNet.Server
             public delegate void UserPacketReceivedDelegate(User user, PacketReader reader);
             public event UserPacketReceivedDelegate UserPacketReceived;
 
-            public Dictionary<TcpClientWrapper, User> Users = new Dictionary<TcpClientWrapper, User>();
+            public Dictionary<TcpClientWrapper, User> TcpClientUsers = new Dictionary<TcpClientWrapper, User>();
             public Dictionary<User, byte[]> UserBuffers = new Dictionary<User, byte[]>();
 
             public User AddNewClient(TcpClientWrapper client)
             {
                 User newUser = new User(client, false);
-                Users.Add(client, newUser);
+                TcpClientUsers.Add(client, newUser);
                 UserBuffers.Add(newUser, new byte[0]);
                 client.DataRead += new TcpClientWrapper.DataReadDelegate(client_DataRead);
                 client.AsyncRead(1024, true);
@@ -29,7 +29,7 @@ namespace VectorNet.Server
 
             protected void client_DataRead(TcpClientWrapper sender, byte[] data)
             {
-                User user = Users[sender];
+                User user = TcpClientUsers[sender];
                 byte[] buffer = UserBuffers[user];
                 int oldLen = buffer.Length;
                 Array.Resize(ref buffer, oldLen + data.Length);

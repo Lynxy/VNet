@@ -21,7 +21,7 @@ namespace VectorNet.Server
 
         protected void listener_OnClientConnected(TcpClientWrapper client)
         {
-            clients.AddNewClient(client);
+            Users.Add(clients.AddNewClient(client));
         }
     }
 }
