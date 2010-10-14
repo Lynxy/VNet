@@ -90,10 +90,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\VectorNet.Client\VectorNet.Client.csproj">
-      <Project>{0F469B0C-F085-488B-BB43-FD048A32A13F}</Project>
-      <Name>VectorNet.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\VectorNet.Server\VectorNet.Server.csproj">
       <Project>{9A6C21A0-E9A4-4FB7-A6A0-BEEE46600670}</Project>
       <Name>VectorNet.Server</Name>
