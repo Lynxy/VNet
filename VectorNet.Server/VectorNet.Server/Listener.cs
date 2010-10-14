@@ -14,7 +14,7 @@ namespace VectorNet.Server
 
         public void StartListening()
         {
-            listener = new TcpListenerWrapper(Config.Variables.ListenPort);
+            listener = new TcpListenerWrapper(Config.ListenPort);
             listener.OnClientConnected += new TcpListenerWrapper.ClientConnectedDelegate(listener_OnClientConnected);
             clients.UserPacketReceived += new ClientHandler.UserPacketReceivedDelegate(HandlePacket);
         }

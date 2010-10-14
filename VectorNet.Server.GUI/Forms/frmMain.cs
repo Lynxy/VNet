@@ -22,7 +22,8 @@ namespace VectorNet.Server.GUI
         public frmMain()
         {
             InitializeComponent();
-            VNet = new Server("config.xml");
+            VNet = new Server();
+            VNet.SaveConfig();
         }
 
         private void frmMain_Load(object sender, EventArgs e)

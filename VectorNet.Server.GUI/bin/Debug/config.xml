@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ConfigData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<ConfigurationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <isAES>false</isAES>
   <isChallenge>false</isChallenge>
   <isIdleSystem>false</isIdleSystem>
-  <HostedBy>TestEnv</HostedBy>
-</ConfigData>
+  <ListenPort>0</ListenPort>
+</ConfigurationData>

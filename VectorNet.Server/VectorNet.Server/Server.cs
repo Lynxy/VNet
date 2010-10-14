@@ -12,8 +12,8 @@ namespace VectorNet.Server
         public Server(string XMLConfigFile)
             : this()
         {
-            Config.File = XMLConfigFile;
-            Config.LoadConfig();
+            ConfigurationFile = XMLConfigFile;
+            LoadConfig();
         }
         public Server()
         {

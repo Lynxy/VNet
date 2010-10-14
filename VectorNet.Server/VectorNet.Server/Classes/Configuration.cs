@@ -5,12 +5,13 @@ using System.Text;
 
 using System.IO;
 using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace VectorNet.Server
 {
     public partial class Server
     {
-        public class ConfigData
+        public class ConfigurationData
         {
             public bool isAES { get; set; }
             public bool isChallenge { get; set; }
@@ -21,29 +22,39 @@ namespace VectorNet.Server
             public string MOTD { get; set; }
         }
 
-        static public class Config
+
+
+
+        public ConfigurationData Config = new ConfigurationData();
+        public string ConfigurationFile = "config.xml";
+
+        public void SaveConfig()
         {
-            static public ConfigData Variables = new ConfigData();
-            static public string File = "config.xml";
+            SaveConfig(ConfigurationFile);
+        }
 
-            static public void SaveConfig()
+        public void SaveConfig(string filename)
+        {
+            XmlSerializer x = new XmlSerializer(Config.GetType());
+            using (StreamWriter sw = new StreamWriter(filename))
             {
-                XmlSerializer x = new XmlSerializer(Variables.GetType());
-                using (StreamWriter sw = new StreamWriter(File))
-                {
-                    x.Serialize(sw, Variables);
-                    sw.Close();
-                }
+                x.Serialize(sw, Config);
+                sw.Close();
             }
+        }
 
-            static public void LoadConfig()
+        public void LoadConfig()
+        {
+            LoadConfig(ConfigurationFile);
+        }
+
+        public void LoadConfig(string filename)
+        {
+            XmlSerializer x = new XmlSerializer(Config.GetType());
+            using (StreamReader sr = new StreamReader(filename))
             {
-                XmlSerializer x = new XmlSerializer(Variables.GetType());
-                using (StreamReader sr = new StreamReader(File))
-                {
-                    Variables = (ConfigData)x.Deserialize(sr);
-                    sr.Close();
-                }
+                Config = (ConfigurationData)x.Deserialize(sr);
+                sr.Close();
             }
         }
     }
