@@ -18,7 +18,7 @@ namespace VectorNet.Server
         }
         public Server()
         {
-            string dbFile = @"vnet.db3";
+            string dbFile = @"vnet.db";
             if (!System.IO.File.Exists(dbFile))
                 SQLiteConnection.CreateFile(dbFile);
             using (SQLiteConnection cn = new SQLiteConnection(@"Data Source=" + dbFile))
