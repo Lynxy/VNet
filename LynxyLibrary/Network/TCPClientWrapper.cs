@@ -85,6 +85,13 @@ namespace Lynxy.Network
         public delegate void ConnectionEstablishedDelegate(TcpClientWrapper sender);
         public event ConnectionEstablishedDelegate ConnectionEstablished;
 
+        /// <summary>
+        /// A connected has been refused asynchronously.
+        /// </summary>
+        /// <remarks>Raised when an Asynchronous connect has been refused.</remarks>
+        public delegate void ConnectionRefusedDelegate(TcpClientWrapper sender);
+        public event ConnectionRefusedDelegate ConnectionRefused;
+
         #endregion
 
         #region "Methods"
@@ -120,6 +127,14 @@ namespace Lynxy.Network
             if (ConnectionEstablished != null)
             {
                 ConnectionEstablished(this);
+            }
+        }
+
+        protected virtual void OnConnectionRefused()
+        {
+            if (ConnectionRefused != null)
+            {
+                ConnectionRefused(this);
             }
         }
 
@@ -177,8 +192,9 @@ namespace Lynxy.Network
                 EndConnect(ar);
                 OnConnectionEstablished();
             }
+            else
+                OnConnectionRefused();
         }
-
         #endregion
 
         #region "Sending Methods"
