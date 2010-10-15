@@ -57,6 +57,7 @@
     <Compile Include="VectorNet.Server\Classes\SQLite.cs" />
     <Compile Include="VectorNet.Server\Constants.cs" />
     <Compile Include="VectorNet.Server\Database.cs" />
+    <Compile Include="VectorNet.Server\Functions\User\UserPoolFunctions.cs" />
     <Compile Include="VectorNet.Server\Functions\User\UserFunctions.cs" />
     <Compile Include="VectorNet.Server\PacketHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
