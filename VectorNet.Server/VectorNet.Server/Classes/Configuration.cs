@@ -51,6 +51,8 @@ namespace VectorNet.Server
         protected void LoadConfig(string filename)
         {
             XmlSerializer x = new XmlSerializer(Config.GetType());
+            if (!File.Exists(filename))
+                return;
             using (StreamReader sr = new StreamReader(filename))
             {
                 Config = (ConfigurationData)x.Deserialize(sr);
