@@ -25,3 +25,10 @@ LynxyLibrary/bin/*/*.dll
 LynxyLibrary/bin/*/*.pdb
 LynxyLibrary/bin/*/*.manifest
 LynxyLibrary/bin/*/*.config
+
+LynxVN/obj/
+LynxVN/bin/*/*.exe
+LynxVN/bin/*/*.dll
+LynxVN/bin/*/*.pdb
+LynxVN/bin/*/*.manifest
+LynxVN/bin/*/*.config
