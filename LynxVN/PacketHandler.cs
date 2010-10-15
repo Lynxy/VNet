@@ -33,8 +33,18 @@ namespace LynxVN
                         int ping = reader.ReadDword();
                         byte rank = reader.ReadByte();
 
-                        //if (logonResult == LogonResult.INVALID_PASSWORD)
+                        if (logonResult == LogonResult.INVALID_PASSWORD)
                             AddChat(Brushes.Red, "Invalid password");
+                        else if (logonResult == LogonResult.INVALID_USERNAME)
+                            AddChat(Brushes.Red, "Invalid username");
+                        else if (logonResult == LogonResult.ACCOUNT_IN_USE)
+                            AddChat(Brushes.Red, "Account is in use");
+                        else if (logonResult == LogonResult.INVALID_PROTOCOL)
+                            AddChat(Brushes.Red, "Invalid protocol");
+                        else
+                        {
+                            AddChat(Brushes.Blue, "Successfully logged on");
+                        }
                         break;
                 }
             }

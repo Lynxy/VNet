@@ -26,6 +26,11 @@ namespace LynxVN
             InitializeComponent();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         protected void AddChat(params object[] val)
         {
             this.Dispatcher.Invoke(new Action(delegate
@@ -43,6 +48,7 @@ namespace LynxVN
             FlowDocument doc = rtbChat.Document;
             Paragraph para = new Paragraph();
             Run run;
+            para.Margin = new Thickness(0);
             for (int i = 0; i < val.Length; i += 2)
             {
                 col = (Brush)val[i];
