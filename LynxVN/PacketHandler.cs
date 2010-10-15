@@ -20,6 +20,10 @@ namespace LynxVN
     {
         protected void HandlePacket(PacketReader reader)
         {
+            string username;
+            int ping;
+            byte flags;
+
             try
             {
                 byte packetId = reader.ReadByte();
@@ -30,7 +34,7 @@ namespace LynxVN
                         byte challengeByte = reader.ReadByte();
                         string serverVersion = reader.ReadStringNT();
                         string hostedBy = reader.ReadStringNT();
-                        int ping = reader.ReadDword();
+                        ping = reader.ReadDword();
                         byte rank = reader.ReadByte();
 
                         if (logonResult == LogonResult.INVALID_PASSWORD)
@@ -45,6 +49,22 @@ namespace LynxVN
                         {
                             AddChat(Brushes.Blue, "Successfully logged on");
                         }
+                        break;
+                    case VNET_CHANNELLIST: //0x04
+                        ListType listType = (ListType)reader.ReadByte();
+                        if (listType == ListType.UsersInChannel)
+                        {
+                            lvChannel.Items.Clear();
+                            while (!reader.EOF())
+                            {
+                                username = reader.ReadStringNT();
+                                ping = reader.ReadDword();
+                                flags = reader.ReadByte();
+                                lvChannel.Items.Add(username);
+                            }
+                        }
+                        break;
+                    default:
                         break;
                 }
             }

@@ -21,6 +21,8 @@ namespace LynxVN
     /// </summary>
     public partial class MainWindow : Window
     {
+        Random rnd = new Random();
+
         public MainWindow()
         {
             InitializeComponent();

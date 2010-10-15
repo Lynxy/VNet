@@ -37,5 +37,12 @@ namespace LynxVN
             ACCOUNT_IN_USE = 0x03,
             INVALID_PROTOCOL = 0x04
         }
+
+        protected enum ListType
+        {
+            UsersInChannel = 0x01,
+            UsersOnServer = 0x02,
+            UsersBannedFromChannel = 0x03,
+        }
     }
 }

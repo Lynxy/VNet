@@ -26,7 +26,7 @@ namespace LynxVN
         protected void SendLogonPacket()
         {
             packet.Clear()
-                .InsertStringNT("Lynxy")
+                .InsertStringNT("Lynxy" + rnd.Next(10000,99999).ToString())
                 .InsertStringNT("pass")
                 .InsertStringNT("LynxVN")
                 .InsertByte(0) //queue sharing
