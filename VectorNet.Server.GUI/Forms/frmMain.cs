@@ -33,7 +33,7 @@ namespace VectorNet.Server.GUI
 
         private void RecvData(byte[] data)
         {
-            MessageBox.Show("recv: " + Encoding.ASCII.GetString(data).Replace((char)0, '.'));
+            //MessageBox.Show("recv: " + Encoding.ASCII.GetString(data).Replace((char)0, '.'));
         }
     }
 }
