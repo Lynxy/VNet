@@ -65,6 +65,7 @@ namespace VectorNet.Server
             public string Username { get; set; }
             public UserFlags Flags { get; set; }
             public bool IsConsole { get; set; }
+            public bool IsOnline { get; set; }
         }
     }
 }
