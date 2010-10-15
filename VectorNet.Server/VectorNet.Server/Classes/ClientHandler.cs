@@ -23,6 +23,7 @@ namespace VectorNet.Server
                 TcpClientUsers.Add(client, newUser);
                 UserBuffers.Add(newUser, new byte[0]);
                 client.DataRead += new TcpClientWrapper.DataReadDelegate(client_DataRead);
+                client.Disconnected += new TcpClientWrapper.DisconnectedDelegate(client_Disconnected);
                 client.AsyncRead(1024, true);
                 return newUser;
             }
@@ -41,6 +42,13 @@ namespace VectorNet.Server
                 {
                     UserPacketReceived(user, new PacketReader(completePacket));
                 }
+            }
+
+            protected void client_Disconnected(TcpClientWrapper sender)
+            {
+                User user = TcpClientUsers[sender];
+                user.IsOnline = false;
+                TcpClientUsers.Remove(sender);
             }
         }
     }
