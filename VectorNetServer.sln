@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorNet.Server", "VectorN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LynxyLibrary", "LynxyLibrary\LynxyLibrary.csproj", "{6D7E9160-813C-4EA1-8A4B-CD9428CA7BA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorNet.Client", "VectorNet.Client\VectorNet.Client.csproj", "{B617855B-D604-4B0F-99FF-9005E1C8A55F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,16 +47,6 @@ Global
 		{6D7E9160-813C-4EA1-8A4B-CD9428CA7BA4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6D7E9160-813C-4EA1-8A4B-CD9428CA7BA4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6D7E9160-813C-4EA1-8A4B-CD9428CA7BA4}.Release|x86.ActiveCfg = Release|Any CPU
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Debug|x86.ActiveCfg = Debug|x86
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Debug|x86.Build.0 = Debug|x86
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Release|Any CPU.ActiveCfg = Release|x86
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Release|Mixed Platforms.Build.0 = Release|x86
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Release|x86.ActiveCfg = Release|x86
-		{B617855B-D604-4B0F-99FF-9005E1C8A55F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
