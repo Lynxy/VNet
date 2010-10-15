@@ -33,5 +33,35 @@ namespace VectorNet.Server
         {
 
         }
+
+        protected void SendChannelList(User user, Channel channel)
+        {
+            List<User> users = GetUsersInChannel(user, channel);
+            if (users == null)
+                return;
+            user.Packet.Clear()
+                .InsertByte((int)ListType.UsersInChannel);
+            foreach (User u in users)
+                user.Packet.InsertStringNT(u.Username)
+                    .InsertDWord(u.Ping) //ping
+                    .InsertByte((byte)u.Flags);
+            user.Packet.Send(VNET_CHANNELLIST);
+        }
+
+        protected void JoinUserToChannel(User user, Channel channel)
+        {
+            RemoveUserFromChannel(user);
+            channel.AddUser(user, false);
+            //TODO: notify channel user joined
+            SendChannelList(user, channel);
+        }
+
+        protected void RemoveUserFromChannel(User user)
+        {
+            if (user.Channel == null)
+                return;
+            //TODO: notify channel user left
+            user.Channel.RemoveUser(user);
+        }
     }
 }

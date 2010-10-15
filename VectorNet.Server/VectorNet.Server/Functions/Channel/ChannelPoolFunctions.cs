@@ -11,6 +11,12 @@ namespace VectorNet.Server
     {
         //Channel Pool Functions
         //This class is for methods that must look at the Channels dictionary, not a single channel
-        
+        protected Channel GetChannelByName(string channel)
+        {
+            Channel ret = Channels.Find(c =>
+                c.Name.ToLower() == channel.ToLower()
+                );
+            return ret;
+        }
     }
 }

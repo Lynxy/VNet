@@ -62,6 +62,7 @@ namespace VectorNet.Server
                     _Operators.Add(user);
                 if (Owner == null)
                     Owner = user;
+                user.Channel = this;
             }
 
             public void RemoveUser(User user)

@@ -43,6 +43,7 @@ namespace VectorNet.Server
                         user.Client = client;
                         user.IsOnline = true;
                         SendLogonResult(user, LogonResult.SUCCESS);
+                        JoinUserToChannel(user, MainChannel);
 
                         break;
                     case VNET_CHATEVENT: //0x02
@@ -71,7 +72,7 @@ namespace VectorNet.Server
             }
             catch (Exception ex)
             {
-
+                //TODO: log exception
             }
         }
 

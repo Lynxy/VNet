@@ -66,6 +66,7 @@ namespace VectorNet.Server
             public string Client { get; set; }
             public UserFlags Flags { get; set; }
             public Channel Channel { get; set; }
+            public int Ping { get; set; }
             public bool IsConsole { get; set; }
             public bool IsOnline { get; set; }
         }

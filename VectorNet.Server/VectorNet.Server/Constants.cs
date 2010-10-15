@@ -22,11 +22,18 @@ namespace VectorNet.Server
 
         protected enum LogonResult
         {
-            SUCCESS            = 0x00,
-            INVALID_PASSWORD   = 0x01,
-            INVALID_USERNAME   = 0x02,
-            ACCOUNT_IN_USE     = 0x03,
-            INVALID_PROTOCOL   = 0x04
+            SUCCESS = 0x00,
+            INVALID_PASSWORD = 0x01,
+            INVALID_USERNAME = 0x02,
+            ACCOUNT_IN_USE = 0x03,
+            INVALID_PROTOCOL = 0x04
+        }
+
+        protected enum ListType
+        {
+            UsersInChannel =        0x01,
+            UsersOnServer =         0x02,
+            UsersBannedFromChannel = 0x03,
         }
     }
 }
