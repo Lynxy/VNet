@@ -14,10 +14,9 @@ namespace VectorNet.Server
             try
             {
                 byte packetId = reader.ReadByte();
-
                 switch (packetId)
                 {
-                    case 0x01:
+                    case VNET_LOGON: //0x01
                         string username = reader.ReadStringNT();
                         string password = reader.ReadStringNT();
                         string client = reader.ReadStringNT();
@@ -37,9 +36,9 @@ namespace VectorNet.Server
                         SendLogonResult(user, LogonResult.SUCCESS);
 
                         break;
-                    case 0x02:
+                    case VNET_CHATEVENT: //0x02
                         break;
-                    case 0x03:
+                    case VNET_TICTACTOE: //0x03
                         break;
                     case 0x04:
                         break;
