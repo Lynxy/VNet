@@ -21,6 +21,8 @@ namespace VectorNet.Server
         {
             protected ChannelFlags _Flags;
             protected string _Name;
+            protected List<User> _Users;
+            protected List<User> _Operators;
 
             public Channel(string name)
                 : this(name, ChannelFlags.Normal)
@@ -31,6 +33,8 @@ namespace VectorNet.Server
             {
                 _Name = name;
                 _Flags = flags;
+                _Users = new List<User>();
+                _Operators = new List<User>();
             }
 
 
@@ -44,6 +48,30 @@ namespace VectorNet.Server
                 get { return _Flags; }
                 set { _Flags = value; }
             }
+
+            public User Owner { get; set; }
+            public List<User> Users { get { return _Users; } }
+            public List<User> Operators { get { return _Operators; } }
+
+
+            public void AddUser(User user, bool isOperator)
+            {
+                if (!_Users.Contains(user))
+                    _Users.Add(user);
+                if (isOperator && !_Operators.Contains(user))
+                    _Operators.Add(user);
+                if (Owner == null)
+                    Owner = user;
+            }
+
+            public void RemoveUser(User user)
+            {
+                if (_Users.Contains(user))
+                    _Users.Remove(user);
+                if (_Operators.Contains(user))
+                    _Operators.Remove(user);
+            }
+
         }
     }
 }
