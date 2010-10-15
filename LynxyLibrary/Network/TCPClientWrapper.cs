@@ -189,8 +189,14 @@ namespace Lynxy.Network
         {
             if (Connected)
             {
-                EndConnect(ar);
-                OnConnectionEstablished();
+                try
+                {
+                    EndConnect(ar);
+                    OnConnectionEstablished();
+                }
+                catch (Exception ex)
+                {
+                }
             }
             else
                 OnConnectionRefused();
@@ -233,8 +239,14 @@ namespace Lynxy.Network
 
         private void EndASSend(IAsyncResult ar)
         {
-            GetStream().EndWrite(ar);
-            OnDataSent();
+            try
+            {
+                GetStream().EndWrite(ar);
+                OnDataSent();
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         #endregion
@@ -284,34 +296,39 @@ namespace Lynxy.Network
         }
 
         private void StartASRead()
-	{
-        asReadBuffer = new byte[0];
-		Array.Resize(ref asReadBuffer, asReadSize);
-		GetStream().BeginRead(asReadBuffer, 0, asReadSize, new AsyncCallback(EndASRead), null);
-	}
+        {
+            asReadBuffer = new byte[0];
+            Array.Resize(ref asReadBuffer, asReadSize);
+            GetStream().BeginRead(asReadBuffer, 0, asReadSize, new AsyncCallback(EndASRead), null);
+        }
 
         private void EndASRead(IAsyncResult ar)
         {
-            int intCount = 0;
-
-            intCount = GetStream().EndRead(ar);
-            if (intCount < 1)
+            try
             {
-                // The only reason to have 0 bytes in an EndRead is disconnected.
-                // We were disconnected, stop async reads and raise Disconnected event.
-                OnDisconnected();
-                return;
+                int intCount = 0;
+                intCount = GetStream().EndRead(ar);
+                if (intCount < 1)
+                {
+                    // The only reason to have 0 bytes in an EndRead is disconnected.
+                    // We were disconnected, stop async reads and raise Disconnected event.
+                    OnDisconnected();
+                    return;
+                }
+
+                //Let's put our stuff into a read result, and pass it back in the DataRead event.
+                byte[] result = new byte[intCount];
+                Array.Copy(asReadBuffer, 0, result, 0, intCount);
+                OnDataRead(result);
+
+                // Continuously Reading Asynchronously.
+                if (asContReads)
+                {
+                    StartASRead();
+                }
             }
-
-            //Let's put our stuff into a read result, and pass it back in the DataRead event.
-            byte[] result = new byte[intCount];
-            Array.Copy(asReadBuffer, 0, result, 0, intCount);
-            OnDataRead(result);
-
-            // Continuously Reading Asynchronously.
-            if (asContReads)
+            catch (Exception ex)
             {
-                StartASRead();
             }
         }
 
