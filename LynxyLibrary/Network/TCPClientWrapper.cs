@@ -100,6 +100,8 @@ namespace Lynxy.Network
 
         protected virtual void OnDisconnected()
         {
+            if (Connected)
+                Close();
             if (Disconnected != null)
             {
                 Disconnected(this);
@@ -194,8 +196,9 @@ namespace Lynxy.Network
                     EndConnect(ar);
                     OnConnectionEstablished();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
+                    OnDisconnected();
                 }
             }
             else
@@ -211,9 +214,16 @@ namespace Lynxy.Network
         /// <param name="Data">The data to be sent, as a string.</param>
         public void Send(string data)
         {
-            System.IO.StreamWriter w = new System.IO.StreamWriter(GetStream());
-            w.Write(data);
-            w.Flush();
+            try
+            {
+                System.IO.StreamWriter w = new System.IO.StreamWriter(GetStream());
+                w.Write(data);
+                w.Flush();
+            }
+            catch (Exception)
+            {
+                OnDisconnected();
+            }
         }
 
         /// <summary>
@@ -223,7 +233,14 @@ namespace Lynxy.Network
         /// <param name="size">The number of bytes in data to be sent.</param>
         public void Send(byte[] data, int size)
         {
-            GetStream().Write(data, 0, size);
+            try
+            {
+                GetStream().Write(data, 0, size);
+            }
+            catch (Exception)
+            {
+                OnDisconnected();
+            }
         }
 
         /// <summary>
@@ -234,7 +251,14 @@ namespace Lynxy.Network
         /// <remarks></remarks>
         public void AsyncSend(byte[] data, int size)
         {
-            GetStream().BeginWrite(data, 0, size, new AsyncCallback(EndASSend), null);
+            try
+            {
+                GetStream().BeginWrite(data, 0, size, new AsyncCallback(EndASSend), null);
+            }
+            catch (Exception)
+            {
+                OnDisconnected();
+            }
         }
 
         private void EndASSend(IAsyncResult ar)
@@ -244,8 +268,9 @@ namespace Lynxy.Network
                 GetStream().EndWrite(ar);
                 OnDataSent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                OnDisconnected();
             }
         }
 
@@ -261,24 +286,32 @@ namespace Lynxy.Network
         /// Disconnected event will fire.</remarks>
         public byte[] Read(int size = 1024)
         {
-            byte[] ReadBuf = { 0 };
-            int Count = 0;
-
-            Array.Resize(ref ReadBuf, size);
-            Count = GetStream().Read(ReadBuf, 0, size);
-
-            if (Count <= 0)
+            try
             {
-                if (!base.Connected)
-                {
-                    OnDisconnected();
-                    return null;
-                }
-            }
+                byte[] ReadBuf = { 0 };
+                int Count = 0;
 
-            byte[] ret = new byte[Count];
-            Array.Copy(ReadBuf, 0, ret, 0, Count);
-            return ret;
+                Array.Resize(ref ReadBuf, size);
+                Count = GetStream().Read(ReadBuf, 0, size);
+
+                if (Count <= 0)
+                {
+                    if (!base.Connected)
+                    {
+                        OnDisconnected();
+                        return null;
+                    }
+                }
+
+                byte[] ret = new byte[Count];
+                Array.Copy(ReadBuf, 0, ret, 0, Count);
+                return ret;
+            }
+            catch (Exception)
+            {
+                OnDisconnected();
+                return new byte[0];
+            }
         }
 
         /// <summary>
@@ -297,9 +330,16 @@ namespace Lynxy.Network
 
         private void StartASRead()
         {
-            asReadBuffer = new byte[0];
-            Array.Resize(ref asReadBuffer, asReadSize);
-            GetStream().BeginRead(asReadBuffer, 0, asReadSize, new AsyncCallback(EndASRead), null);
+            try
+            {
+                asReadBuffer = new byte[0];
+                Array.Resize(ref asReadBuffer, asReadSize);
+                GetStream().BeginRead(asReadBuffer, 0, asReadSize, new AsyncCallback(EndASRead), null);
+            }
+            catch (Exception)
+            {
+                OnDisconnected();
+            }
         }
 
         private void EndASRead(IAsyncResult ar)
@@ -327,8 +367,9 @@ namespace Lynxy.Network
                     StartASRead();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                OnDisconnected();
             }
         }
 
