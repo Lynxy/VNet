@@ -9,6 +9,8 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
+        //User Functions
+        //This class is for methods that deal with a single user, not multiple users
         protected void SendLogonResult(User user, LogonResult result)
         {
             //if (result == LogonResult.SUCCESS)

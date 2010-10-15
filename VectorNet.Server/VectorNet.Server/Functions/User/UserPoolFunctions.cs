@@ -9,6 +9,8 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
+        //User Pool Functions
+        //This class is for methods that must look at the Users dictionary, not a single user
         protected User GetUserByName(string username)
         {
             User ret = Users.Find(u =>
