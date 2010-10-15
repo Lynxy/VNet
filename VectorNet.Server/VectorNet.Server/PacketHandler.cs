@@ -24,15 +24,24 @@ namespace VectorNet.Server
                         byte protocolVer = reader.ReadByte();
 
                         if (protocolVer != 1)
+                        {
                             SendLogonResult(user, LogonResult.INVALID_PROTOCOL);
+                            return;
+                        }
 
                         //check client name
 
                         //check username+pass combo
 
                         if (GetUserByName(username) != null)
+                        {
                             SendLogonResult(user, LogonResult.ACCOUNT_IN_USE);
+                            return;
+                        }
 
+                        user.Username = username;
+                        user.Client = client;
+                        user.IsOnline = true;
                         SendLogonResult(user, LogonResult.SUCCESS);
 
                         break;
