@@ -26,6 +26,11 @@ namespace Lynxy.Network
             return _data[_position++];
         }
 
+        public bool EOF()
+        {
+            return (_position >= _data.Length);
+        }
+
         public short ReadWord()
         {
             short ret = BitConverter.ToInt16(_data, _position);
