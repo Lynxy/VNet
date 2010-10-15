@@ -11,37 +11,63 @@ namespace VectorNet.Server
     {
         protected void HandlePacket(User user, PacketReader reader)
         {
-            byte packetId = reader.ReadByte();
+            try
+            {
+                byte packetId = reader.ReadByte();
 
-            switch (packetId)
-            { 
-                case 0x01:
+                switch (packetId)
+                {
+                    case 0x01:
+                        string username = reader.ReadStringNT();
+                        string password = reader.ReadStringNT();
+                        string client = reader.ReadStringNT();
+                        byte queueSharing = reader.ReadByte();
+                        byte protocolVer = reader.ReadByte();
 
-                    break;
-                case 0x02:
-                    break;
-                case 0x03:
-                    break;
-                case 0x04:
-                    break;
-                case 0x05:
-                    break;
-                case 0x06:
-                    break;
-                case 0x07:
-                    break;
-                case 0x08:
-                    break;
-                case 0x09:
-                    break;
-                case 0x0A:
-                    break;
-                case 0x0B:
-                    break;
-                case 0x0C:
-                    break;
+                        if (protocolVer != 1)
+                            SendLogonResult(user, LogonResult.INVALID_PROTOCOL);
+
+                        //check client name
+
+                        //check username+pass combo
+
+                        if (GetUserByName(username) != null)
+                            SendLogonResult(user, LogonResult.ACCOUNT_IN_USE);
+
+                        SendLogonResult(user, LogonResult.SUCCESS);
+
+                        break;
+                    case 0x02:
+                        break;
+                    case 0x03:
+                        break;
+                    case 0x04:
+                        break;
+                    case 0x05:
+                        break;
+                    case 0x06:
+                        break;
+                    case 0x07:
+                        break;
+                    case 0x08:
+                        break;
+                    case 0x09:
+                        break;
+                    case 0x0A:
+                        break;
+                    case 0x0B:
+                        break;
+                    case 0x0C:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
+
+        
 
     }
 }
