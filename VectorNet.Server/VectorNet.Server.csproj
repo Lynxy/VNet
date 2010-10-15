@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,6 +49,7 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,13 +76,13 @@
     <Compile Include="VectorNet.Server\Classes\User.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="VectorNet.Server\Functions\Channel\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\LynxyLibrary\LynxyLibrary.csproj">
       <Project>{6D7E9160-813C-4EA1-8A4B-CD9428CA7BA4}</Project>
       <Name>LynxyLibrary</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VectorNet.Server\Functions\Channel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
