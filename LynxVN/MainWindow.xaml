@@ -1,0 +1,13 @@
+﻿<Window x:Class="LynxVN.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="567">
+    <Grid>
+        <RichTextBox Margin="12,29,164,41" Name="rtbChat" />
+        <ListView HorizontalAlignment="Right" Margin="0,29,12,41" Name="lvChannel" Width="146" />
+        <TextBox Height="23" Margin="12,0,12,12" Name="txtSend" VerticalAlignment="Bottom" />
+        <Menu Height="23" Name="menu1" VerticalAlignment="Top">
+            <MenuItem Header="Connect" Name="mnuConnect" Click="mnuConnect_Click" />
+        </Menu>
+    </Grid>
+</Window>
