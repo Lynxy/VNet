@@ -17,6 +17,13 @@ namespace VectorNet.Server
             public Dictionary<TcpClientWrapper, User> TcpClientUsers = new Dictionary<TcpClientWrapper, User>();
             public Dictionary<User, byte[]> UserBuffers = new Dictionary<User, byte[]>();
 
+            protected Server _server;
+
+            public ClientHandler(Server server)
+            {
+                _server = server;
+            }
+
             public User AddNewClient(TcpClientWrapper client)
             {
                 User newUser = new User(client, false);
@@ -47,6 +54,7 @@ namespace VectorNet.Server
             protected void client_Disconnected(TcpClientWrapper sender)
             {
                 User user = TcpClientUsers[sender];
+                _server.DisconnectUser(user);
                 user.IsOnline = false;
                 TcpClientUsers.Remove(sender);
             }

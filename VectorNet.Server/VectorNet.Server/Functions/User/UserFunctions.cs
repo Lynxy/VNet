@@ -29,6 +29,13 @@ namespace VectorNet.Server
             //}
         }
 
+        protected void DisconnectUser(User user)
+        {
+            RemoveUserFromChannel(user);
+            user.IsOnline = false;
+            user.Socket.Close();
+        }
+
         protected void SendServerInfo(User user)
         {
 
