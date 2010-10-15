@@ -11,13 +11,12 @@ namespace VectorNet.Server
     {
         protected User GetUserByName(string username)
         {
-            IEnumerable<User> ret = from u in Users
-                       where u.Username.ToLower() == username.ToLower()
-                       && u.IsOnline == true
-                       select u;
-            if (ret == null)
-                return null;
-            return ret.First();
+            User ret = Users.Find(u =>
+                u.IsOnline == true
+                && u.Username != null
+                && u.Username.ToLower() == username.ToLower()
+                );
+            return ret;
         }
     }
 }
