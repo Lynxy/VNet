@@ -20,6 +20,7 @@ namespace LynxVN
     {
         protected TcpClientWrapper socket;
         protected Packet packet;
+        protected byte[] packetBuffer = new byte[0];
 
         protected void SetupSocket()
         {
@@ -35,23 +36,35 @@ namespace LynxVN
 
         protected void socket_ConnectionEstablished(TcpClientWrapper sender)
         {
+            socket.AsyncRead(1024, true);
             SendLogonPacket();
         }
 
         protected void socket_ConnectionRefused(TcpClientWrapper sender)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         protected void socket_Disconnected(TcpClientWrapper sender)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         protected void socket_DataRead(TcpClientWrapper sender, byte[] data)
         {
-            PacketReader reader = new PacketReader(data);
-            HandlePacket(reader);
+            int oldLen = packetBuffer.Length;
+            Array.Resize(ref packetBuffer, oldLen + data.Length);
+            Array.Copy(data, 0, packetBuffer, oldLen, data.Length);
+
+            //check to see if whole packet is available
+            byte[] completePacket;
+            while ((completePacket = PacketBuffer.GetNextPacket(ref packetBuffer)) != null)
+            {
+                this.Dispatcher.Invoke(new Action(delegate
+                    {
+                        HandlePacket(new PacketReader(completePacket));
+                    }), null);
+            }
         }
 
         protected void packet_DataSent(byte[] data)

@@ -20,7 +20,27 @@ namespace LynxVN
     {
         protected void HandlePacket(PacketReader reader)
         {
+            try
+            {
+                byte packetId = reader.ReadByte();
+                switch (packetId)
+                {
+                    case VNET_LOGON: //0x01
+                        LogonResult logonResult = (LogonResult)reader.ReadByte();
+                        byte challengeByte = reader.ReadByte();
+                        string serverVersion = reader.ReadStringNT();
+                        string hostedBy = reader.ReadStringNT();
+                        int ping = reader.ReadDword();
+                        byte rank = reader.ReadByte();
 
+                        //if (logonResult == LogonResult.INVALID_PASSWORD)
+                            AddChat(Brushes.Red, "Invalid password");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
     }
 }

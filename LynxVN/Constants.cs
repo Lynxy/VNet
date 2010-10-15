@@ -29,5 +29,13 @@ namespace LynxVN
         protected const int VNET_SERVERCHALLENGE = 0x0A;
         protected const int VNET_VNETPAD = 0x0B;
 
+        protected enum LogonResult
+        {
+            SUCCESS = 0x00,
+            INVALID_PASSWORD = 0x01,
+            INVALID_USERNAME = 0x02,
+            ACCOUNT_IN_USE = 0x03,
+            INVALID_PROTOCOL = 0x04
+        }
     }
 }

@@ -26,9 +26,47 @@ namespace LynxVN
             InitializeComponent();
         }
 
-        private void mnuConnect_Click(object sender, RoutedEventArgs e)
+        protected void AddChat(params object[] val)
         {
+            this.Dispatcher.Invoke(new Action(delegate
+                {
+                    AddChatB(val);
+                }), null);
+        }
 
+        private void AddChatB(params object[] val)
+        {
+            if (val.Length % 2 != 0)
+                throw new Exception("AddChat not passed even number of args");
+            Brush col;
+            string text;
+            FlowDocument doc = rtbChat.Document;
+            Paragraph para = new Paragraph();
+            Run run;
+            for (int i = 0; i < val.Length; i += 2)
+            {
+                col = (Brush)val[i];
+                text = (string)val[i + 1];
+                run = new Run(text, rtbChat.CaretPosition.DocumentEnd);
+                run.Foreground = col;
+                para.Inlines.Add(run);
+            }
+            doc.Blocks.Add(para);
+        }
+
+        protected void mnuConnect_Click(object sender, RoutedEventArgs e)
+        {
+            if (socket != null)
+                socket.Close();
+            SetupSocket();
+            //try
+            //{
+                socket.AsyncConnect("127.0.0.1", 4800);
+            //}
+            //catch (Exception ex)
+            //{
+            //    int stop = 0;
+            //}
         }
     }
 }
