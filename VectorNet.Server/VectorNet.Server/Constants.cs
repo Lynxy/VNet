@@ -20,13 +20,13 @@ namespace VectorNet.Server
         protected const int VNET_SERVERCHALLENGE = 0x0A;
         protected const int VNET_VNETPAD        = 0x0B;
 
-        protected static class LogonResult
+        protected enum LogonResult
         {
-            public const int SUCCESS            = 0x00;
-            public const int INVALID_PASSWORD   = 0x01;
-            public const int INVALID_USERNAME   = 0x02;
-            public const int ACCOUNT_IN_USE     = 0x03;
-            public const int INVALID_PROTOCOL   = 0x04;
+            SUCCESS            = 0x00,
+            INVALID_PASSWORD   = 0x01,
+            INVALID_USERNAME   = 0x02,
+            ACCOUNT_IN_USE     = 0x03,
+            INVALID_PROTOCOL   = 0x04
         }
     }
 }
