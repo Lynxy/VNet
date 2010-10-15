@@ -20,11 +20,11 @@ namespace VectorNet.Server
             //{
                 user.Packet.Clear()
                     .InsertByte((byte)result)
-                    .InsertByte(0) //challenge byte
                     .InsertStringNT("server ver")
                     .InsertStringNT("TestEnv")
+                    .InsertStringNT(user.Username)
                     .InsertDWord(0) //ping
-                    .InsertByte(0) //rank
+                    .InsertByte(0) //flag
                     .Send(VNET_LOGON);
             //}
         }
@@ -50,9 +50,9 @@ namespace VectorNet.Server
                 .InsertByte((int)ListType.UsersInChannel);
             foreach (User u in users)
                 user.Packet.InsertStringNT(u.Username)
-                    .InsertDWord(u.Ping) //ping
+                    .InsertDWord(u.Ping)
                     .InsertByte((byte)u.Flags);
-            user.Packet.Send(VNET_CHANNELLIST);
+            user.Packet.Send(VNET_LIST);
         }
 
         protected void JoinUserToChannel(User user, Channel channel)

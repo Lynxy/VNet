@@ -21,17 +21,12 @@ namespace VectorNet.Server
                         string password = reader.ReadStringNT();
                         string client = reader.ReadStringNT();
                         byte queueSharing = reader.ReadByte();
-                        byte protocolVer = reader.ReadByte();
-
-                        if (protocolVer != 1)
-                        {
-                            SendLogonResult(user, LogonResult.INVALID_PROTOCOL);
-                            return;
-                        }
 
                         //check client name
 
                         //check username+pass combo
+
+                        //remember challenge
 
                         if (GetUserByName(username) != null)
                         {
@@ -46,9 +41,9 @@ namespace VectorNet.Server
                         JoinUserToChannel(user, MainChannel);
 
                         break;
-                    case VNET_CHATEVENT: //0x02
+                    case VNET_SERVERCHALLENGE: //0x02
                         break;
-                    case VNET_TICTACTOE: //0x03
+                    case VNET_CHATEVENT: //0x03
                         break;
                     case 0x04:
                         break;
