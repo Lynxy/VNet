@@ -50,6 +50,7 @@ namespace VectorNet.Server
                 .InsertByte((int)ListType.UsersInChannel);
             foreach (User u in users)
                 user.Packet.InsertStringNT(u.Username)
+                    .InsertStringNT(u.Client)
                     .InsertDWord(u.Ping)
                     .InsertByte((byte)u.Flags);
             user.Packet.Send(VNET_LIST);
@@ -59,7 +60,17 @@ namespace VectorNet.Server
         {
             RemoveUserFromChannel(user);
             channel.AddUser(user, false);
-            //TODO: notify channel user joined
+
+            foreach (User u in channel.Users)
+                if (u != user)
+                    u.Packet.Clear()
+                        .InsertByte((byte)ChatEventType.USER_JOIN_CHANNEL)
+                        .InsertDWord(user.Ping)
+                        .InsertByte((byte)user.Flags)
+                        .InsertStringNT(user.Username)
+                        .InsertStringNT(user.Client)
+                        .Send(VNET_CHATEVENT);
+
             SendChannelList(user, channel);
         }
 
@@ -67,7 +78,17 @@ namespace VectorNet.Server
         {
             if (user.Channel == null)
                 return;
-            //TODO: notify channel user left
+
+            foreach (User u in user.Channel.Users)
+                if (u != user)
+                    u.Packet.Clear()
+                        .InsertByte((byte)ChatEventType.USER_LEAVE_CHANNEL)
+                        .InsertDWord(user.Ping)
+                        .InsertByte((byte)user.Flags)
+                        .InsertStringNT(user.Username)
+                        .InsertStringNT(user.Client)
+                        .Send(VNET_CHATEVENT);
+
             user.Channel.RemoveUser(user);
         }
     }
