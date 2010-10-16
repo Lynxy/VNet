@@ -3,8 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="567" Loaded="Window_Loaded">
     <Grid>
-        <RichTextBox Margin="12,29,164,41" Name="rtbChat" />
-        <ListView HorizontalAlignment="Right" Margin="0,29,12,41" Name="lvChannel" Width="146" />
+        <RichTextBox Margin="12,29,164,41" Name="rtbChat" VerticalScrollBarVisibility="Auto" />
+        <ListView HorizontalAlignment="Right" Margin="0,29,12,41" Name="lvChannel" Width="146">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Username" DisplayMemberBinding="{Binding Username}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
         <TextBox Height="23" Margin="12,0,12,12" Name="txtSend" VerticalAlignment="Bottom" />
         <Menu Height="23" Name="menu1" VerticalAlignment="Top">
             <MenuItem Header="Connect" Name="mnuConnect" Click="mnuConnect_Click" />

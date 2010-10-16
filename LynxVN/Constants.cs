@@ -18,16 +18,14 @@ namespace LynxVN
 {
     public partial class MainWindow : Window
     {
+        protected const int VNET_KEEPALIVE = 0x00;
         protected const int VNET_LOGON = 0x01;
-        protected const int VNET_CHATEVENT = 0x02;
-        protected const int VNET_TICTACTOE = 0x03;
-        protected const int VNET_CHANNELLIST = 0x04;
-        protected const int VNET_FEATUREQUERY = 0x05;
-        protected const int VNET_KEEPALIVE = 0x06;
-        protected const int VNET_CHANNELJOIN = 0x07;
-        protected const int VNET_QUEUESHARE = 0x09;
-        protected const int VNET_SERVERCHALLENGE = 0x0A;
-        protected const int VNET_VNETPAD = 0x0B;
+        protected const int VNET_SERVERCHALLENGE = 0x02;
+        protected const int VNET_CHATEVENT = 0x03;
+        protected const int VNET_FEATUREQUERY = 0x04;
+        protected const int VNET_APPS = 0x05;
+        protected const int VNET_LIST = 0x06;
+        protected const int VNET_QUEUESHARE = 0x07;
 
         protected enum LogonResult
         {
@@ -35,7 +33,20 @@ namespace LynxVN
             INVALID_PASSWORD = 0x01,
             INVALID_USERNAME = 0x02,
             ACCOUNT_IN_USE = 0x03,
-            INVALID_PROTOCOL = 0x04
+            SEND_CHALLENGE = 0x04
+        }
+
+        protected enum ChatEventType
+        {
+            USER_JOIN = 0x01,
+            USER_LEAVE = 0x02,
+            USER_TALK = 0x03,
+            USER_EMOTE = 0x04,
+            SERVER_INFO = 0x05,
+            USER_JOIN_CHANNEL = 0x06,
+            USER_LEAVE_CHANNEL = 0x07,
+            WHISPER_TO = 0x08,
+            WHISPER_FROM = 0x09
         }
 
         protected enum ListType

@@ -30,7 +30,6 @@ namespace LynxVN
                 .InsertStringNT("pass")
                 .InsertStringNT("LynxVN")
                 .InsertByte(0) //queue sharing
-                .InsertByte(1) //protocol revision
                 .Send(VNET_LOGON);
         }
     }

@@ -22,6 +22,7 @@ namespace LynxVN
     public partial class MainWindow : Window
     {
         Random rnd = new Random();
+        List<User> Users = new List<User>();
 
         public MainWindow()
         {
@@ -60,6 +61,7 @@ namespace LynxVN
                 para.Inlines.Add(run);
             }
             doc.Blocks.Add(para);
+            rtbChat.ScrollToEnd();
         }
 
         protected void mnuConnect_Click(object sender, RoutedEventArgs e)
@@ -75,6 +77,28 @@ namespace LynxVN
             //{
             //    int stop = 0;
             //}
+        }
+
+        protected void ClearChannelList()
+        {
+            Users = new List<User>();
+        }
+
+        protected void AddUser(User user)
+        {
+            Users.Add(user);
+            lvChannel.ItemsSource = Users;
+        }
+
+        protected void RemoveUser(string username)
+        {
+            User user = Users.Find(u =>
+                u.Username.ToLower() == username.ToLower()
+                );
+            if (user == null)
+                return;
+            Users.Remove(user);
+            lvChannel.ItemsSource = Users;
         }
     }
 }
