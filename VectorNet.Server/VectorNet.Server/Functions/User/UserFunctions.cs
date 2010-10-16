@@ -91,5 +91,19 @@ namespace VectorNet.Server
 
             user.Channel.RemoveUser(user);
         }
+
+        protected void UserChat(User user, string message)
+        {
+            foreach (User u in user.Channel.Users)
+                if (u != user)
+                    u.Packet.Clear()
+                        .InsertByte((byte)ChatEventType.USER_TALK)
+                        .InsertDWord(user.Ping)
+                        .InsertByte((byte)user.Flags)
+                        .InsertStringNT(user.Username)
+                        .InsertStringNT(message)
+                        .Send(VNET_CHATEVENT);
+        }
+
     }
 }

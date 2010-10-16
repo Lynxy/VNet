@@ -11,15 +11,18 @@ namespace VectorNet.Server
     {
         protected void HandlePacket(User user, PacketReader reader)
         {
+            string username;
+            string text;
+            string client;
             try
             {
                 byte packetId = reader.ReadByte();
                 switch (packetId)
                 {
                     case VNET_LOGON: //0x01
-                        string username = reader.ReadStringNT();
+                        username = reader.ReadStringNT();
                         string password = reader.ReadStringNT();
-                        string client = reader.ReadStringNT();
+                        client = reader.ReadStringNT();
                         byte queueSharing = reader.ReadByte();
 
                         //check client name
@@ -41,10 +44,15 @@ namespace VectorNet.Server
                         JoinUserToChannel(user, MainChannel);
 
                         break;
+
                     case VNET_SERVERCHALLENGE: //0x02
                         break;
+
                     case VNET_CHATEVENT: //0x03
+                        text = reader.ReadStringNT();
+                        UserChat(user, text);
                         break;
+
                     case 0x04:
                         break;
                     case 0x05:
