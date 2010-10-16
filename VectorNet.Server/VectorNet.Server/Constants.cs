@@ -27,10 +27,23 @@ namespace VectorNet.Server
             SEND_CHALLENGE   = 0x04
         }
 
+        protected enum ChatEventType
+        {
+            USER_JOIN = 0x01,
+            USER_LEAVE = 0x02,
+            USER_TALK = 0x03,
+            USER_EMOTE = 0x04,
+            SERVER_INFO = 0x05,
+            USER_JOIN_CHANNEL = 0x06,
+            USER_LEAVE_CHANNEL = 0x07,
+            WHISPER_TO = 0x08,
+            WHISPER_FROM = 0x09
+        }
+
         protected enum ListType
         {
-            UsersInChannel         = 0x01,
-            UsersOnServer          = 0x02,
+            UsersInChannel = 0x01,
+            UsersOnServer = 0x02,
             UsersBannedFromChannel = 0x03,
         }
     }
