@@ -11,7 +11,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <TextBox Height="23" Margin="12,0,12,12" Name="txtSend" VerticalAlignment="Bottom" />
+        <TextBox Height="23" Margin="12,0,12,12" Name="txtSend" VerticalAlignment="Bottom" KeyUp="txtSend_KeyUp" />
         <Menu Height="23" Name="menu1" VerticalAlignment="Top">
             <MenuItem Header="Connect" Name="mnuConnect" Click="mnuConnect_Click" />
         </Menu>

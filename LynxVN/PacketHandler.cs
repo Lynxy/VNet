@@ -69,6 +69,10 @@ namespace LynxVN
                             RemoveUser(username);
                             AddChat(Brushes.DarkRed, "-- ", Brushes.Blue, username, Brushes.DarkRed, " has left the channel");
                         }
+                        else if (id == (byte)ChatEventType.USER_TALK)
+                        {
+                            AddChat(Brushes.Orange, "<", Brushes.Orange, username, Brushes.Orange, "> " , Brushes.Black, text);
+                        }
                         break;
 
                     case VNET_LIST: //0x06

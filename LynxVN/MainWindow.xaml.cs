@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Collections.ObjectModel;
 using Lynxy.Network;
 
 namespace LynxVN
@@ -22,7 +23,7 @@ namespace LynxVN
     public partial class MainWindow : Window
     {
         Random rnd = new Random();
-        List<User> Users = new List<User>();
+        ObservableCollection<User> Users = new ObservableCollection<User>();
 
         public MainWindow()
         {
@@ -81,7 +82,7 @@ namespace LynxVN
 
         protected void ClearChannelList()
         {
-            Users = new List<User>();
+            Users = new ObservableCollection<User>();
         }
 
         protected void AddUser(User user)
@@ -92,13 +93,23 @@ namespace LynxVN
 
         protected void RemoveUser(string username)
         {
-            User user = Users.Find(u =>
+            User user = Users.First(u =>
                 u.Username.ToLower() == username.ToLower()
                 );
             if (user == null)
                 return;
             Users.Remove(user);
             lvChannel.ItemsSource = Users;
+        }
+
+        private void txtSend_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                packet.Clear().InsertStringNT(txtSend.Text).Send(VNET_CHATEVENT);
+                AddChat(Brushes.DarkCyan, "<You> ", Brushes.Black, txtSend.Text);
+                txtSend.Text = "";
+            }
         }
     }
 }
