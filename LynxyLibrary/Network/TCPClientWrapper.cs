@@ -189,20 +189,27 @@ namespace Lynxy.Network
 
         private void EndASConnect(IAsyncResult ar)
         {
-            if (Connected)
+            try
             {
-                try
+                if (Connected)
                 {
-                    EndConnect(ar);
-                    OnConnectionEstablished();
+                    try
+                    {
+                        EndConnect(ar);
+                        OnConnectionEstablished();
+                    }
+                    catch (Exception)
+                    {
+                        OnDisconnected();
+                    }
                 }
-                catch (Exception)
-                {
-                    OnDisconnected();
-                }
+                else
+                    OnConnectionRefused();
             }
-            else
+            catch (Exception)
+            {
                 OnConnectionRefused();
+            }
         }
         #endregion
 
