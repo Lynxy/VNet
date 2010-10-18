@@ -36,14 +36,9 @@ namespace VectorNet.Server
             user.Socket.Close();
         }
 
-        protected void SendServerInfo(User user)
+        protected void SendChannelList(User user)
         {
-
-        }
-
-        protected void SendChannelList(User user, Channel channel)
-        {
-            List<User> users = GetUsersInChannel(user, channel, false);
+            List<User> users = GetUsersInChannel(user, user.Channel, false);
             if (users == null)
                 return;
             user.Packet.Clear()
@@ -60,63 +55,16 @@ namespace VectorNet.Server
         {
             RemoveUserFromChannel(user);
             channel.AddUser(user, false);
-
-            foreach (User u in channel.Users)
-                if (u != user)
-                    u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_JOIN_CHANNEL)
-                        .InsertDWord(user.Ping)
-                        .InsertByte((byte)user.Flags)
-                        .InsertStringNT(user.Username)
-                        .InsertStringNT(user.Client)
-                        .Send(VNET_CHATEVENT);
-
-            SendChannelList(user, channel);
+            SendUserJoinedChannel(user);
+            SendChannelList(user);
         }
 
         protected void RemoveUserFromChannel(User user)
         {
             if (user.Channel == null)
                 return;
-
-            foreach (User u in user.Channel.Users)
-                if (u != user)
-                    u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_LEAVE_CHANNEL)
-                        .InsertDWord(user.Ping)
-                        .InsertByte((byte)user.Flags)
-                        .InsertStringNT(user.Username)
-                        .InsertStringNT(user.Client)
-                        .Send(VNET_CHATEVENT);
-
+            SendUserLeftChannel(user);
             user.Channel.RemoveUser(user);
         }
-
-        protected void UserChat(User user, string message)
-        {
-            foreach (User u in user.Channel.Users)
-                if (u != user)
-                    u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_TALK)
-                        .InsertDWord(user.Ping)
-                        .InsertByte((byte)user.Flags)
-                        .InsertStringNT(user.Username)
-                        .InsertStringNT(message)
-                        .Send(VNET_CHATEVENT);
-        }
-
-        protected void UserEmote(User user, string message)
-        {
-            foreach (User u in user.Channel.Users)
-                if (u != user)
-                    u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_EMOTE)
-                        .InsertDWord(user.Ping)
-                        .InsertByte((byte)user.Flags)
-                        .InsertStringNT(user.Username)
-                        .InsertStringNT(message)
-                        .Send(VNET_CHATEVENT);
-        }
-
     }
 }

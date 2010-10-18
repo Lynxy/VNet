@@ -50,7 +50,7 @@ namespace VectorNet.Server
 
                     case VNET_CHATEVENT: //0x03
                         text = reader.ReadStringNT();
-                        UserChat(user, text);
+                        SendUserTalk(user, text);
                         break;
 
                     case 0x04:
