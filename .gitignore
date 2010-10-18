@@ -1,8 +1,9 @@
 VectorNetServer.suo
 LynxVN.suo
 
-~$*
+VectorNet.Server.GUI/bin/*/vnet.sqlite
 
+~$*
 *.csproj.user
 *.vbproj.user
 *.csproj.webinfo
