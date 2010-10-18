@@ -9,15 +9,22 @@ namespace VectorNet.Server.GUI
 {
     public class ServerLoader
     {
+        //Server Loader
+        //All server-related code must go in here, or risk causing the GUI/client to crash
+
         protected Server VNet;
 
-        public ServerLoader()
+        public ServerLoader(Action<byte[]> dataRecv)
         {
             VNet = new Server("config.xml");
 
-            VNet.CreateConsoleUser(RecvData);
+            VNet.CreateConsoleUser(dataRecv);
             VNet.StartListening();
-            VNet.HandleConsoleCommand("test");
+        }
+
+        public void HandleConsoleCommand(string cmd)
+        {
+            VNet.HandleConsoleCommand(cmd);
         }
 
         private void RecvData(byte[] data)

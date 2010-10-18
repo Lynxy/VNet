@@ -15,16 +15,7 @@ namespace VectorNet.Server.GUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            bool serverMode = false;
-            try
-            {
-                System.Reflection.Assembly.LoadFrom("VectorNet.Server.dll");
-                serverMode = true;
-            }
-            catch (Exception) { }
-
-            Application.Run(new frmMain(serverMode));
+            Application.Run(new frmMain());
         }
     }
 }

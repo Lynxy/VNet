@@ -17,20 +17,38 @@ namespace VectorNet.Server.GUI
     public partial class frmMain : Form
     {
         protected ServerLoader loader = null;
-        protected bool clientMode = false;
+        protected bool serverMode = false;
 
-        public frmMain(bool serverMode)
+        public frmMain()
         {
+            InitializeComponent();
+            DiscoverServerMode();
+        }
+
+        protected void DiscoverServerMode()
+        {
+            try
+            {
+                System.Reflection.Assembly.LoadFrom("VectorNet.Server.dll");
+                serverMode = true;
+            }
+            catch (Exception) { }
+
             MessageBox.Show("serverMode = " + serverMode.ToString());
             if (serverMode)
-                loader = new ServerLoader();
-            InitializeComponent();
+                loader = new ServerLoader(RecvData);
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            if (serverMode)
+                loader.HandleConsoleCommand("join wtf");
         }
 
-        
+        private void RecvData(byte[] data)
+        {
+            MessageBox.Show("recv: " + Encoding.ASCII.GetString(data).Replace((char)0, '.'));
+        }
+
     }
 }
