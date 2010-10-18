@@ -106,9 +106,11 @@ namespace LynxVN
         {
             if (e.Key == Key.Return)
             {
-                packet.Clear().InsertStringNT(txtSend.Text).Send(VNET_CHATEVENT);
-                AddChat(Brushes.DarkCyan, "<You> ", Brushes.White, txtSend.Text);
+                string msg = txtSend.Text;
                 txtSend.Text = "";
+                packet.Clear().InsertStringNT(msg).Send(VNET_CHATEVENT);
+                if (msg[0] != '/')
+                    AddChat(Brushes.DarkCyan, "<You> ", Brushes.White, msg);
             }
         }
     }
