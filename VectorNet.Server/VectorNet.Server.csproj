@@ -76,6 +76,7 @@
     <Compile Include="UNUSED\ConfigurationOLD.cs" />
     <Compile Include="VectorNet.Server\QueueSharingPool.cs" />
     <Compile Include="VectorNet.Server\Classes\User.cs" />
+    <Compile Include="VectorNet.Server\Sending Methods\ChatEvent.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
