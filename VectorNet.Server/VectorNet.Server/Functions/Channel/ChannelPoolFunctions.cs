@@ -16,6 +16,11 @@ namespace VectorNet.Server
             Channel ret = Channels.Find(c =>
                 c.Name.ToLower() == channel.ToLower()
                 );
+            if (ret == null)
+            {
+                ret = new Channel(channel);
+                Channels.Add(ret);
+            }
             return ret;
         }
     }

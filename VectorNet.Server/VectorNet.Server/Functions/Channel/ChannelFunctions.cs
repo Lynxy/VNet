@@ -11,14 +11,12 @@ namespace VectorNet.Server
     {
         //Channel Functions
         //This class is for methods that deal with a single channel, not multiple channels
-        protected Channel MainChannel = new Channel("Main");
+        protected Channel MainChannel;
 
-        protected List<User> GetUsersInChannel(User userPerspective, string channel, bool excludeUser)
+        protected void CreateMainChannel(string name)
         {
-            Channel chan = GetChannelByName(channel);
-            if (chan == null)
-                return null;
-            return GetUsersInChannel(userPerspective, chan, excludeUser);
+            MainChannel = new Channel(name);
+            Channels.Add(MainChannel);
         }
 
         protected List<User> GetUsersInChannel(User userPerspective, Channel channel, bool excludeUser)

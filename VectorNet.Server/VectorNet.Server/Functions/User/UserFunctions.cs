@@ -22,7 +22,9 @@ namespace VectorNet.Server
         {
             RemoveUserFromChannel(user);
             channel.AddUser(user, false);
+
             SendUserJoinedChannel(user);
+            SendJoinedChannelSuccessfully(user);
             SendChannelList(user);
         }
 

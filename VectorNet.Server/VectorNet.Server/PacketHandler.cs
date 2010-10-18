@@ -50,7 +50,10 @@ namespace VectorNet.Server
 
                     case VNET_CHATEVENT: //0x03
                         text = reader.ReadStringNT();
-                        SendUserTalk(user, text);
+                        if (text[0] == '/')
+                            HandleCommand(user, text.Substring(1));
+                        else
+                            SendUserTalk(user, text);
                         break;
 
                     case 0x04:

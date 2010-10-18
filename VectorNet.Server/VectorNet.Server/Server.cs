@@ -36,6 +36,7 @@ namespace VectorNet.Server
         {
             Users = new List<User>();
             Channels = new List<Channel>();
+            CreateMainChannel("Main");
         }
 
         public void CreateConsoleUser(Action<byte[]> ReceiveDataEvent)
