@@ -1,0 +1,3 @@
+[submodule "LynxyLibrary"]
+	path = LynxyLibrary
+	url = git://github.com/Lynxy/LynxyLibrary.git
