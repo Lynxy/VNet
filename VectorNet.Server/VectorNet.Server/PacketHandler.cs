@@ -26,10 +26,20 @@ namespace VectorNet.Server
                         byte queueSharing = reader.ReadByte();
 
                         //check client name
+                        
 
                         //check username+pass combo
+                        AccountState state = GetAccountState(username, password);
+                        if (state == AccountState.InvalidPassword)
+                        {
+                            SendLogonResult(user, LogonResult.INVALID_PASSWORD);
+                            return;
+                        }
+                        if (state == AccountState.NewAccount)
+                            CreateNewAccount(username, password, user.IPAddress);
 
                         //remember challenge
+
 
                         if (GetUserByName(username) != null)
                         {
@@ -40,7 +50,11 @@ namespace VectorNet.Server
                         user.Username = username;
                         user.Client = client;
                         user.IsOnline = true;
+
+                        UpdateLastLogin(username);
                         SendLogonResult(user, LogonResult.SUCCESS);
+                        if (state == AccountState.NewAccount)
+                            SendServerInfo(user, "New account created!");
                         JoinUserToChannel(user, MainChannel);
 
                         break;

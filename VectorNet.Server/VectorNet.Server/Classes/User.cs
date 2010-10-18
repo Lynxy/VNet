@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Lynxy.Network;
+using System.Net;
 
 namespace VectorNet.Server
 {
@@ -60,6 +61,11 @@ namespace VectorNet.Server
             public Packet Packet
             {
                 get { return packet; }
+            }
+
+            public string IPAddress
+            {
+                get { return ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString(); }
             }
 
             public string Username { get; set; }

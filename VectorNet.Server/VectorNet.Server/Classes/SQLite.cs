@@ -20,8 +20,7 @@ namespace VectorNet.Server
             public SQLite(string databaseFile)
             {
                 dbFile = databaseFile;
-                CheckDBExists();
-                ConnectDB();
+                CheckDBExistsAndConnect();
             }
 
             public void Dispose()
@@ -48,11 +47,14 @@ namespace VectorNet.Server
                 Dispose(false);
             }
 
-            protected void CheckDBExists()
+            protected void CheckDBExistsAndConnect()
             {
-                if (!System.IO.File.Exists(dbFile))
+                if (System.IO.File.Exists(dbFile))
+                    ConnectDB();
+                else
                 {
                     SQLiteConnection.CreateFile(dbFile);
+                    ConnectDB();
                     SetupDB();
                 }
             }
@@ -69,7 +71,14 @@ namespace VectorNet.Server
             protected void SetupDB()
             {
                 ExecuteNonQuery(@"DROP TABLE IF EXISTS users");
-                ExecuteNonQuery(@"CREATE TABLE users (username VARCHAR(50), password char(32))");
+                ExecuteNonQuery(@"CREATE TABLE users (
+                                    username VARCHAR(50) NOT NULL PRIMARY KEY ASC,
+                                    password CHAR(32) NOT NULL,
+                                    reg_ip VARCHAR(15) NOT NULL,
+                                    banned BOOL NOT NULL DEFAULT false,
+                                    last_login TEXT(19)
+                                )");
+                //ExecuteNonQuery(@"CREATE INDEX idx_username ON users (username ASC)");
             }
 
             public SQLiteDataReader ExecuteReader(string query)

@@ -37,6 +37,7 @@ namespace VectorNet.Server
             Users = new List<User>();
             Channels = new List<Channel>();
             CreateMainChannel("Main");
+            ConnectToDatabase("vnet.sqlite");
         }
 
         public void CreateConsoleUser(Action<byte[]> ReceiveDataEvent)

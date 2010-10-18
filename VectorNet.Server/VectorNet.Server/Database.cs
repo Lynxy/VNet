@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Lynxy.Network;
+using System.Data.SqlClient;
 
 namespace VectorNet.Server
 {
@@ -11,6 +12,9 @@ namespace VectorNet.Server
     {
         protected SQLite database;
 
-        
+        protected void ConnectToDatabase(string databaseFile)
+        {
+            database = new SQLite(databaseFile);
+        }
     }
 }
