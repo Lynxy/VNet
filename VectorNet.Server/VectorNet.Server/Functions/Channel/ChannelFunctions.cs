@@ -13,18 +13,21 @@ namespace VectorNet.Server
         //This class is for methods that deal with a single channel, not multiple channels
         protected Channel MainChannel = new Channel("Main");
 
-        protected List<User> GetUsersInChannel(User userPerspective, string channel)
+        protected List<User> GetUsersInChannel(User userPerspective, string channel, bool excludeUser)
         {
             Channel chan = GetChannelByName(channel);
             if (chan == null)
                 return null;
-            return GetUsersInChannel(userPerspective, chan);
+            return GetUsersInChannel(userPerspective, chan, excludeUser);
         }
 
-        protected List<User> GetUsersInChannel(User userPerspective, Channel channel)
+        protected List<User> GetUsersInChannel(User userPerspective, Channel channel, bool excludeUser)
         {
             //TODO: user perspective
-            return channel.Users;
+            List<User> ret = channel.Users;
+            if (excludeUser && ret.Contains(userPerspective))
+                ret.Remove(userPerspective);
+            return ret;
         }
     }
 }
