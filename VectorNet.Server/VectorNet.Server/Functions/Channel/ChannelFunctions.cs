@@ -33,9 +33,6 @@ namespace VectorNet.Server
             if (userPerspective == console)
                 if (ret.Contains(console) == false)
                     ret.Add(console);
-            if (userPerspective != console)
-                if (ret.Contains(console) == true)
-                    ret.Remove(console);
             return ret;
         }
     }
