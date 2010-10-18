@@ -53,27 +53,14 @@ namespace VectorNet.Server
                     socket.AsyncSend(data, data.Length);
             }
 
-            public TcpClientWrapper Socket
-            {
-                get { return socket; }
-            }
-
-            public Packet Packet
-            {
-                get { return packet; }
-            }
-
-            public string IPAddress
-            {
-                get { return ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString(); }
-            }
-
+            public TcpClientWrapper Socket { get { return socket; } }
+            public Packet Packet { get { return packet; } }
+            public string IPAddress { get { return ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString(); } }
             public string Username { get; set; }
             public string Client { get; set; }
             public UserFlags Flags { get; set; }
             public Channel Channel { get; set; }
             public int Ping { get; set; }
-            public bool IsConsole { get; set; }
             public bool IsOnline { get; set; }
         }
     }

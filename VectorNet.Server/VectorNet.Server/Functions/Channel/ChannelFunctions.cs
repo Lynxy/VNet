@@ -22,9 +22,20 @@ namespace VectorNet.Server
         protected List<User> GetUsersInChannel(User userPerspective, Channel channel, bool excludeUser)
         {
             //TODO: user perspective
-            List<User> ret = channel.Users;
+            List<User> ret = channel.Users.ToList();
             if (excludeUser && ret.Contains(userPerspective))
                 ret.Remove(userPerspective);
+            for (int i = ret.Count - 1; i >= 0; i--)
+            {
+                if (CanUserSeeUser(userPerspective, ret[i]) == false)
+                    ret.RemoveAt(i);
+            }
+            if (userPerspective == console)
+                if (ret.Contains(console) == false)
+                    ret.Add(console);
+            if (userPerspective != console)
+                if (ret.Contains(console) == true)
+                    ret.Remove(console);
             return ret;
         }
     }

@@ -35,5 +35,17 @@ namespace VectorNet.Server
             SendUserLeftChannel(user);
             user.Channel.RemoveUser(user);
         }
+
+        protected bool CanUserSeeUser(User user, User targetUser)
+        {
+            if (user == console)
+                return true; //console can see all
+            if (targetUser == console)
+                return false; //no one can see console (not even admins)
+
+            if (user == targetUser)
+                return true; //user can always see themselves
+            return true;
+        }
     }
 }

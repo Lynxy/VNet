@@ -50,7 +50,7 @@ namespace VectorNet.Server
             }
 
             public User Owner { get; set; }
-            public List<User> Users { get { return _Users; } }
+            public List<User> Users { get { return _Users; } } //DO NOT REFERENCE THIS TYPE BY ITSELF! USE GetUsersInChannel() INSTEAD
             public List<User> Operators { get { return _Operators; } }
 
 
