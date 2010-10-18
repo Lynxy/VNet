@@ -1,0 +1,284 @@
+VectorNet Protocol Specification v2
+
+2/16/09: The first specification of the VectorNet protocol was written. This was a text based protocol which used values separated by null strings.
+
+12/30/09: The Second revision of the protocol is made. This usitilizes multiple data types for information. In this version, the packets for VectorNet are made of of these parts:
+
+	BYTE    Packet ID
+	WORD   Packet Length
+	VOID    Data
+
+Note: By default, the port for VectorNet is 4800.
+
+When flag is mentioned in any of these packets, it refers to these values:
+	0x00: Normal VectorNet User
+	0x01: VectorNet Admin
+	0x02: VectorNet Moderator
+	0x04: VectorNet Channel Operator
+	0x08: squelched
+	0x10: muted
+	0x20: hidden (unseen by the client, cannot parse info, but can hear text)
+
+If you see Client <-> Server, that means the data sent is exactly the same data
+that is received from client to server, and vice versa
+
+Changes:
+10/15/2010
+ - VNET_LOGON S>C 0x02
+   - STRING Username (To show unique name, if logged on more than once)
+   - Result byte 0x04: Account passed, You need to send a challenge to complete logon
+   - Removed BYTE for protocol ID
+ - VNET_CHATEVENT S>C 0x02
+   - Added byte 0x04 to ID_SERVERINFO: Broadcast message
+ - Dropped VNET_USERLIST and merged with VNET_CHANNELLIST 0x04 (renamed VNET_LIST)
+ - Changed packet VNET_FEATUREQUERY from ID 0x05 to ID 0x03
+ - Changed packet 0x03 (VNET_TICTACTOE) to VNET_APPS (this will contain individual protocols)
+ - Put VNET_TICTACTOE and VNET_VNETPAD inside of VNET_APPS 0x03
+ - Merged Packet IDs down, as I have removed some and added them to other packets
+ - Changed the name RANK to FLAG
+ - Added another ID to VNET_CHATEVENT S>C (0x05) that indicates successful channel join
+	-Text contains their channel name in proper casing
+ - Dropped packet VNET_CHANNELJOIN S>C 0x07 (after ID drop)
+
+VNET_KEEPALIVE (0x00) Client <-> Server
+    Data:
+		None
+
+		-Note: This ensures that the client is still alive
+			 Just reply to this packet when its sent to you
+
+VNET_LOGON (0x01) Client -> Server
+    Data:
+	STRING   Username
+	STRING   Password
+	STRING   Client Name
+	BYTE     Bot Queue Sharing (0x00 or 0x01)
+
+    -Client Name refers to the name of the Client connecting to VectorNet.
+    -Bot Queue Sharing has the following values:
+	0x00: The bot will not participate in message sharing (between bots)
+	0x01: The client will participate in message sharing (between bots)
+	      -If you send anything other than 0x00 or 0x01, 0x00 is assumed
+
+VNET_LOGON (0x01) Server -> Client
+    -The response to 0x01
+
+    Data:
+	BYTE     Logon result (everything after this byte is included if result is 0x01)
+	STRING   Server version string (VectorNet x.xx by Vector)
+	STRING   Hosted by name
+	STRING   Your name (#2, etc., if you log on the same name more than once)
+	DWORD    Your ping
+	BYTE     Your flag on the server (regular user, moderator, admin, etc.)
+
+	Logon result can be one of:
+		0x00: Account logged on successfully
+		0x01: Invalid password
+		0x02: Invalid characters in name
+		0x03: That account is already in use
+		0x04: Account passed, You need to send a challenge to complete logon
+
+VNET_SERVERCHALLENGE (0x02) Client -> Server
+    Data:
+	STRING  Challenge key
+
+	-Challenge key should be a random string representing the unique client
+
+VNET_SERVERCHALLENGE (0x02) Server -> Client
+    Data:
+	BYTE    Challenge result
+
+	-Challenge result may have only two values:
+		0x00: Client has passed the challenge
+		0x01: Client has failed the challenge (client will now be disconnected)
+		0x02: Challenge has just been created (no prior known entry for this client)
+
+VNET_CHATEVENT (0x03) Client -> Server
+    Data:
+	STRING   Message
+
+	-Simply send this message to VectorNet
+
+VNET_CHATEVENT (0x03) Server -> Client
+    Data:
+	BYTE     Message ID
+	DWORD    Ping
+	BYTE     Flag
+	STRING   Username
+	STRING   Text
+
+    Data:
+	There are several message IDs, to which Username, text, and Flag might change:
+		0x01: ID_USERJOIN
+ 			Text: The name of their product
+		0x02: ID_USERLEAVE
+			Text: The name of their product
+		0x03: ID_USERTALK
+		0x04: ID_USEREMOTE
+		0x05: ID_SERVERINFO (Flag contains server message ID)
+			  -Username only exists on ID 0x04, in ID 0x05
+
+			0x01: Server error messages
+			0x02: Server info messages
+			0x03: Account-related messages
+			0x04: Broadcast messages (Username contains name of broadcaster)
+			0x05: Successful channel join (Text contains proper cased channel name)
+		0x06: ID_USERJOINCHANNEL
+			Text:	Contains the name of their product
+		0x07: ID_USERLEAVECHANNEL
+			Text:	Contains the name of their product
+		0x08: ID_WHISPERTO
+		0x09: ID_WHISPERFROM
+
+VNET_FEATUREQUERY (0x04) Client -> Server
+    Data:
+	BYTE     Feature ID
+	    -Features have the following IDs
+		0x01: Tic-Tac-Toe
+		0x02: VNET Pad
+
+VNET_FEATUREQUERY (0x04) Server -> Client
+    Data:
+	BYTE     Result ID
+
+	    -Result ID can either be 0x01 (feature supported) or 0x00 (feature not supported)
+
+VNET_APPS (0x05) Client <-> Server
+    Data:
+	BYTE   App ID
+	STRING   Name of user to send packet to (not included on Server -> Client)
+	VOID   Rest of data
+
+	The app IDs are the following:
+		0x01: Tic-Tac-Toe
+		0x02: VNET PAD
+
+	-Note: The individual app protocols are shown below 
+
+For app ID 0x01 (VNET_TICTACTOE) Client -> Server
+    Data:
+	BYTE     Event ID
+	BYTE     Extra byte in Events (S>C 0x08, C>S and S>C 0x09)
+	STRING   Extra string in event 0x10
+
+	The events can be summarized with the following bytes:
+	    0x01: Compatibility check (makes sure client can play tic-tac-toe)
+	    0x02: Compabibility verification (client can play tic-tac-toe)
+	    0x03: Game request (requests a game from the other client)
+	    0x04: Game accept (accepts a game request from the other client)
+	    0x05: Game deny (Rejects a game request)
+	    0x06: Game quit (quits a game in progress)
+	    0x07: Game reset (resets the current game)
+	    0x08: Game prepare (selects who plays as what, X or O)
+	    	  - The server will determine who plays as what
+		  - The result will be sent to the other client as a BYTE:
+		    0x01: X
+		    0x02: O
+
+		  - Only on S > C will there be an extra BYTE
+    	    0x09: Board move has the following moves as a BYTE:
+		0x01: bottom left
+		0x02: bottom
+		0x03: bottom right
+		0x04: left
+		0x05: center
+		0x06: right
+		0x07: top left
+		0x08: top
+		0x09: top right
+	    0x10: Game chat (chat messages passed between players)
+		STRING     Text
+	    0x11: Game already in progress (the client is already playing a tic-tac-toe game)
+
+For app ID 0x01 (VNET_TICTACTOE) Server -> Client
+    Data:
+
+	    - This packet just mirrors the packets sent from client to client
+	    - Note the different events which require an extra BYTE:
+		0x08, and 0x09:
+
+For app ID 0x02 (VNET_VNETPAD) Cleint -> Server
+
+VNET_LIST (0x06) Client -> Server
+    Data:
+	BYTE    Request ID
+
+    -Requests a list of users in the client's current channel
+	Types of requests are:
+		0x01: Users in current channel
+		0x02: Banned users in channel
+		0x03: Users on VectorNet
+
+
+VNET_LIST (0x06) Server -> Client
+    Data:
+	BYTE    List Type
+	WORD    User Count
+
+	List type may be one of the following:
+		0x01: Users in client's current channel
+		0x02: Banned users in client's channel
+		0x03: Users currently on VectorNet
+
+	For Each User:
+		STRING    Username
+		DWORD     Ping
+		BYTE      Flag
+
+VNET_QUEUESHARE (0x07) Client -> Server
+    -This packet sends the specified message to any other clients
+      participating in message sharing (Battle.Net bots)
+      which requires the queue sharing byte to be on at login
+
+    Data:
+	BYTE     Action ID
+      For ID 0x01:
+	    BYTE     Enable/Disable Queue Sharing
+
+	For ID 0x02:
+	    STRING   Battle.Net channel
+	    STRING   Message to send to others
+
+	For ID 0x03:
+	    STRING   New queue master
+
+	For ID 0x04:
+	    STRING Sets Battle.Net Channel
+
+	Remarks for the specified IDs:
+		0x01:
+			All users must be in the same Battle.Net channel for messages
+			to be passed to other clients
+		0x02:
+                        Note: If the name is blank, the server will send back
+                              a reply of who the current channel master is.
+			      Also note that only the channel master may change
+			      the current channel master, or a VectorNet admin
+
+		0x03:
+			This just changes the client's Battle.Net channel variable.
+
+VNET_QUEUESHARE (0x07) Server -> Client
+
+    Data:
+	BYTE      Message ID
+	STRING    Message (not contained in ID 0x03)
+
+	Message IDs consist of the following bytes:
+		0x01: Message sent from another queue slave. Send this to Battle.Net.
+		0x02: Message contains name of channel master (if request is not blank)
+		0x03: 
+
+---------------------------------------------
+-                                           -
+-                                           -
+-   How the queue sharing process works     -
+-                                           -
+-                                           -
+---------------------------------------------
+
+You must send the queue sharing packet with ID 0x01 to enable queue sharing.
+You must also be in the same Battle.Net channel as another user who is also
+participating in queue sharing. Furthermore, they must be in the same IP pool
+as you are. If you are the channel master, you may open and close the pool
+at your leisure. If the pool is closed, no one else may join your queue pool
