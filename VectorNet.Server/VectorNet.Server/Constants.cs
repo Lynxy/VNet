@@ -29,8 +29,8 @@ namespace VectorNet.Server
 
         protected enum ChatEventType
         {
-            USER_JOIN = 0x01,
-            USER_LEAVE = 0x02,
+            USER_JOIN_VNET = 0x01,
+            USER_LEAVE_VNET = 0x02,
             USER_TALK = 0x03,
             USER_EMOTE = 0x04,
             SERVER_INFO = 0x05,
