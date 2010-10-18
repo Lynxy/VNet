@@ -16,24 +16,21 @@ namespace VectorNet.Server.GUI
 {
     public partial class frmMain : Form
     {
-        protected Server VNet;
+        protected ServerLoader loader = null;
+        protected bool clientMode = false;
 
-        public frmMain()
+        public frmMain(bool serverMode)
         {
+            MessageBox.Show("serverMode = " + serverMode.ToString());
+            if (serverMode)
+                loader = new ServerLoader();
             InitializeComponent();
-            VNet = new Server("config.xml");
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            VNet.CreateConsoleUser(RecvData);
-            VNet.StartListening();
-            VNet.HandleConsoleCommand("test");
         }
 
-        private void RecvData(byte[] data)
-        {
-            //MessageBox.Show("recv: " + Encoding.ASCII.GetString(data).Replace((char)0, '.'));
-        }
+        
     }
 }
