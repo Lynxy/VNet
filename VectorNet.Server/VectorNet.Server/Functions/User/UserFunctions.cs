@@ -45,6 +45,15 @@ namespace VectorNet.Server
 
             if (user == targetUser)
                 return true; //user can always see themselves
+
+            if (user.Flags == UserFlags.Admin)
+                return true; //admin can see all else
+
+            if (user.Flags == UserFlags.Moderator)
+            {
+                if (targetUser.Flags == UserFlags.Admin && targetUser.Flags == UserFlags.Invisible)
+                    return false;
+            }
             return true;
         }
     }
