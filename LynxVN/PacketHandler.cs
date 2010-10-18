@@ -59,19 +59,40 @@ namespace LynxVN
                         username = reader.ReadStringNT();
                         text = reader.ReadStringNT();
 
-                        if (id == (byte)ChatEventType.USER_JOIN_CHANNEL)
+                        if (id == (byte)ChatEventType.USER_JOIN_VNET)
+                        { }
+                        else if (id == (byte)ChatEventType.USER_LEAVE_VNET)
+                        { }
+                        else if (id == (byte)ChatEventType.USER_TALK)
+                        {
+                            AddChat(Brushes.Orange, "<" + username + "> ", Brushes.White, text);
+                        }
+                        else if (id == (byte)ChatEventType.USER_EMOTE)
+                        {
+                            AddChat(Brushes.Orange, "<" + username + " " + text + ">");
+                        }
+                        else if (id == (byte)ChatEventType.SERVER_INFO)
+                        {
+                            if (flags == 0x01) //error
+                                AddChat(Brushes.Red, "[VNET] " + text);
+                            else if (flags == 0x02) //info
+                                AddChat(Brushes.Blue, "[VNET] " + text);
+                            else if (flags == 0x03) //acct-message
+                                AddChat(Brushes.Red, "[VNET] " + text);
+                            else if (flags == 0x04) //broadcast
+                                AddChat(Brushes.Blue, "<" + username + "> " + text);
+                            else if (flags == 0x05) //joined channel
+                                AddChat(Brushes.DarkGreen, "-- You joined channel ", Brushes.Yellow, text, Brushes.DarkGreen, " --");
+                        }
+                        else if (id == (byte)ChatEventType.USER_JOIN_CHANNEL)
                         {
                             AddUser(new User() { Username = username, Client = text, Flags = flags, Ping = ping });
-                            AddChat(Brushes.DarkGreen, "-- ", Brushes.Blue, username, Brushes.DarkGreen, " has joined the channel");
+                            AddChat(Brushes.DarkGreen, "-- ", Brushes.Blue, username, Brushes.DarkGreen, " has joined the channel --");
                         }
                         else if (id == (byte)ChatEventType.USER_LEAVE_CHANNEL)
                         {
                             RemoveUser(username);
-                            AddChat(Brushes.DarkRed, "-- ", Brushes.Blue, username, Brushes.DarkRed, " has left the channel");
-                        }
-                        else if (id == (byte)ChatEventType.USER_TALK)
-                        {
-                            AddChat(Brushes.Orange, "<", Brushes.Orange, username, Brushes.Orange, "> " , Brushes.Black, text);
+                            AddChat(Brushes.DarkRed, "-- ", Brushes.Blue, username, Brushes.DarkRed, " has left the channel --");
                         }
                         break;
 
@@ -92,6 +113,7 @@ namespace LynxVN
                         }
                         break;
                     default:
+                        AddChat(Brushes.Red, "Unknown packet " + packetId.ToString() + ": " + Encoding.ASCII.GetString(reader.ReadToEnd()).Replace((char)0, '.'));
                         break;
                 }
             }
