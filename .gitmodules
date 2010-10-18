@@ -1,0 +1,3 @@
+[submodule "ps3toolchain"]
+	path = LynxyLibrary
+	url = git://github.com/Lynxy/LynxyLibrary.git
