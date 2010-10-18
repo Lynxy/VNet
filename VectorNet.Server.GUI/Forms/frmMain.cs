@@ -34,20 +34,30 @@ namespace VectorNet.Server.GUI
             }
             catch (Exception) { }
 
-            MessageBox.Show("serverMode = " + serverMode.ToString());
             if (serverMode)
                 loader = new ServerLoader(RecvData);
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            AddChat("Server mode = " + serverMode.ToString());
             if (serverMode)
-                loader.HandleConsoleCommand("join wtf");
+                loader.HandleConsoleCommand("join test");
         }
 
         private void RecvData(byte[] data)
         {
-            MessageBox.Show("recv: " + Encoding.ASCII.GetString(data).Replace((char)0, '.'));
+            AddChat(Encoding.ASCII.GetString(data) + "\r\n");
+        }
+
+        private void AddChat(string msg)
+        {
+            for (int i = 0; i < 32; i++)
+                msg = msg.Replace((char)i, '.');
+            rtbChat.Invoke(new Action(delegate
+            {
+                rtbChat.Text += "[" + DateTime.Now.ToShortTimeString() + "] " + msg + "\r\n";
+            }));
         }
 
     }

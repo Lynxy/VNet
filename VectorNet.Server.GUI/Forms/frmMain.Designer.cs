@@ -35,16 +35,18 @@
             // rtbChat
             // 
             this.rtbChat.BackColor = System.Drawing.Color.Black;
+            this.rtbChat.ForeColor = System.Drawing.Color.White;
             this.rtbChat.Location = new System.Drawing.Point(12, 12);
             this.rtbChat.Name = "rtbChat";
             this.rtbChat.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.rtbChat.Size = new System.Drawing.Size(471, 274);
             this.rtbChat.TabIndex = 0;
-            this.rtbChat.Text = " ";
+            this.rtbChat.Text = "";
             // 
             // lvVNUsers
             // 
             this.lvVNUsers.BackColor = System.Drawing.Color.Black;
+            this.lvVNUsers.ForeColor = System.Drawing.Color.White;
             this.lvVNUsers.Location = new System.Drawing.Point(489, 10);
             this.lvVNUsers.Name = "lvVNUsers";
             this.lvVNUsers.Size = new System.Drawing.Size(248, 274);
