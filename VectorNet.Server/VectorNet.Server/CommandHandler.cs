@@ -11,6 +11,7 @@ namespace VectorNet.Server
         {
             string[] aryCmd = cmd.ToString().Split(' ');
             string text;
+            List<string> msgs;
             Channel channel;
 
             switch (aryCmd[0].ToLower())
@@ -35,39 +36,23 @@ namespace VectorNet.Server
                         channel = GetChannelByName(text);
                         List<User> u = GetUsersInChannel(user, channel, false);
 
-                        if (u.Count > 0)
-                        {
-                            string uString = null;
-                            int idx = 1;
-
-                            SendServerInfo(user, "Users in channel " + channel.Name + ":");
-                            foreach (User tmp in u)
-                            {
-                                if (idx == u.Count)
-                                {
-                                    if (uString == null)
-                                        uString = tmp.Username;
-                                    else
-                                        uString += ", " + tmp.Username;
-
-                                    SendServerInfo(user, uString);
-                                }
-                                else if (idx % 2 == 0)
-                                {
-                                    uString += uString + tmp.Username;
-                                    SendServerInfo(user, uString);
-                                    uString = null;
-                                }
-                                else
-                                    if (uString == null)
-                                        uString = tmp.Username;
-                                    else
-                                        uString += ", " + tmp.Username;
-                                idx++;
-                            }
-                        }
-                        else
+                        if (u.Count == 0)
                             SendServerError(user, "That channel doesn't exist.");
+                        else
+                        {
+                            msgs = new List<string>();
+                            msgs.Add("Users in channel " + channel.Name + ":");
+                            for (int i = 0; i < u.Count; i++)
+                            {
+                                if (i % 2 == 0)
+                                    msgs.Add(u[i].Username);
+                                else
+                                    msgs[msgs.Count - 1] += ", " + u[i].Username;
+                            }
+                            foreach (string msg in msgs)
+                                SendServerInfo(user, msg);
+                            msgs = null;
+                        }
                     }
                     break;
                 default:
