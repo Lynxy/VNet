@@ -62,7 +62,7 @@ namespace VectorNet.Server
                 List<User> users = GetUsersInChannel(console, fromChannel, false);
                 foreach (User u in users)
                     if (u != targetUser)
-                        SendServerInfo(u, user.Username + " banned " + targetUser.Username + " from the channel!");
+                        SendServerInfo(u, targetUser.Username + " was banned from the channel by " + user.Username + "!");
                 JoinUserToChannel(targetUser, Channel_Void);
             }
             else

@@ -13,6 +13,7 @@ namespace VectorNet.Server
             string text;
             List<string> msgs;
             Channel channel;
+            User targetUser;
 
             switch (aryCmd[0].ToLower())
             {
@@ -23,9 +24,14 @@ namespace VectorNet.Server
                     else
                     {
                         text = cmd.Substring(cmd.IndexOf(' ') + 1);
-                        JoinUserToChannel(user, GetChannelByName(text, true));
+                        channel = GetChannelByName(text, true);
+                        if (channel.IsUserBanned(user))
+                            SendServerError(user, "You are banned from that channel.");
+                        else
+                            JoinUserToChannel(user, channel);
                     }
                     break;
+
                 case "who":
                     if (aryCmd.Length < 2)
                         SendServerError(user, "You must specify a channel.");
@@ -59,6 +65,24 @@ namespace VectorNet.Server
                         }
                     }
                     break;
+
+                case "ban":
+                    //TODO: Check permissions to ban
+                    if (aryCmd.Length < 2)
+                        SendServerError(user, "You must specify a user to ban.");
+                    else
+                    {
+                        targetUser = GetUserByName(aryCmd[1]);
+                        if (targetUser == null)
+                            SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
+                        else
+                            BanUser(user, targetUser, user.Channel);
+                    }
+                    break;
+
+                case "unban":
+                    break;
+
                 default:
                     SendServerError(user, "That is not a valid command.");
                     break;

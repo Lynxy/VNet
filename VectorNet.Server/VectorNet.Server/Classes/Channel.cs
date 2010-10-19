@@ -79,7 +79,7 @@ namespace VectorNet.Server
                 return _Users.ToList();
             }
 
-            public bool IsBanned(User user)
+            public bool IsUserBanned(User user)
             {
                 if (_Banned.Contains(user))
                     return true;
