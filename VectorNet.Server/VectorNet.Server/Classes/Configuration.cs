@@ -54,15 +54,6 @@ namespace VectorNet.Server
         {
             XmlSerializer x = new XmlSerializer(Config.GetType());
             if (!File.Exists(filename))
-                // Set VectorNet defaults
-
-                Config.HostedBy = null;
-                Config.isAES = false;
-                Config.isChallenge = false;
-                Config.ListenPort = 4800;
-                Config.MOTD = null;
-                Config.isIdleSystem = false;
-
                 return;
             using (StreamReader sr = new StreamReader(filename))
             {
