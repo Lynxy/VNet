@@ -11,12 +11,12 @@ namespace VectorNet.Server
     {
         //Channel Pool Functions
         //This class is for methods that must look at the Channels dictionary, not a single channel
-        protected Channel GetChannelByName(string channel)
+        protected Channel GetChannelByName(string channel, bool allowCreation)
         {
             Channel ret = Channels.Find(c =>
                 c.Name.ToLower() == channel.ToLower()
                 );
-            if (ret == null)
+            if (ret == null && allowCreation)
             {
                 ret = new Channel(channel);
                 Channels.Add(ret);

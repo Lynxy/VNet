@@ -23,7 +23,7 @@ namespace VectorNet.Server
                     else
                     {
                         text = cmd.Substring(cmd.IndexOf(' ') + 1);
-                        JoinUserToChannel(user, GetChannelByName(text));
+                        JoinUserToChannel(user, GetChannelByName(text, true));
                     }
                     break;
                 case "who":
@@ -33,25 +33,29 @@ namespace VectorNet.Server
                     {
                         text = cmd.Substring(cmd.IndexOf(' ') + 1);
 
-                        channel = GetChannelByName(text);
-                        List<User> u = GetUsersInChannel(user, channel, false);
-
-                        if (u.Count == 0)
+                        channel = GetChannelByName(text, false);
+                        if (channel == null)
                             SendServerError(user, "That channel doesn't exist.");
                         else
                         {
-                            msgs = new List<string>();
-                            msgs.Add("Users in channel " + channel.Name + ":");
-                            for (int i = 0; i < u.Count; i++)
+                            List<User> u = GetUsersInChannel(user, channel, false);
+                            if (u.Count == 0)
+                                SendServerError(user, "That channel doesn't exist.");
+                            else
                             {
-                                if (i % 2 == 0)
-                                    msgs.Add(u[i].Username);
-                                else
-                                    msgs[msgs.Count - 1] += ", " + u[i].Username;
+                                msgs = new List<string>();
+                                msgs.Add("Users in channel " + channel.Name + ":");
+                                for (int i = 0; i < u.Count; i++)
+                                {
+                                    if (i % 2 == 0)
+                                        msgs.Add(u[i].Username);
+                                    else
+                                        msgs[msgs.Count - 1] += ", " + u[i].Username;
+                                }
+                                foreach (string msg in msgs)
+                                    SendServerInfo(user, msg);
+                                msgs = null;
                             }
-                            foreach (string msg in msgs)
-                                SendServerInfo(user, msg);
-                            msgs = null;
                         }
                     }
                     break;
