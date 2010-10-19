@@ -19,6 +19,7 @@ namespace VectorNet.Server
                 byte packetId = reader.ReadByte();
                 switch (packetId)
                 {
+                     
                     case VNET_LOGON: //0x01
                         username = reader.ReadStringNT();
                         string password = reader.ReadStringNT();
