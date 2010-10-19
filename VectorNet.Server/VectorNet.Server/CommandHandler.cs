@@ -11,10 +11,12 @@ namespace VectorNet.Server
         {
             string[] aryCmd = cmd.ToString().Split(' ');
             string text;
+            Channel channel;
 
             switch (aryCmd[0].ToLower())
-            { 
+            {
                 case "join":
+                case "j":
                     if (aryCmd.Length < 2)
                         SendServerError(user, "You must specify a channel.");
                     else
@@ -30,15 +32,17 @@ namespace VectorNet.Server
                     {
                         text = cmd.Substring(cmd.IndexOf(' ') + 1);
 
-                        List<User> u = GetUsersInChannel(user, GetChannelByName(text), false);
+                        channel = GetChannelByName(text);
+                        List<User> u = GetUsersInChannel(user, channel, false);
 
                         if (u.Count > 0)
                         {
                             string uString = null;
                             int idx = 1;
 
-                            SendServerInfo(user, "Users in channel " + text + ":");
+                            SendServerInfo(user, "Users in channel " + channel.Name + ":");
                             foreach (User tmp in u)
+                            {
                                 if (idx == u.Count)
                                 {
                                     if (uString == null)
@@ -59,6 +63,8 @@ namespace VectorNet.Server
                                         uString = tmp.Username;
                                     else
                                         uString += ", " + tmp.Username;
+                                idx++;
+                            }
                         }
                         else
                             SendServerError(user, "That channel doesn't exist.");
