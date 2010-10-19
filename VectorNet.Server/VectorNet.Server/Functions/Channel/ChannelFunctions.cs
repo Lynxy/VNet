@@ -19,6 +19,18 @@ namespace VectorNet.Server
             Channels.Add(MainChannel);
         }
 
+        protected Channel GetChannelByName(string channel, bool allowCreation)
+        {
+            Channel ret = Channels.Find(c =>
+                c.Name.ToLower() == channel.ToLower());
+            if (ret == null && allowCreation)
+            {
+                ret = new Channel(channel);
+                Channels.Add(ret);
+            }
+            return ret;
+        }
+
         protected List<User> GetUsersInChannel(User userPerspective, Channel channel, bool excludeUser)
         {
             //TODO: user perspective
