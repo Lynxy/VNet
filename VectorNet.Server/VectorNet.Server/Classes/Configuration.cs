@@ -27,9 +27,6 @@ namespace VectorNet.Server
             public bool UseIdleSystem { get { return _UseIdleSystem; } set { _UseIdleSystem = value; } }
         }
 
-
-
-
         protected ConfigurationData Config = new ConfigurationData();
         protected string ConfigurationFile = "config.xml";
 

@@ -166,6 +166,8 @@ namespace VectorNet.Server
                 .InsertStringNT(message)
                 .Send(VNET_CHATEVENT);
         }
+
+
         
     }
 }

@@ -43,6 +43,8 @@ namespace VectorNet.Server.GUI
             AddChat("Server mode = " + serverMode.ToString());
             if (serverMode)
                 loader.HandleConsoleCommand("join test");
+
+
         }
 
         private void RecvData(byte[] data)

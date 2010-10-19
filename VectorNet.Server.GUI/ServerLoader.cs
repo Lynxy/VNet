@@ -18,13 +18,13 @@ namespace VectorNet.Server.GUI
         {
             VNet = new Server("config.xml");
 
-            VNet.CreateConsoleUser(dataRecv);
+            //VNet.CreateConsoleUser(dataRecv);
             VNet.StartListening();
         }
 
         public void HandleConsoleCommand(string cmd)
         {
-            VNet.HandleConsoleCommand(cmd);
+            //VNet.HandleConsoleCommand(cmd);
         }
 
         private void RecvData(byte[] data)
