@@ -100,9 +100,10 @@ namespace Lynxy.Network
 
         protected virtual void OnDisconnected()
         {
-            if (Connected && Disconnected != null)
-            {
+            if (Connected)
                 Close();
+            if (Disconnected != null)
+            {
                 Disconnected(this);
             }
         }
