@@ -59,7 +59,6 @@ namespace VectorNet.Server
                 user.IsOnline = false;
                 _server.DisconnectUser(user);
                 TcpClientUsers.Remove(sender);
-                sender.Client.Dispose();
             }
         }
     }
