@@ -11,16 +11,19 @@ namespace VectorNet.Server
         {
             string[] aryCmd = cmd.ToString().Split(' ');
             string text;
+            List<string> msgs;
+            Channel channel;
 
             switch (aryCmd[0].ToLower())
-            { 
+            {
                 case "join":
+                case "j":
                     if (aryCmd.Length < 2)
                         SendServerError(user, "You must specify a channel.");
                     else
                     {
                         text = cmd.Substring(cmd.IndexOf(' ') + 1);
-                        JoinUserToChannel(user, GetChannelByName(text));
+                        JoinUserToChannel(user, GetChannelByName(text, true));
                     }
                     break;
                 case "who":
@@ -30,38 +33,30 @@ namespace VectorNet.Server
                     {
                         text = cmd.Substring(cmd.IndexOf(' ') + 1);
 
-                        List<User> u = GetUsersInChannel(user, GetChannelByName(text), false);
-
-                        if (u.Count > 0)
-                        {
-                            string uString = null;
-                            int idx = 1;
-
-                            SendServerInfo(user, "Users in channel " + text + ":");
-                            foreach (User tmp in u)
-                                if (idx == u.Count)
-                                {
-                                    if (uString == null)
-                                        uString = tmp.Username;
-                                    else
-                                        uString += ", " + tmp.Username;
-
-                                    SendServerInfo(user, uString);
-                                }
-                                else if (idx % 2 == 0)
-                                {
-                                    uString += uString + tmp.Username;
-                                    SendServerInfo(user, uString);
-                                    uString = null;
-                                }
-                                else
-                                    if (uString == null)
-                                        uString = tmp.Username;
-                                    else
-                                        uString += ", " + tmp.Username;
-                        }
-                        else
+                        channel = GetChannelByName(text, false);
+                        if (channel == null)
                             SendServerError(user, "That channel doesn't exist.");
+                        else
+                        {
+                            List<User> u = GetUsersInChannel(user, channel, false);
+                            if (u.Count == 0)
+                                SendServerError(user, "That channel doesn't exist.");
+                            else
+                            {
+                                msgs = new List<string>();
+                                msgs.Add("Users in channel " + channel.Name + ":");
+                                for (int i = 0; i < u.Count; i++)
+                                {
+                                    if (i % 2 == 0)
+                                        msgs.Add(u[i].Username);
+                                    else
+                                        msgs[msgs.Count - 1] += ", " + u[i].Username;
+                                }
+                                foreach (string msg in msgs)
+                                    SendServerInfo(user, msg);
+                                msgs = null;
+                            }
+                        }
                     }
                     break;
                 default:

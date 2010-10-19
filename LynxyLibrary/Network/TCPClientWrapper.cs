@@ -191,24 +191,18 @@ namespace Lynxy.Network
         {
             try
             {
-                if (Connected)
+                if (!Connected)
                 {
-                    try
-                    {
-                        EndConnect(ar);
-                        OnConnectionEstablished();
-                    }
-                    catch (Exception)
-                    {
-                        OnDisconnected();
-                    }
-                }
-                else
                     OnConnectionRefused();
+                    return;
+                }
+
+                EndConnect(ar);
+                OnConnectionEstablished();
             }
             catch (Exception)
             {
-                OnConnectionRefused();
+                OnDisconnected();
             }
         }
         #endregion
@@ -223,6 +217,12 @@ namespace Lynxy.Network
         {
             try
             {
+                if (!Connected)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
                 System.IO.StreamWriter w = new System.IO.StreamWriter(GetStream());
                 w.Write(data);
                 w.Flush();
@@ -242,6 +242,12 @@ namespace Lynxy.Network
         {
             try
             {
+                if (!Connected)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
                 GetStream().Write(data, 0, size);
             }
             catch (Exception)
@@ -260,6 +266,12 @@ namespace Lynxy.Network
         {
             try
             {
+                if (!Connected)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
                 GetStream().BeginWrite(data, 0, size, new AsyncCallback(EndASSend), null);
             }
             catch (Exception)
@@ -273,6 +285,12 @@ namespace Lynxy.Network
         {
             try
             {
+                if (!Connected)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
                 GetStream().EndWrite(ar);
                 OnDataSent();
             }
@@ -296,6 +314,12 @@ namespace Lynxy.Network
         {
             try
             {
+                if (!Connected)
+                {
+                    OnDisconnected();
+                    return null;
+                }
+
                 byte[] ReadBuf = { 0 };
                 int Count = 0;
 
@@ -304,11 +328,8 @@ namespace Lynxy.Network
 
                 if (Count <= 0)
                 {
-                    if (!base.Connected)
-                    {
-                        OnDisconnected();
-                        return null;
-                    }
+                    OnDisconnected();
+                    return null;
                 }
 
                 byte[] ret = new byte[Count];
@@ -340,6 +361,12 @@ namespace Lynxy.Network
         {
             try
             {
+                if (!Connected)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
                 asReadBuffer = new byte[0];
                 Array.Resize(ref asReadBuffer, asReadSize);
                 GetStream().BeginRead(asReadBuffer, 0, asReadSize, new AsyncCallback(EndASRead), null);
@@ -354,6 +381,12 @@ namespace Lynxy.Network
         {
             try
             {
+                if (!Connected)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
                 int intCount = 0;
                 intCount = GetStream().EndRead(ar);
                 if (intCount < 1)

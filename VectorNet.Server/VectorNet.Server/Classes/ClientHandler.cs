@@ -53,10 +53,13 @@ namespace VectorNet.Server
 
             protected void client_Disconnected(TcpClientWrapper sender)
             {
+                if (!TcpClientUsers.ContainsKey(sender))
+                    return;
                 User user = TcpClientUsers[sender];
-                _server.DisconnectUser(user);
                 user.IsOnline = false;
+                _server.DisconnectUser(user);
                 TcpClientUsers.Remove(sender);
+                sender.Client.Dispose();
             }
         }
     }
