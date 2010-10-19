@@ -36,7 +36,7 @@ namespace VectorNet.Server
         {
             Users = new List<User>();
             Channels = new List<Channel>();
-            CreateMainChannel("Main");
+            CreateDefaultChannels();
             ConnectToDatabase("vnet.sqlite");
 
             console = new User(null, true);

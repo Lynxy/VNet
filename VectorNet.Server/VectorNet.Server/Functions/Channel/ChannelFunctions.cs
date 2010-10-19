@@ -11,12 +11,16 @@ namespace VectorNet.Server
     {
         //Channel Functions
         //This class is for methods that deal with a single channel, not multiple channels
-        protected Channel MainChannel;
+        protected Channel Channel_Main;
+        protected Channel Channel_Void;
 
-        protected void CreateMainChannel(string name)
+        protected void CreateDefaultChannels()
         {
-            MainChannel = new Channel(name);
-            Channels.Add(MainChannel);
+            Channel_Main = new Channel("Main");
+            Channels.Add(Channel_Main);
+
+            Channel_Void = new Channel("The Void");
+            Channels.Add(Channel_Void);
         }
 
         protected Channel GetChannelByName(string channel, bool allowCreation)

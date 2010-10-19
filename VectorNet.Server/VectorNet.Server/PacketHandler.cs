@@ -56,7 +56,7 @@ namespace VectorNet.Server
                         SendLogonResult(user, LogonResult.SUCCESS);
                         if (state == AccountState.NewAccount)
                             SendServerInfo(user, "New account created!");
-                        JoinUserToChannel(user, MainChannel);
+                        JoinUserToChannel(user, Channel_Main);
 
                         break;
 
