@@ -13,13 +13,18 @@ namespace VectorNet.Server
     {
         public class ConfigurationData
         {
-            public bool isAES { get; set; }
-            public bool isChallenge { get; set; }
-            public bool isIdleSystem { get; set; }
+            protected int _ListenPort = 4800;
+            protected string _HostedBy = "";
+            protected string _MOTD = "";
+            protected bool _AllowAES = true;
+            protected bool _AllowChallenges = true;
+            protected bool _UseIdleSystem = false;
 
-            public int ListenPort { get; set; }
-            public string HostedBy { get; set; }
-            public string MOTD { get; set; }
+            public int ListenPort { get { return _ListenPort; } set { _ListenPort = value; } }
+            public string HostedBy { get { return _HostedBy; } set { _HostedBy = value; } }
+            public string MOTD { get { return _MOTD; } set { _MOTD = value; } }
+            public bool AllowAES { get { return _AllowAES; } set { _AllowAES = value; } }
+            public bool UseIdleSystem { get { return _UseIdleSystem; } set { _UseIdleSystem = value; } }
         }
 
         protected ConfigurationData Config = new ConfigurationData();
