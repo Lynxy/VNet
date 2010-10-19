@@ -32,8 +32,8 @@ namespace VectorNet.Server
                         .InsertWord((short)u.Count);
 
                     foreach (User tmp in u)
-                        user.Packet.InsertString(tmp.Username)
-                            .InsertString(tmp.Client)
+                        user.Packet.InsertStringNT(tmp.Username)
+                            .InsertStringNT(tmp.Client)
                             .InsertDWord(tmp.Ping)
                             .InsertByte((byte)tmp.Flags);
                     user.Packet.Send(VNET_LIST);
