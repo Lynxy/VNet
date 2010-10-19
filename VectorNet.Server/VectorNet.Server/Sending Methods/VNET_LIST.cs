@@ -34,7 +34,7 @@ namespace VectorNet.Server
                         
                     break;
                 case ListType.UsersBannedFromChannel:
-                    List<User> banned = user.Channel.GetBannedUsersInChannel().ToList();
+                    List<User> banned = user.Channel.Banned;
 
                     user.Packet.InsertByte((byte)ListType.UsersBannedFromChannel)
                         .InsertWord((short)banned.Count);

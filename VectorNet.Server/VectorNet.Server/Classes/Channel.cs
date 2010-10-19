@@ -36,6 +36,7 @@ namespace VectorNet.Server
                 _Flags = flags;
                 _Users = new List<User>();
                 _Operators = new List<User>();
+                _Banned = new List<User>();
             }
 
 
@@ -83,16 +84,6 @@ namespace VectorNet.Server
                 if (_Banned.Contains(user))
                     return true;
                 return false;
-            }
-
-            public List<User> GetBannedUsersInChannel()
-            {
-                List<User> ret = _Users.ToList();
-
-                foreach (User u in ret)
-                    if (!IsBanned(u))
-                        ret.Remove(u);
-                return ret;
             }
         }
     }
