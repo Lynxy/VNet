@@ -51,9 +51,8 @@ namespace VectorNet.Server
             }
 
             public User Owner { get; set; }
-            public List<User> Users { get { return _Users; } } //DO NOT REFERENCE THIS TYPE BY ITSELF! USE GetUsersInChannel() INSTEAD
             public List<User> Operators { get { return _Operators; } }
-            public List<User> Banned { get { return _Banned; } }
+            public List<User> Banned { get { return _Banned; } set { _Banned = value; } }
 
             public void AddUser(User user, bool isOperator)
             {
@@ -74,6 +73,11 @@ namespace VectorNet.Server
                     _Operators.Remove(user);
             }
 
+            public List<User> GetCompleteUserList()
+            {
+                return _Users.ToList();
+            }
+
             public void BanUser(User user)
             {
                 if (!Banned.Contains(user))
@@ -90,11 +94,12 @@ namespace VectorNet.Server
             {
                 if (_Banned.Contains(user))
                     return true;
+                return false;
             }
 
             public List<User> GetBannedUsersInChannel()
             {
-                List<User> ret = Users.ToList();
+                List<User> ret = _Users.ToList();
 
                 foreach (User u in ret)
                     if (!IsBanned(u))

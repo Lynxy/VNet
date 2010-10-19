@@ -34,7 +34,7 @@ namespace VectorNet.Server
         protected List<User> GetUsersInChannel(User userPerspective, Channel channel, bool excludeUser)
         {
             //TODO: user perspective
-            List<User> ret = channel.Users.ToList();
+            List<User> ret = channel.GetCompleteUserList();
             if (excludeUser && ret.Contains(userPerspective))
                 ret.Remove(userPerspective);
             for (int i = ret.Count - 1; i >= 0; i--)
