@@ -38,11 +38,12 @@ namespace VectorNet.Server
             Channels = new List<Channel>();
             CreateMainChannel("Main");
             ConnectToDatabase("vnet.sqlite");
+
+            console = new User(null, true);
         }
 
-        public void CreateConsoleUser(Action<byte[]> ReceiveDataEvent)
+        public void WireConsoleUserDataRecv(Action<byte[]> ReceiveDataEvent)
         {
-            console = new User(null, true);
             console.SendData += ReceiveDataEvent;
         }
     }

@@ -9,24 +9,20 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        protected enum ListType
-        {
-            VNET_CHANNEL_LIST = 0x01,
-            VNET_CHANNEL_BANNED = 0x02,
-            VNET_SERVER_LIST = 0x03
-        }
+        
 
-        protected void SendList(User user, ListType flags)
+        protected void SendList(User user, ListType listType)
         {
-            switch (flags)
+            switch (listType)
             {
-                case ListType.VNET_CHANNEL_LIST:
-                    List<User> u = GetUsersInChannel(user, user.Channel, true);
+                case ListType.UsersInChannel:
+                    List<User> u = GetUsersInChannel(user, user.Channel, false); //dont exclude current user from channel listing
 
                     if (u == null)
                         return;
 
-                    user.Packet.Clear().InsertByte((byte)ListType.VNET_CHANNEL_LIST)
+                    user.Packet.Clear()
+                        .InsertByte((byte)ListType.UsersInChannel)
                         .InsertWord((short)u.Count);
 
                     foreach (User tmp in u)
@@ -37,10 +33,10 @@ namespace VectorNet.Server
                     user.Packet.Send(VNET_LIST);
                         
                     break;
-                case ListType.VNET_CHANNEL_BANNED:
+                case ListType.UsersBannedFromChannel:
                     break;
 
-                case ListType.VNET_SERVER_LIST:
+                case ListType.UsersOnServer:
                     break;
             }
         }

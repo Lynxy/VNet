@@ -18,7 +18,7 @@ namespace VectorNet.Server.GUI
         {
             VNet = new Server("config.xml");
 
-            //VNet.CreateConsoleUser(dataRecv);
+            //VNet.WireConsoleUserDataRecv(dataRecv);
             VNet.StartListening();
         }
 
