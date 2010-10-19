@@ -50,6 +50,7 @@ Changes:
    - Removed IDs 0x01 and 0x02 (compatibility) since APP ID 0x00 is a better way of testing
      if the client supports the app or not
  - Added information for APP_VNETPAD (ID 0x02)
+ - Added Client STRING field to VNET_LIST (0x05 Server -> Client
 
 VNET_KEEPALIVE (0x00) Client <-> Server
     Data:
@@ -224,6 +225,7 @@ VNET_LIST (0x05) Server -> Client
 
 	For Each User:
 		STRING    Username
+		STRING    Client
 		DWORD     Ping
 		BYTE      Flag
 
