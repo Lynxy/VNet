@@ -52,7 +52,7 @@ namespace VectorNet.Server
             public User Owner { get; set; }
             public List<User> Users { get { return _Users; } } //DO NOT REFERENCE THIS TYPE BY ITSELF! USE GetUsersInChannel() INSTEAD
             public List<User> Operators { get { return _Operators; } }
-
+            public List<User> Banned { get { return Banned; } }
 
             public void AddUser(User user, bool isOperator)
             {
@@ -73,6 +73,17 @@ namespace VectorNet.Server
                     _Operators.Remove(user);
             }
 
+            public void BanUser(User user)
+            {
+                if (!Banned.Contains(user))
+                    Banned.Add(user);
+                }
+
+            public void UnbanUser(User user)
+            {
+                if (Banned.Contains(user))
+                    Banned.Remove(user);
+            }
         }
     }
 }
