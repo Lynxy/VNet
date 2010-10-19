@@ -52,10 +52,21 @@ namespace VectorNet.Server
             return ret;
         }
 
-        protected void BanUser(User user, Channel fromChannel)
+        protected void BanUser(User user, User targetUser, Channel fromChannel)
         {
-            if (!fromChannel.Banned.Contains(user))
-                fromChannel.Banned.Add(user);
+            if (!fromChannel.Banned.Contains(targetUser))
+                fromChannel.Banned.Add(targetUser);
+            if (targetUser.Channel == fromChannel)
+            {
+                SendServerInfo(targetUser, "You have been banned from the channel by  " + user.Username + ".");
+                List<User> users = GetUsersInChannel(console, fromChannel, false);
+                foreach (User u in users)
+                    if (u != targetUser)
+                        SendServerInfo(u, user.Username + " banned " + targetUser.Username + " from the channel!");
+                JoinUserToChannel(targetUser, Channel_Void);
+            }
+            else
+                SendServerInfo(targetUser, user.Username + " has banned you from channel " + fromChannel.Name + ".");
         }
 
         protected void UnbanUser(User user, Channel fromChannel)
