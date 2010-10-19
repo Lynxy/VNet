@@ -268,6 +268,7 @@ namespace Lynxy.Network
             }
         }
 
+        //TODO: FIX ME
         private void EndASSend(IAsyncResult ar)
         {
             try

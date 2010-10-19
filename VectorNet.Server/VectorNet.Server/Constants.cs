@@ -43,8 +43,8 @@ namespace VectorNet.Server
         protected enum ListType
         {
             UsersInChannel = 0x01,
-            UsersOnServer = 0x02,
-            UsersBannedFromChannel = 0x03,
+            UsersBannedFromChannel = 0x02,
+            UsersOnServer = 0x03
         }
     }
 }

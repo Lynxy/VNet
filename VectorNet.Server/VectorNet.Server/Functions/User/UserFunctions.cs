@@ -25,7 +25,7 @@ namespace VectorNet.Server
 
             SendUserJoinedChannel(user);
             SendJoinedChannelSuccessfully(user);
-            SendChannelList(user);
+            SendList(user, ListType.UsersInChannel);
         }
 
         protected void RemoveUserFromChannel(User user)
