@@ -18,6 +18,15 @@ namespace VectorNet.Server
         protected const int VNET_LIST           = 0x06;
         protected const int VNET_QUEUESHARE     = 0x07;
 
+        protected enum AppFlags
+        { 
+            APP_UNHANDLED = 0x00,
+            APP_TICTACTOE = 0x01,
+            APP_VNETPAD = 0x02,
+            APP_ICONS = 0x03,
+            APP_FILESHARING = 0x04
+        }
+
         protected enum LogonResult
         {
             SUCCESS          = 0x00,
