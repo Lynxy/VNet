@@ -8,17 +8,22 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <RichTextBox Margin="12,29,164,41" Name="rtbChat" VerticalScrollBarVisibility="Auto" Background="Black" Foreground="White" />
-        <ListView HorizontalAlignment="Right" Margin="0,29,12,41" Name="lvChannel" Width="146" Background="Black" Foreground="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="375*" />
+            <ColumnDefinition Width="170*"  />
+        </Grid.ColumnDefinitions>
+        <RichTextBox Margin="12,29,8,44" Name="rtbChat" VerticalScrollBarVisibility="Auto" Background="Black" Foreground="White" BorderBrush="{x:Null}" />
+        <TextBox Height="23" Margin="12,0,12,12" Name="txtSend" Grid.ColumnSpan="2" VerticalAlignment="Bottom" KeyUp="txtSend_KeyUp" Background="Black" Foreground="White" BorderBrush="{x:Null}" />
+        <Menu Height="23" Name="menu1" VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <MenuItem Header="Connect" Name="mnuConnect" Click="mnuConnect_Click" />
+        </Menu>
+        <Separator Margin="12,273,12,0" Name="separator1" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+        <ListView Background="Black" BorderBrush="{x:Null}" Foreground="White" Margin="8,29,12,44" Name="lvChannel" Grid.Column="1">
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
-                    <GridViewColumn Header="Username" DisplayMemberBinding="{Binding Username}" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Username}" Header="Username" />
                 </GridView>
             </ListView.View>
         </ListView>
-        <TextBox Height="23" Margin="12,0,12,12" Name="txtSend" VerticalAlignment="Bottom" KeyUp="txtSend_KeyUp" Background="Black" Foreground="White" />
-        <Menu Height="23" Name="menu1" VerticalAlignment="Top">
-            <MenuItem Header="Connect" Name="mnuConnect" Click="mnuConnect_Click" />
-        </Menu>
     </Grid>
 </Window>
