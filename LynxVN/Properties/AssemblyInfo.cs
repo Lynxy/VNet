@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("LynxVN")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Northwestern Michigan College")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("LynxVN")]
-[assembly: AssemblyCopyright("Copyright © Northwestern Michigan College 2010")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
