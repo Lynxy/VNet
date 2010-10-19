@@ -48,6 +48,7 @@ Changes:
  - Fixed a few things, and added some more data
  - VNET_APPS -> APP_TICTACTOE (0x01)
    - Removed IDs 0x01 and 0x02 (compatibility) since APP ID 0x00 is a better way of testing
+     if the client supports the app or not
  - Added information for APP_VNETPAD (ID 0x02)
 
 VNET_KEEPALIVE (0x00) Client <-> Server
