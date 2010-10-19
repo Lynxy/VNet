@@ -47,5 +47,17 @@ namespace VectorNet.Server
                     ret.Add(console);
             return ret;
         }
+
+        protected void BanUser(User user, Channel fromChannel)
+        {
+            if (!fromChannel.Banned.Contains(user))
+                fromChannel.Banned.Add(user);
+        }
+
+        protected void UnbanUser(User user, Channel fromChannel)
+        {
+            if (fromChannel.Banned.Contains(user))
+                fromChannel.Banned.Remove(user);
+        }
     }
 }

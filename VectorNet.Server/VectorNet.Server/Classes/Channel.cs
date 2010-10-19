@@ -78,18 +78,6 @@ namespace VectorNet.Server
                 return _Users.ToList();
             }
 
-            public void BanUser(User user)
-            {
-                if (!Banned.Contains(user))
-                    Banned.Add(user);
-                }
-
-            public void UnbanUser(User user)
-            {
-                if (_Banned.Contains(user))
-                    _Banned.Remove(user);
-            }
-
             public bool IsBanned(User user)
             {
                 if (_Banned.Contains(user))
