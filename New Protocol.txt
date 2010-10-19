@@ -52,6 +52,9 @@ Changes:
  - Added information for APP_VNETPAD (ID 0x02)
  - Added Client STRING field to VNET_LIST (0x05 Server -> Client
 
+10/19/2010
+ - Added missing ID information (0x05) to VNET_QUEUESHARING (0x06) Client -> Server
+
 VNET_KEEPALIVE (0x00) Client <-> Server
     Data:
 		None
@@ -137,9 +140,9 @@ VNET_CHATEVENT (0x03) Server -> Client
 
 VNET_APPS (0x04) Client <-> Server
     Data:
-	BYTE   App ID
+	BYTE     App ID
 	STRING   Name of user to send packet to (Server -> Client contains name of sender)
-	VOID   Rest of data
+	VOID     Rest of data
 
 	The app IDs are the following:
 		0x00: Unsupported
@@ -265,6 +268,9 @@ VNET_QUEUESHARE (0x06) Client -> Server
 
 		0x04:
 			This just changes the client's Battle.Net channel variable.
+		0x05:
+			This opens or closes your IP pool, if you are channel master
+			so no other users may join your pool
 
 VNET_QUEUESHARE (0x06) Server -> Client
 
