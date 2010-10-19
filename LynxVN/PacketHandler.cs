@@ -26,6 +26,7 @@ namespace LynxVN
             int ping;
             byte flags;
             byte id;
+            short count;
 
             try
             {
@@ -98,6 +99,7 @@ namespace LynxVN
 
                     case VNET_LIST: //0x06
                         id = reader.ReadByte();
+                        count = reader.ReadWord();
                         if (id == (byte)ListType.UsersInChannel)
                         {
                             ClearChannelList();
