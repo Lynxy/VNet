@@ -9,8 +9,6 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-
-        [Flags]
         protected enum ListType
         {
             VNET_CHANNEL_LIST = 0x01,
