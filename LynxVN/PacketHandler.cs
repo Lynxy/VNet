@@ -114,10 +114,13 @@ namespace LynxVN
                         {
                             username = reader.ReadStringNT();
                             client = reader.ReadStringNT();
-                            channel = reader.ReadStringNT();
-                            tmpByte = reader.ReadByte();
-                            if (tmpByte != 0)
-                                tmpStr = reader.ReadStringNT();
+                            if (id == (byte)ListType.UsersOnServer)
+                            {
+                                channel = reader.ReadStringNT();
+                                tmpByte = reader.ReadByte();
+                                if (tmpByte != 0)
+                                    tmpStr = reader.ReadStringNT();
+                            }
                             ping = reader.ReadDword();
                             flags = reader.ReadByte();
                             if (id == (byte)ListType.UsersInChannel)
