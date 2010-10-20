@@ -49,6 +49,39 @@ namespace VectorNet.Server
                     break;
 
                 case ListType.UsersOnServer:
+                    Dictionary<User, List<string>> userBannedFrom = new Dictionary<User, List<string>>();
+                    foreach (Channel chan in Channels)
+                    {
+                        foreach (User usr in chan.Banned)
+                        {
+                            if (!userBannedFrom.ContainsKey(usr))
+                                userBannedFrom.Add(usr, new List<string>());
+                            if (!userBannedFrom[usr].Contains(chan.Name))
+                                userBannedFrom[usr].Add(chan.Name);
+                        }
+                    }
+
+                    user.Packet.InsertByte((byte)ListType.UsersOnServer)
+                               .InsertWord((short)Users.Count);
+
+                    foreach (User usr in Users)
+                    {
+                        user.Packet.InsertStringNT(usr.Username)
+                                   .InsertStringNT(usr.Client)
+                                   .InsertStringNT(usr.Channel.Name);
+
+                        if (userBannedFrom.ContainsKey(usr))
+                            user.Packet.InsertByte(0x01)
+                                       .InsertStringNT(String.Join(((byte)1).ToString(), userBannedFrom[usr]));
+                        else
+                            user.Packet.InsertByte(0x00);
+
+                        user.Packet.InsertWord((short)usr.Ping)
+                                   .InsertByte((byte)usr.Flags);
+                    }
+                    user.Packet.Send(VNET_LIST);
+
+
                     List<Channel> ChannelList = Channels.ToList();
 
                     TempUserStruct temp;
