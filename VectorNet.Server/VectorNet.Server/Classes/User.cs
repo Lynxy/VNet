@@ -16,6 +16,7 @@ namespace VectorNet.Server
 
             protected TcpClientWrapper socket;
             protected Packet packet;
+            protected PacketBufferer bufferer;
             protected bool _isConsole = false;
 
             public User(TcpClientWrapper clientSocket, bool isConsole)
@@ -26,11 +27,12 @@ namespace VectorNet.Server
                 packet = new Packet();
                 packet.skipHeaders = isConsole;
                 packet.DataSent += new Packet.SendDataDelegate(packet_SendData);
+                bufferer = new PacketBufferer(SendDataFinal, 200);
 
                 Flags = UserFlags.Normal;
             }
 
-            protected void packet_SendData(byte[] data)
+            protected void packet_SendData(ref byte[] data)
             {
                 if (_isConsole)
                 {
@@ -38,7 +40,12 @@ namespace VectorNet.Server
                         SendData(data);
                 }
                 else
-                    socket.AsyncSend(data, data.Length);
+                    bufferer.QueuePacket(ref data);
+            }
+
+            protected void SendDataFinal(ref byte[] data)
+            {
+                socket.AsyncSend(data, data.Length);
             }
 
             public TcpClientWrapper Socket { get { return socket; } }
