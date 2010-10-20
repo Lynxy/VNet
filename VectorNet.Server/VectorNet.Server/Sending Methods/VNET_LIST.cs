@@ -86,7 +86,7 @@ namespace VectorNet.Server
                     user.Packet.Send(VNET_LIST);
 
 
-                    List<Channel> ChannelList = Channels.ToList();
+                    //List<Channel> ChannelList = Channels.ToList();
 
                     //TempUserStruct temp;
                     //List<TempUserStruct> lstTemp = new List<TempUserStruct>();
