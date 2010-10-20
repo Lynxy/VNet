@@ -19,7 +19,7 @@ namespace VectorNet.Server
             public Dictionary<TcpClientWrapper, User> TcpClientUsers = new Dictionary<TcpClientWrapper, User>();
             public Dictionary<User, byte[]> UserBuffers = new Dictionary<User, byte[]>();
 
-            protected readonly object _locker = new object();
+            private readonly object _locker = new object();
             protected Server _server;
 
             public ClientHandler(Server server)
