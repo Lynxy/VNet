@@ -22,7 +22,7 @@ namespace Lynxy.Network
     public sealed class Packet
     {
         public delegate byte[] EncryptorDelegate(byte[] data);
-        public delegate void SendDataDelegate(byte[] data);
+        public delegate void SendDataDelegate(ref byte[] data);
         public event SendDataDelegate DataSent;
 
         private StringBuilder buffer;
@@ -88,7 +88,7 @@ namespace Lynxy.Network
             else
                 ret = this;
             if (DataSent != null)
-                DataSent(ret);
+                DataSent(ref ret);
             Clear();
         }
 
