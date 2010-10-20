@@ -83,6 +83,10 @@ namespace VectorNet.Server
                 case "unban":
                     break;
 
+                case "users":
+                    SendList(user, ListType.UsersOnServer);
+                    break;
+
                 default:
                     SendServerError(user, "That is not a valid command.");
                     break;
