@@ -33,7 +33,7 @@ namespace VectorNet.Server
                         AccountState state = GetAccountState(username, password);
                         if (state == AccountState.InvalidPassword)
                         {
-                            SendLogonResult(user, LogonResult.INVALID_PASSWORD);
+                            SendLogonResult(user, LogonResult.InvalidPassword);
                             return;
                         }
                         if (state == AccountState.NewAccount)
@@ -44,7 +44,7 @@ namespace VectorNet.Server
 
                         if (GetUserByName(username) != null)
                         {
-                            SendLogonResult(user, LogonResult.ACCOUNT_IN_USE);
+                            SendLogonResult(user, LogonResult.AccountInUse);
                             return;
                         }
 
@@ -53,7 +53,7 @@ namespace VectorNet.Server
                         user.IsOnline = true;
 
                         UpdateLastLogin(username);
-                        SendLogonResult(user, LogonResult.SUCCESS);
+                        SendLogonResult(user, LogonResult.Success);
                         if (state == AccountState.NewAccount)
                             SendServerInfo(user, "New account created!");
                         JoinUserToChannel(user, Channel_Main);

@@ -16,7 +16,7 @@ namespace VectorNet.Server
             foreach (User u in Users)
                 if (u != user)
                     u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_JOIN_VNET)
+                        .InsertByte((byte)ChatEventType.UserJoinedServer)
                         .InsertDWord(user.Ping)
                         .InsertByte((byte)user.Flags)
                         .InsertStringNT(user.Username)
@@ -29,7 +29,7 @@ namespace VectorNet.Server
             foreach (User u in Users)
                 if (u != user)
                     u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_LEAVE_VNET)
+                        .InsertByte((byte)ChatEventType.UserLeftServer)
                         .InsertDWord(user.Ping)
                         .InsertByte((byte)user.Flags)
                         .InsertStringNT(user.Username)
@@ -42,7 +42,7 @@ namespace VectorNet.Server
             foreach (User u in GetUsersInChannel(console, user.Channel, false))
                 if (u != user)
                     u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_TALK)
+                        .InsertByte((byte)ChatEventType.UserTalk)
                         .InsertDWord(user.Ping)
                         .InsertByte((byte)user.Flags)
                         .InsertStringNT(user.Username)
@@ -55,7 +55,7 @@ namespace VectorNet.Server
             foreach (User u in GetUsersInChannel(console, user.Channel, false))
                 if (u != user)
                     u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_EMOTE)
+                        .InsertByte((byte)ChatEventType.UserEmote)
                         .InsertDWord(user.Ping)
                         .InsertByte((byte)user.Flags)
                         .InsertStringNT(user.Username)
@@ -66,7 +66,7 @@ namespace VectorNet.Server
         protected void SendServerError(User user, string message)
         {
             user.Packet.Clear()
-                .InsertByte((byte)ChatEventType.SERVER_INFO)
+                .InsertByte((byte)ChatEventType.ServerInfo)
                 .InsertDWord(0)
                 .InsertByte(0x01) //error
                 .InsertStringNT("")
@@ -77,7 +77,7 @@ namespace VectorNet.Server
         protected void SendServerInfo(User user, string message)
         {
             user.Packet.Clear()
-                .InsertByte((byte)ChatEventType.SERVER_INFO)
+                .InsertByte((byte)ChatEventType.ServerInfo)
                 .InsertDWord(0)
                 .InsertByte(0x02) //info
                 .InsertStringNT("")
@@ -88,7 +88,7 @@ namespace VectorNet.Server
         protected void SendAccountInfo(User user, string message)
         {
             user.Packet.Clear()
-                .InsertByte((byte)ChatEventType.SERVER_INFO)
+                .InsertByte((byte)ChatEventType.ServerInfo)
                 .InsertDWord(0)
                 .InsertByte(0x03) //account info
                 .InsertStringNT("")
@@ -100,7 +100,7 @@ namespace VectorNet.Server
         {
             foreach (User u in Users)
                 u.Packet.Clear()
-                    .InsertByte((byte)ChatEventType.SERVER_INFO)
+                    .InsertByte((byte)ChatEventType.ServerInfo)
                     .InsertDWord(userBroadcasting.Ping)
                     .InsertByte(0x04) //broadcast
                     .InsertStringNT(userBroadcasting.Username)
@@ -111,7 +111,7 @@ namespace VectorNet.Server
         protected void SendJoinedChannelSuccessfully(User user)
         {
             user.Packet.Clear()
-                .InsertByte((byte)ChatEventType.SERVER_INFO)
+                .InsertByte((byte)ChatEventType.ServerInfo)
                 .InsertDWord(0)
                 .InsertByte(0x05) //you joined channel
                 .InsertStringNT("")
@@ -124,7 +124,7 @@ namespace VectorNet.Server
             foreach (User u in GetUsersInChannel(console, user.Channel, false))
                 if (u != user)
                     u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_JOIN_CHANNEL)
+                        .InsertByte((byte)ChatEventType.UserJoinedChannel)
                         .InsertDWord(user.Ping)
                         .InsertByte((byte)user.Flags)
                         .InsertStringNT(user.Username)
@@ -137,7 +137,7 @@ namespace VectorNet.Server
             foreach (User u in GetUsersInChannel(console, user.Channel, false))
                 if (u != user)
                     u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.USER_LEAVE_CHANNEL)
+                        .InsertByte((byte)ChatEventType.UserLeftChannel)
                         .InsertDWord(user.Ping)
                         .InsertByte((byte)user.Flags)
                         .InsertStringNT(user.Username)
@@ -148,7 +148,7 @@ namespace VectorNet.Server
         protected void SendUserWhisperTo(User userFrom, User userTo, string message)
         {
             userFrom.Packet.Clear()
-                .InsertByte((byte)ChatEventType.WHISPER_TO)
+                .InsertByte((byte)ChatEventType.UserWhisperTo)
                 .InsertDWord(userTo.Ping)
                 .InsertByte((byte)userTo.Flags)
                 .InsertStringNT(userTo.Username)
@@ -159,7 +159,7 @@ namespace VectorNet.Server
         protected void SendUserWhisperFrom(User userTo, User userFrom, string message)
         {
             userTo.Packet.Clear()
-                .InsertByte((byte)ChatEventType.WHISPER_FROM)
+                .InsertByte((byte)ChatEventType.UserWhisperFrom)
                 .InsertDWord(userFrom.Ping)
                 .InsertByte((byte)userFrom.Flags)
                 .InsertStringNT(userFrom.Username)
