@@ -22,11 +22,16 @@ namespace LynxVN
         {
             User user;
             string username;
+            string client;
+            string channel;
             string text;
             int ping;
             byte flags;
             byte id;
             short count;
+
+            byte tmpByte = 0;
+            string tmpStr = "";
 
             try
             {
@@ -38,18 +43,19 @@ namespace LynxVN
                         byte challengeByte = reader.ReadByte();
                         string serverVersion = reader.ReadStringNT();
                         string hostedBy = reader.ReadStringNT();
+                        MyName = reader.ReadStringNT();
                         ping = reader.ReadDword();
                         flags = reader.ReadByte();
 
-                        if (logonResult == LogonResult.SUCCESS || logonResult == LogonResult.SEND_CHALLENGE)
+                        if (logonResult == LogonResult.Success || logonResult == LogonResult.SendChallenge)
                         {
                             AddChat(Brushes.Blue, "Successfully logged on");
                         }
-                        else if (logonResult == LogonResult.INVALID_PASSWORD)
+                        else if (logonResult == LogonResult.InvalidPassword)
                             AddChat(Brushes.Red, "Invalid password");
-                        else if (logonResult == LogonResult.INVALID_USERNAME)
+                        else if (logonResult == LogonResult.InvalidUsername)
                             AddChat(Brushes.Red, "Invalid username");
-                        else if (logonResult == LogonResult.ACCOUNT_IN_USE)
+                        else if (logonResult == LogonResult.AccountInUse)
                             AddChat(Brushes.Red, "Account is in use");
                         break;
 
@@ -60,19 +66,19 @@ namespace LynxVN
                         username = reader.ReadStringNT();
                         text = reader.ReadStringNT();
 
-                        if (id == (byte)ChatEventType.USER_JOIN_VNET)
+                        if (id == (byte)ChatEventType.UserJoinedServer)
                         { }
-                        else if (id == (byte)ChatEventType.USER_LEAVE_VNET)
+                        else if (id == (byte)ChatEventType.UserLeftServer)
                         { }
-                        else if (id == (byte)ChatEventType.USER_TALK)
+                        else if (id == (byte)ChatEventType.UserTalk)
                         {
                             AddChat(Brushes.Orange, "<" + username + "> ", Brushes.White, text);
                         }
-                        else if (id == (byte)ChatEventType.USER_EMOTE)
+                        else if (id == (byte)ChatEventType.UserEmote)
                         {
                             AddChat(Brushes.Orange, "<" + username + " " + text + ">");
                         }
-                        else if (id == (byte)ChatEventType.SERVER_INFO)
+                        else if (id == (byte)ChatEventType.ServerInfo)
                         {
                             if (flags == 0x01) //error
                                 AddChat(Brushes.Red, "[VNET] " + text);
@@ -85,12 +91,12 @@ namespace LynxVN
                             else if (flags == 0x05) //joined channel
                                 AddChat(Brushes.DarkGreen, "-- You joined channel ", Brushes.Yellow, text, Brushes.DarkGreen, " --");
                         }
-                        else if (id == (byte)ChatEventType.USER_JOIN_CHANNEL)
+                        else if (id == (byte)ChatEventType.UserJoinedChannel)
                         {
                             AddUser(new User() { Username = username, Client = text, Flags = flags, Ping = ping });
                             AddChat(Brushes.DarkGreen, "-- ", Brushes.Blue, username, Brushes.DarkGreen, " has joined the channel --");
                         }
-                        else if (id == (byte)ChatEventType.USER_LEAVE_CHANNEL)
+                        else if (id == (byte)ChatEventType.UserLeftChannel)
                         {
                             RemoveUser(username);
                             AddChat(Brushes.DarkRed, "-- ", Brushes.Blue, username, Brushes.DarkRed, " has left the channel --");
@@ -101,16 +107,30 @@ namespace LynxVN
                         id = reader.ReadByte();
                         count = reader.ReadWord();
                         if (id == (byte)ListType.UsersInChannel)
-                        {
                             ClearChannelList();
-                            while (!reader.EOF())
+                        else if (id == (byte)ListType.UsersOnServer)
+                            AddChat(Brushes.Blue, "Users on server:");
+                        while (!reader.EOF())
+                        {
+                            username = reader.ReadStringNT();
+                            client = reader.ReadStringNT();
+                            channel = reader.ReadStringNT();
+                            tmpByte = reader.ReadByte();
+                            if (tmpByte != 0)
+                                tmpStr = reader.ReadStringNT();
+                            ping = reader.ReadDword();
+                            flags = reader.ReadByte();
+                            if (id == (byte)ListType.UsersInChannel)
                             {
-                                username = reader.ReadStringNT();
-                                text = reader.ReadStringNT();
-                                ping = reader.ReadDword();
-                                flags = reader.ReadByte();
-                                user = new User() { Username = username, Client = text, Ping = ping, Flags = flags };
+                                user = new User() { Username = username, Client = client, Ping = ping, Flags = flags };
                                 AddUser(user);
+                            }
+                            else if (id == (byte)ListType.UsersBannedFromChannel)
+                            {
+                            }
+                            else if (id == (byte)ListType.UsersOnServer)
+                            {
+                                AddChat(Brushes.Blue, "  " + username + (tmpByte == 0 ? "" : " - Banned from: " + tmpStr.Replace(((char)1).ToString(), ", ")));
                             }
                         }
                         break;

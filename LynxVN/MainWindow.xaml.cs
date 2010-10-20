@@ -22,9 +22,10 @@ namespace LynxVN
     /// </summary>
     public partial class MainWindow : Window
     {
-        Random rnd = new Random();
-        ObservableCollection<User> Users = new ObservableCollection<User>();
-
+        protected string MyName = "";
+        protected Random rnd = new Random();
+        protected ObservableCollection<User> Users = new ObservableCollection<User>();
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -108,9 +109,22 @@ namespace LynxVN
             {
                 string msg = txtSend.Text;
                 txtSend.Text = "";
+
+                if (msg.Length == 0)
+                    return;
+
+                if (msg == "test")
+                {
+                    packet.Clear().InsertStringNT("----------------------").Send(VNET_CHATEVENT);
+                    for (int j = 0; j < 1000; j++)
+                        packet.Clear().InsertStringNT("Test msg " + j).Send(VNET_CHATEVENT);
+                    packet.Clear().InsertStringNT("----------------------").Send(VNET_CHATEVENT);
+                    return;
+                }
+
                 packet.Clear().InsertStringNT(msg).Send(VNET_CHATEVENT);
                 if (msg[0] != '/')
-                    AddChat(Brushes.DarkCyan, "<You> ", Brushes.White, msg);
+                    AddChat(Brushes.DarkCyan, "<" + MyName + "> ", Brushes.White, msg);
             }
         }
     }

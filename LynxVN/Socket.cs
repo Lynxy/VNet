@@ -36,18 +36,19 @@ namespace LynxVN
 
         protected void socket_ConnectionEstablished(TcpClientWrapper sender)
         {
+            AddChat(Brushes.Green, "Connection accepted. Sending login information.");
             socket.AsyncRead(1024, true);
             SendLogonPacket();
         }
 
         protected void socket_ConnectionRefused(TcpClientWrapper sender)
         {
-            //throw new NotImplementedException();
+            AddChat(Brushes.Red, "The connection was refused.");
         }
 
         protected void socket_Disconnected(TcpClientWrapper sender)
         {
-            //throw new NotImplementedException();
+            AddChat(Brushes.Red, "Disconnected from server.");
         }
 
         protected void socket_DataRead(TcpClientWrapper sender, byte[] data)
