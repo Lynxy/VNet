@@ -38,7 +38,7 @@ namespace Lynxy.Network
             if (packet.Length < 4)
                 return null;
             int length = BitConverter.ToInt32(packet, 0);
-            if (length > packet.Length)
+            if (length > packet.Length - 4)
                 return null;
             byte[] data = new byte[length];
             Array.Copy(packet, 4, data, 0, length);
