@@ -12,9 +12,8 @@ namespace Lynxy.Network
             byte[] ret = Packet.Parse(packet);
             if (ret == null)
                 return null;
-            byte[] newPacket = new byte[packet.Length - ret.Length - 4];
-            Array.Copy(packet, 4 + ret.Length, newPacket, 0, newPacket.Length);
-            packet = newPacket;
+            Array.Copy(packet, ret.Length + 4, packet, 0, packet.Length - ret.Length - 4);
+            Array.Resize(ref packet, packet.Length - ret.Length - 4);
             return ret;
         }
     }
