@@ -7,16 +7,6 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        [Flags]
-        protected enum ChannelFlags
-        {
-            Normal = 0x00,
-            Public = 0x01,
-            Administrative = 0x02,
-            Clan = 0x04,
-            Silent = 0x08
-        }
-
         protected class Channel
         {
             protected ChannelFlags _Flags;

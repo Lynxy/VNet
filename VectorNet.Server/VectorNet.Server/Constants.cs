@@ -18,6 +18,27 @@ namespace VectorNet.Server
         protected const int VNET_LIST           = 0x06;
         protected const int VNET_QUEUESHARE     = 0x07;
 
+        [Flags]
+        protected enum UserFlags
+        {
+            Normal = 0x00,
+            Admin = 0x01,
+            Operator = 0x02,
+            Moderator = 0x04,
+            Ignored = 0x08,
+            Muted = 0x10,
+            Invisible = 0x20
+        }
+
+        [Flags]
+        protected enum ChannelFlags
+        {
+            Normal = 0x00,
+            Public = 0x01,
+            Administrative = 0x02,
+            Clan = 0x04,
+            Silent = 0x08
+        }
         protected enum AppFlags
         { 
             APP_UNHANDLED = 0x00,

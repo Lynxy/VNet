@@ -10,18 +10,6 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        [Flags]
-        protected enum UserFlags
-        {
-            Normal = 0x00,
-            Admin = 0x01,
-            Operator = 0x02,
-            Moderator = 0x04,
-            Ignored = 0x08,
-            Muted = 0x10,
-            Invisible = 0x20
-        }
-
         protected class User
         {
             public event Action<byte[]> SendData;
