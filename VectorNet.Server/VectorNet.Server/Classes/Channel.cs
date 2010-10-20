@@ -13,7 +13,8 @@ namespace VectorNet.Server
             protected string _Name;
             protected List<User> _Users;
             protected List<User> _Operators;
-            protected List<string> _Banned;
+            protected List<string> _BannedIPs;
+            protected List<string> _BannedUsers;
 
             public Channel(string name)
                 : this(name, ChannelFlags.Normal)
@@ -26,7 +27,8 @@ namespace VectorNet.Server
                 _Flags = flags;
                 _Users = new List<User>();
                 _Operators = new List<User>();
-                _Banned = new List<string>();
+                _BannedIPs = new List<string>();
+                _BannedUsers = new List<string>();
             }
 
 
@@ -43,7 +45,8 @@ namespace VectorNet.Server
 
             public User Owner { get; set; }
             public List<User> Operators { get { return _Operators; } }
-            public List<string> BannedIPs { get { return _Banned; } set { _Banned = value; } }
+            public List<string> BannedIPs { get { return _BannedIPs; } set { _BannedIPs = value; } }
+            public List<string> BannedUsers { get { return _BannedUsers; } set { _BannedUsers = value; } }
 
             public void AddUser(User user, bool isOperator)
             {
@@ -71,7 +74,9 @@ namespace VectorNet.Server
 
             public bool IsUserBanned(User user)
             {
-                if (_Banned.Contains(user.IPAddress))
+                if (_BannedIPs.Contains(user.IPAddress))
+                    return true;
+                if (_BannedUsers.Contains(user.Username.ToLower()))
                     return true;
                 return false;
             }

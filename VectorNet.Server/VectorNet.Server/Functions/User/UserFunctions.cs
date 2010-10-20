@@ -50,6 +50,13 @@ namespace VectorNet.Server
             foreach (string ip in channel.BannedIPs)
                 foreach (User tmp in GetUsersByIP(ip))
                     ret.Add(tmp);
+            User usr;
+            foreach (string name in channel.BannedUsers)
+            {
+                usr = GetUserByName(name);
+                if (usr != null && !ret.Contains(usr))
+                    ret.Add(usr);
+            }
             return ret;
         }
 

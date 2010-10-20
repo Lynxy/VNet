@@ -72,23 +72,31 @@ namespace VectorNet.Server
                     SendServerInfo(user, message);
         }
 
-        protected void BanUser(User user, User targetUser, Channel fromChannel)
+        protected void BanUserByUsername(User user, User targetUser, Channel fromChannel)
         {
-            if (fromChannel.IsUserBanned(targetUser))
-                SendServerError(user, "That user is already banned from this channel.");
-            else
+            if (!fromChannel.BannedUsers.Contains(targetUser.Username))
             {
-                fromChannel.BannedIPs.Add(targetUser.IPAddress);
+                fromChannel.BannedUsers.Add(targetUser.Username.ToLower());
 
-                //ban target user first!
                 SendServerInfoToChannel(fromChannel, targetUser.Username + " was banned from the channel by " + user.Username + "!",
                         targetUser, "You have been banned from the channel by " + user.Username + "!");
                 if (targetUser.Channel == fromChannel)
                     JoinUserToChannel(targetUser, Channel_Void);
                 else
                     SendServerInfo(targetUser, user.Username + " has banned you from channel " + fromChannel.Name + ".");
+            }
+        }
 
-                //now ban matching ips
+        protected void BanUserByIP(User user, User targetUser, Channel fromChannel)
+        {
+            if (!fromChannel.BannedIPs.Contains(targetUser.IPAddress))
+            {
+                //ban target user first, ensuring their username gets added to channels banned list
+                BanUserByUsername(user, targetUser, fromChannel);
+
+                fromChannel.BannedIPs.Add(targetUser.IPAddress);
+
+                //ban matching ips
                 foreach (User target in GetUsersByIP(targetUser.IPAddress))
                 {
                     if (target != targetUser)
