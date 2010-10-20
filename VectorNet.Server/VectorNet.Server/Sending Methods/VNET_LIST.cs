@@ -28,6 +28,8 @@ namespace VectorNet.Server
                     foreach (User tmp in u)
                         user.Packet.InsertStringNT(tmp.Username)
                             .InsertStringNT(tmp.Client)
+                            .InsertStringNT(tmp.Channel.Name)
+                            .InsertByte(0) //dummy byte, banned=0
                             .InsertDWord(tmp.Ping)
                             .InsertByte((byte)tmp.Flags);
                     user.Packet.Send(VNET_LIST);
@@ -42,7 +44,9 @@ namespace VectorNet.Server
                     foreach (User tmp in banned)
                         user.Packet.InsertStringNT(tmp.Username)
                             .InsertStringNT(tmp.Client)
-                            .InsertWord((short)tmp.Ping)
+                            .InsertStringNT(tmp.Channel.Name)
+                            .InsertByte(0) //dummy byte, banned=0
+                            .InsertDWord(tmp.Ping)
                             .InsertByte((byte)tmp.Flags);
                     user.Packet.Send(VNET_LIST);
 
@@ -76,7 +80,7 @@ namespace VectorNet.Server
                         else
                             user.Packet.InsertByte(0x00);
 
-                        user.Packet.InsertWord((short)usr.Ping)
+                        user.Packet.InsertDWord(usr.Ping)
                                    .InsertByte((byte)usr.Flags);
                     }
                     user.Packet.Send(VNET_LIST);
