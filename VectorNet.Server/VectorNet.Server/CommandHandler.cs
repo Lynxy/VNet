@@ -88,7 +88,7 @@ namespace VectorNet.Server
                 case "ipban":
                     //TODO: Check permissions to ban
                     if (aryCmd.Length < 2)
-                        SendServerError(user, "You must specify a user to ban.");
+                        SendServerError(user, "You must specify a user to IP ban.");
                     else
                     {
                         targetUser = GetUserByName(aryCmd[1]);
@@ -105,6 +105,21 @@ namespace VectorNet.Server
                     break;
 
                 case "unban":
+                    if (aryCmd.Length < 2)
+                        SendServerError(user, "You must specify a user to unban.");
+                    else
+                    {
+                        targetUser = GetUserByName(aryCmd[1]);
+                        if (targetUser == null)
+                            SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
+                        else
+                        {
+                            if (!user.Channel.IsUserBanned(targetUser))
+                                SendServerError(user, "That user is not banned from this channel.");
+                            else
+                                UnbanUser(user, targetUser, user.Channel);
+                        }
+                    }
                     break;
 
                 case "users":

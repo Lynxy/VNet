@@ -112,10 +112,20 @@ namespace VectorNet.Server
             }
         }
 
-        protected void UnbanUser(User user, Channel fromChannel)
+        protected void UnbanUser(User user, User targetUser, Channel fromChannel)
         {
-            if (fromChannel.IsUserBanned(user))
-                fromChannel.BannedIPs.Remove(user.IPAddress);
+            bool wasBanned = fromChannel.IsUserBanned(targetUser);
+
+            if (fromChannel.BannedUsers.Contains(targetUser.Username.ToLower()))
+                fromChannel.BannedUsers.Remove(targetUser.Username.ToLower());
+            if (fromChannel.BannedIPs.Contains(targetUser.IPAddress))
+                fromChannel.BannedIPs.Remove(targetUser.IPAddress);
+
+            if (wasBanned)
+            {
+                SendServerInfoToChannel(fromChannel, targetUser.Username + " was unbanned from the channel by " + user.Username + ".");
+                SendServerInfo(targetUser, user.Username + " has unbanned you from channel " + fromChannel.Name + ".");
+            }
         }
     }
 }
