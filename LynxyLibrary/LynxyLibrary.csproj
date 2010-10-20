@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\PacketBufferer.cs" />
     <Compile Include="Network\Packet.cs" />
     <Compile Include="Network\PacketReader.cs" />
     <Compile Include="Network\TCPClientWrapper.cs" />
