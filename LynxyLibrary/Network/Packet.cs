@@ -7,14 +7,18 @@ namespace Lynxy.Network
 {
     static public class PacketBuffer
     {
+        static private readonly object _locker = new object();
         static public byte[] GetNextPacket(ref byte[] packet)
         {
-            byte[] ret = Packet.Parse(packet);
-            if (ret == null)
-                return null;
-            Array.Copy(packet, ret.Length + 4, packet, 0, packet.Length - ret.Length - 4);
-            Array.Resize(ref packet, packet.Length - ret.Length - 4);
-            return ret;
+            lock (_locker)
+            {
+                byte[] ret = Packet.Parse(packet);
+                if (ret == null)
+                    return null;
+                Array.Copy(packet, ret.Length + 4, packet, 0, packet.Length - ret.Length - 4);
+                Array.Resize(ref packet, packet.Length - ret.Length - 4);
+                return ret;
+            }
         }
     }
 
