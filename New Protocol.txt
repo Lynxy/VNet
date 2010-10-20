@@ -229,8 +229,15 @@ VNET_LIST (0x05) Server -> Client
 	For Each User:
 		STRING    Username
 		STRING    Client
+		STRING    Channel
+		BYTE	  Banned
+		STRING    Channels banned from
 		DWORD     Ping
 		BYTE      Flag
+
+	Remarks: The fourth field, (BYTE banned), if 0x01, will include the next STRING as a list
+		 of channels the user is banned from, delimited by the 0x01 character
+		 otherwise the next STRING field will not be present.
 
 VNET_QUEUESHARE (0x06) Client -> Server
     -This packet sends the specified message to any other clients
