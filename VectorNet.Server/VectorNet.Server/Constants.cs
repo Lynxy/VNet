@@ -77,15 +77,15 @@ namespace VectorNet.Server
             UsersOnServer           = 0x03
         }
 
-        protected struct TempUserStruct
-        {
-            public string Username;
-            public string Channel;
-            public string Client;
-            public List<string> bannedChannel;
-            public short ping;
-            public byte flags;
-            public byte banned;
-        }
+        //protected struct TempUserStruct
+        //{
+        //    public string Username;
+        //    public string Channel;
+        //    public string Client;
+        //    public List<string> bannedChannel;
+        //    public short ping;
+        //    public byte flags;
+        //    public byte banned;
+        //}
     }
 }
