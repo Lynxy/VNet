@@ -51,6 +51,7 @@ namespace VectorNet.Server
                 {
                     UserPacketReceived(user, new PacketReader(completePacket));
                 }
+                UserBuffers[user] = buffer;
             }
 
             protected void client_Disconnected(TcpClientWrapper sender)
