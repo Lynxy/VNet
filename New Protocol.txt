@@ -54,6 +54,7 @@ Changes:
 
 10/19/2010
  - Added missing ID information (0x05) to VNET_QUEUESHARING (0x06) Client -> Server
+ - Added missing information to ID 0x03 (VNET_SERVER_LIST) of packet 0x05 (VNET_LIST)
 
 VNET_KEEPALIVE (0x00) Client <-> Server
     Data:
@@ -229,9 +230,9 @@ VNET_LIST (0x05) Server -> Client
 	For Each User:
 		STRING    Username
 		STRING    Client
-		STRING    Channel
-		BYTE	  Banned
-		STRING    Channels banned from
+		STRING    Channel (on ID VNET_SERVER_LIST (0x03))
+		BYTE	  Banned (on ID VNET_SERVER_LIST (0x03))
+		STRING    Channels banned from (on ID VNET_SERVER_LIST (0x03))
 		DWORD     Ping
 		BYTE      Flag
 
