@@ -76,7 +76,7 @@ namespace VectorNet.Server
 
                         if (userBannedFrom.ContainsKey(usr))
                             user.Packet.InsertByte(0x01)
-                                       .InsertStringNT(String.Join(((byte)1).ToString(), userBannedFrom[usr]));
+                                       .InsertStringNT(String.Join(((char)1).ToString(), userBannedFrom[usr]));
                         else
                             user.Packet.InsertByte(0x00);
 
