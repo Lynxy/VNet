@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Lynxy.Network;
+using System.Management;
 
 namespace LynxVN
 {

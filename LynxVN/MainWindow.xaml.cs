@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 
 using System.Collections.ObjectModel;
 using Lynxy.Network;
+using System.Management;
 
 namespace LynxVN
 {
@@ -34,6 +35,16 @@ namespace LynxVN
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        protected string GetProcessorID()
+        {
+            ManagementClass mc = new ManagementClass("win32_processor");
+            ManagementObjectCollection moc = mc.GetInstances();
+            string processorID = "";
+            foreach (ManagementObject mo in moc)
+                processorID += mo.Properties["processorID"].Value.ToString();
+            return processorID;
         }
 
         protected void AddChat(params object[] val)
