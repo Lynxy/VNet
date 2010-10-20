@@ -20,6 +20,7 @@ namespace LynxVN
     {
         protected TcpClientWrapper socket;
         protected Packet packet;
+        protected PacketBufferer bufferer;
         protected byte[] packetBuffer = new byte[0];
 
         protected void SetupSocket()
@@ -32,6 +33,7 @@ namespace LynxVN
 
             packet = new Packet();
             packet.DataSent += new Packet.SendDataDelegate(packet_DataSent);
+            bufferer = new PacketBufferer(SendDataFinal, 100);
         }
 
         protected void socket_ConnectionEstablished(TcpClientWrapper sender)
@@ -68,7 +70,12 @@ namespace LynxVN
             }
         }
 
-        protected void packet_DataSent(byte[] data)
+        protected void packet_DataSent(ref byte[] data)
+        {
+            bufferer.QueuePacket(ref data);
+        }
+
+        protected void SendDataFinal(ref byte[] data)
         {
             socket.AsyncSend(data, data.Length);
         }
