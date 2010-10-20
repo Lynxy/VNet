@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using System.Timers;
+using System.Threading;
 
 namespace Lynxy.Network
 {
@@ -14,31 +14,38 @@ namespace Lynxy.Network
 
         protected byte[] buffer = new byte[0];
         protected Timer ticker;
+        private readonly object _locker = new object();
 
         public PacketBufferer(SendDataDelegate SendData)
             : this(SendData, 100)
         {
         }
-        public PacketBufferer(SendDataDelegate SendData, double interval)
+        public PacketBufferer(SendDataDelegate SendData, int interval)
         {
             _SendData = SendData;
-            ticker = new Timer(interval);
-            ticker.Elapsed += new ElapsedEventHandler(ticker_Elapsed);
+            ticker = new Timer(ticker_Elapsed, null, interval, interval);
         }
 
-        protected void ticker_Elapsed(object sender, ElapsedEventArgs e)
+        protected void ticker_Elapsed(object obj)
         {
-            ticker.Stop();
-            _SendData(ref buffer);
-            Array.Resize(ref buffer, 0);
+            lock (_locker)
+            {
+                if (buffer.Length > 0)
+                {
+                    _SendData(ref buffer);
+                    Array.Resize(ref buffer, 0);
+                }
+            }
         }
 
         public void QueuePacket(ref byte[] packet)
         {
-            int origLen = buffer.Length;
-            Array.Resize(ref buffer, origLen + packet.Length);
-            Array.Copy(packet, 0, buffer, origLen, packet.Length);
-            ticker.Start();
+            lock (_locker)
+            {
+                int origLen = buffer.Length;
+                Array.Resize(ref buffer, origLen + packet.Length);
+                Array.Copy(packet, 0, buffer, origLen, packet.Length);
+            }
         }
     }
 }
