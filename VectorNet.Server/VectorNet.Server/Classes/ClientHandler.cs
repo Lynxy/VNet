@@ -19,6 +19,7 @@ namespace VectorNet.Server
             public Dictionary<TcpClientWrapper, User> TcpClientUsers = new Dictionary<TcpClientWrapper, User>();
             public Dictionary<User, byte[]> UserBuffers = new Dictionary<User, byte[]>();
 
+            protected readonly object _locker = new object();
             protected Server _server;
 
             public ClientHandler(Server server)
@@ -39,31 +40,37 @@ namespace VectorNet.Server
 
             protected void client_DataRead(TcpClientWrapper sender, byte[] data)
             {
-                User user = TcpClientUsers[sender];
-                byte[] buffer = UserBuffers[user];
-                int oldLen = buffer.Length;
-                Array.Resize(ref buffer, oldLen + data.Length);
-                Array.Copy(data, 0, buffer, oldLen, data.Length);
-
-                //check to see if whole packet is available
-                byte[] completePacket;
-                while ((completePacket = PacketBuffer.GetNextPacket(ref buffer)) != null)
+                lock (_locker)
                 {
-                    UserPacketReceived(user, new PacketReader(completePacket));
+                    User user = TcpClientUsers[sender];
+                    byte[] buffer = UserBuffers[user];
+                    int oldLen = buffer.Length;
+                    Array.Resize(ref buffer, oldLen + data.Length);
+                    Array.Copy(data, 0, buffer, oldLen, data.Length);
+
+                    //check to see if whole packet is available
+                    byte[] completePacket;
+                    while ((completePacket = PacketBuffer.GetNextPacket(ref buffer)) != null)
+                    {
+                        UserPacketReceived(user, new PacketReader(completePacket));
+                    }
+                    UserBuffers[user] = buffer;
                 }
-                UserBuffers[user] = buffer;
             }
 
             protected void client_Disconnected(TcpClientWrapper sender)
             {
-                if (!TcpClientUsers.ContainsKey(sender))
-                    return;
-                User user = TcpClientUsers[sender];
-                if (UserDisconnected != null)
-                    UserDisconnected(user);
-                user.IsOnline = false;
-                _server.DisconnectUser(user);
-                TcpClientUsers.Remove(sender);
+                lock (_locker)
+                {
+                    if (!TcpClientUsers.ContainsKey(sender))
+                        return;
+                    User user = TcpClientUsers[sender];
+                    if (UserDisconnected != null)
+                        UserDisconnected(user);
+                    user.IsOnline = false;
+                    _server.DisconnectUser(user);
+                    TcpClientUsers.Remove(sender);
+                }
             }
         }
     }
