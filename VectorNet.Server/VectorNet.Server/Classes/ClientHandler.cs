@@ -13,6 +13,8 @@ namespace VectorNet.Server
         {
             public delegate void UserPacketReceivedDelegate(User user, PacketReader reader);
             public event UserPacketReceivedDelegate UserPacketReceived;
+            public delegate void UserDisconnectedDelegate(User user);
+            public event UserDisconnectedDelegate UserDisconnected;
 
             public Dictionary<TcpClientWrapper, User> TcpClientUsers = new Dictionary<TcpClientWrapper, User>();
             public Dictionary<User, byte[]> UserBuffers = new Dictionary<User, byte[]>();
@@ -56,6 +58,8 @@ namespace VectorNet.Server
                 if (!TcpClientUsers.ContainsKey(sender))
                     return;
                 User user = TcpClientUsers[sender];
+                if (UserDisconnected != null)
+                    UserDisconnected(user);
                 user.IsOnline = false;
                 _server.DisconnectUser(user);
                 TcpClientUsers.Remove(sender);
