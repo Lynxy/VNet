@@ -35,6 +35,11 @@ namespace VectorNet.Server
             return ret;
         }
 
+        protected List<User> GetUsersInChannel(Channel channel)
+        {
+            return GetUsersInChannel(console, channel, false);
+        }
+
         protected List<User> GetUsersInChannel(User userPerspective, Channel channel, bool excludeUser)
         {
             //TODO: user perspective
@@ -52,27 +57,57 @@ namespace VectorNet.Server
             return ret;
         }
 
+        protected void SendServerInfoToChannel(Channel channel, string message)
+        {
+            foreach (User user in GetUsersInChannel(channel))
+                SendServerInfo(user, message);
+        }
+
+        protected void SendServerInfoToChannel(Channel channel, string message, User uniqueUser, string uniqueMessage)
+        {
+            foreach (User user in GetUsersInChannel(channel))
+                if (user == uniqueUser)
+                    SendServerInfo(user, uniqueMessage);
+                else
+                    SendServerInfo(user, message);
+        }
+
         protected void BanUser(User user, User targetUser, Channel fromChannel)
         {
-            if (!fromChannel.Banned.Contains(targetUser))
-                fromChannel.Banned.Add(targetUser);
-            if (targetUser.Channel == fromChannel)
-            {
-                SendServerInfo(targetUser, "You have been banned from the channel by  " + user.Username + ".");
-                List<User> users = GetUsersInChannel(console, fromChannel, false);
-                foreach (User u in users)
-                    if (u != targetUser)
-                        SendServerInfo(u, targetUser.Username + " was banned from the channel by " + user.Username + "!");
-                JoinUserToChannel(targetUser, Channel_Void);
-            }
+            if (fromChannel.IsUserBanned(targetUser))
+                SendServerError(user, "That user is already banned from this channel.");
             else
-                SendServerInfo(targetUser, user.Username + " has banned you from channel " + fromChannel.Name + ".");
+            {
+                fromChannel.BannedIPs.Add(targetUser.IPAddress);
+
+                //ban target user first!
+                SendServerInfoToChannel(fromChannel, targetUser.Username + " was banned from the channel by " + user.Username + "!",
+                        targetUser, "You have been banned from the channel by " + user.Username + "!");
+                if (targetUser.Channel == fromChannel)
+                    JoinUserToChannel(targetUser, Channel_Void);
+                else
+                    SendServerInfo(targetUser, user.Username + " has banned you from channel " + fromChannel.Name + ".");
+
+                //now ban matching ips
+                foreach (User target in GetUsersByIP(targetUser.IPAddress))
+                {
+                    if (target != targetUser)
+                    {
+                        SendServerInfoToChannel(fromChannel, target.Username + " was banned from the channel by " + user.Username + " [IP match]!",
+                            target, "You have been banned from the channel by " + user.Username + " [IP match]!");
+                        if (target.Channel == fromChannel)
+                            JoinUserToChannel(target, Channel_Void);
+                        else
+                            SendServerInfo(target, user.Username + " has banned you from channel " + fromChannel.Name + ".");
+                    }
+                }
+            }
         }
 
         protected void UnbanUser(User user, Channel fromChannel)
         {
-            if (fromChannel.Banned.Contains(user))
-                fromChannel.Banned.Remove(user);
+            if (fromChannel.IsUserBanned(user))
+                fromChannel.BannedIPs.Remove(user.IPAddress);
         }
     }
 }

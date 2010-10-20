@@ -36,6 +36,23 @@ namespace VectorNet.Server
             user.Channel.RemoveUser(user);
         }
 
+        protected List<User> GetUsersByIP(string IPAddress)
+        {
+            List<User> ret = Users.Where(u => u.IPAddress == IPAddress).ToList();
+            if (ret == null)
+                ret = new List<User>();
+            return ret;
+        }
+
+        protected List<User> GetUsersBannedFromChannel(Channel channel)
+        {
+            List<User> ret = new List<User>();
+            foreach (string ip in channel.BannedIPs)
+                foreach (User tmp in GetUsersByIP(ip))
+                    ret.Add(tmp);
+            return ret;
+        }
+
         protected bool CanUserSeeUser(User user, User targetUser)
         {
             if (user == console)

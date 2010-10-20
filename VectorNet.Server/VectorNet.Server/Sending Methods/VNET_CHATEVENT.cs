@@ -39,7 +39,7 @@ namespace VectorNet.Server
 
         protected void SendUserTalk(User user, string message)
         {
-            foreach (User u in GetUsersInChannel(console, user.Channel, false))
+            foreach (User u in GetUsersInChannel(user.Channel))
                 if (u != user)
                     u.Packet.Clear()
                         .InsertByte((byte)ChatEventType.UserTalk)
@@ -52,7 +52,7 @@ namespace VectorNet.Server
 
         protected void SendUserEmote(User user, string message)
         {
-            foreach (User u in GetUsersInChannel(console, user.Channel, false))
+            foreach (User u in GetUsersInChannel(user.Channel))
                 if (u != user)
                     u.Packet.Clear()
                         .InsertByte((byte)ChatEventType.UserEmote)
@@ -121,7 +121,7 @@ namespace VectorNet.Server
 
         protected void SendUserJoinedChannel(User user)
         {
-            foreach (User u in GetUsersInChannel(console, user.Channel, false))
+            foreach (User u in GetUsersInChannel(user.Channel))
                 if (u != user)
                     u.Packet.Clear()
                         .InsertByte((byte)ChatEventType.UserJoinedChannel)
@@ -134,7 +134,7 @@ namespace VectorNet.Server
 
         protected void SendUserLeftChannel(User user)
         {
-            foreach (User u in GetUsersInChannel(console, user.Channel, false))
+            foreach (User u in GetUsersInChannel(user.Channel))
                 if (u != user)
                     u.Packet.Clear()
                         .InsertByte((byte)ChatEventType.UserLeftChannel)
