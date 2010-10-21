@@ -34,8 +34,8 @@ namespace VectorNet.Server
 
             protected void client_DataRead(TcpClientWrapper sender, byte[] data)
             {
-                //lock (_locker)
-                //{
+                lock (_locker)
+                {
                     User user = TcpClientUsers[sender];
                     byte[] buffer = UserBuffers[user];
                     int oldLen = buffer.Length;
@@ -49,20 +49,20 @@ namespace VectorNet.Server
                         UserPacketReceived(user, new PacketReader(completePacket));
                     }
                     UserBuffers[user] = buffer;
-                //}
+                }
             }
 
             protected void client_Disconnected(TcpClientWrapper sender)
             {
-                //lock (_locker)
-                //{
+                lock (_locker)
+                {
                     if (!TcpClientUsers.ContainsKey(sender))
                         return;
                     User user = TcpClientUsers[sender];
                     if (UserDisconnected != null)
                         UserDisconnected(user);
                     TcpClientUsers.Remove(sender);
-                //}
+                }
             }
         }
     }
