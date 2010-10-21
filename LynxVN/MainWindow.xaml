@@ -6,12 +6,14 @@
         <Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Visibility" Value="Collapsed" />
         </Style>
+        <ImageSource x:Key="user_active">/Icons/user_active.png</ImageSource>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="375*" />
             <ColumnDefinition Width="170*"  />
         </Grid.ColumnDefinitions>
+        
         <RichTextBox Margin="12,29,8,44" Name="rtbChat" VerticalScrollBarVisibility="Auto" Background="Black" Foreground="White" BorderBrush="{x:Null}" />
         <TextBox Height="23" Margin="12,0,12,12" Name="txtSend" Grid.ColumnSpan="2" VerticalAlignment="Bottom" KeyUp="txtSend_KeyUp" Background="Black" Foreground="White" BorderBrush="{x:Null}" />
         <Menu Height="23" Name="menu1" VerticalAlignment="Top" Grid.ColumnSpan="2">
@@ -21,6 +23,7 @@
         <ListView Background="Black" BorderBrush="{x:Null}" Foreground="White" Margin="8,29,12,44" Name="lvChannel" Grid.Column="1">
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
+                    <GridViewColumn Width="30" DisplayMemberBinding="{Binding Icon}" Header="Icon" />
                     <GridViewColumn DisplayMemberBinding="{Binding Username}" Header="Username" />
                 </GridView>
             </ListView.View>

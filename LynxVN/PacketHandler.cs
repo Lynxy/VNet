@@ -49,14 +49,14 @@ namespace LynxVN
 
                         if (logonResult == LogonResult.Success || logonResult == LogonResult.SendChallenge)
                         {
-                            AddChat(Brushes.Blue, "Successfully logged on");
+                            AddChat(ChatColors.ServerInfo, "Successfully logged on");
                         }
                         else if (logonResult == LogonResult.InvalidPassword)
-                            AddChat(Brushes.Red, "Invalid password");
+                            AddChat(ChatColors.ServerError, "Invalid password");
                         else if (logonResult == LogonResult.InvalidUsername)
-                            AddChat(Brushes.Red, "Invalid username");
+                            AddChat(ChatColors.ServerError, "Invalid username");
                         else if (logonResult == LogonResult.AccountInUse)
-                            AddChat(Brushes.Red, "Account is in use");
+                            AddChat(ChatColors.ServerError, "Account is in use");
                         break;
 
                     case VNET_CHATEVENT: //0x03
@@ -72,34 +72,40 @@ namespace LynxVN
                         { }
                         else if (id == (byte)ChatEventType.UserTalk)
                         {
-                            AddChat(Brushes.Orange, "<" + username + "> ", Brushes.White, text);
+                            AddChat(ChatColors.ChatOther, "<",
+                                ChatColors.UsernameRemote, username,
+                                ChatColors.ChatOther, "> ",
+                                ChatColors.ChatMsg, text);
                         }
                         else if (id == (byte)ChatEventType.UserEmote)
                         {
-                            AddChat(Brushes.Orange, "<" + username + " " + text + ">");
+                            AddChat(ChatColors.EmoteOther, "<",
+                                ChatColors.UsernameRemote, username,
+                                ChatColors.EmoteOther, "> ",
+                                ChatColors.EmoteMsg, text);
                         }
                         else if (id == (byte)ChatEventType.ServerInfo)
                         {
                             if (flags == 0x01) //error
-                                AddChat(Brushes.Red, "[VNET] " + text);
+                                AddChat(ChatColors.ServerError, "[VNET] " + text);
                             else if (flags == 0x02) //info
-                                AddChat(Brushes.Blue, "[VNET] " + text);
+                                AddChat(ChatColors.ServerInfo, "[VNET] " + text);
                             else if (flags == 0x03) //acct-message
-                                AddChat(Brushes.Red, "[VNET] " + text);
+                                AddChat(ChatColors.ServerError, "[VNET] " + text);
                             else if (flags == 0x04) //broadcast
-                                AddChat(Brushes.Blue, "<" + username + "> " + text);
+                                AddChat(ChatColors.UsernameBroadcast, "<" + username + "> " + text);
                             else if (flags == 0x05) //joined channel
-                                AddChat(Brushes.DarkGreen, "-- You joined channel ", Brushes.Yellow, text, Brushes.DarkGreen, " --");
+                                AddChat(ChatColors.UserJoinedChannel, "-- You joined channel ", ChatColors.UserJoinedChannel_Channel, text, ChatColors.UserJoinedChannel, " --");
                         }
                         else if (id == (byte)ChatEventType.UserJoinedChannel)
                         {
                             AddUser(new User() { Username = username, Client = text, Flags = flags, Ping = ping });
-                            AddChat(Brushes.DarkGreen, "-- ", Brushes.Blue, username, Brushes.DarkGreen, " has joined the channel --");
+                            AddChat(ChatColors.UserJoinedChannel, "-- ", ChatColors.UserJoinedChannel_Username, username, ChatColors.UserJoinedChannel, " has joined the channel --");
                         }
                         else if (id == (byte)ChatEventType.UserLeftChannel)
                         {
                             RemoveUser(username);
-                            AddChat(Brushes.DarkRed, "-- ", Brushes.Blue, username, Brushes.DarkRed, " has left the channel --");
+                            AddChat(ChatColors.UserJoinedChannel, "-- ", ChatColors.UserJoinedChannel_Username, username, ChatColors.UserJoinedChannel, " has left the channel --");
                         }
                         break;
 
@@ -109,7 +115,7 @@ namespace LynxVN
                         if (id == (byte)ListType.UsersInChannel)
                             ClearChannelList();
                         else if (id == (byte)ListType.UsersOnServer)
-                            AddChat(Brushes.Blue, "Users on server:");
+                            AddChat(ChatColors.ServerInfo, "Users on server:");
                         while (!reader.EOF())
                         {
                             username = reader.ReadStringNT();
@@ -133,12 +139,12 @@ namespace LynxVN
                             }
                             else if (id == (byte)ListType.UsersOnServer)
                             {
-                                AddChat(Brushes.Blue, "  " + username + (tmpByte == 0 ? "" : " - Banned from: " + tmpStr.Replace(((char)1).ToString(), ", ")));
+                                AddChat(ChatColors.ServerInfo, "  " + username + (tmpByte == 0 ? "" : " - Banned from: " + tmpStr.Replace(((char)1).ToString(), ", ")));
                             }
                         }
                         break;
                     default:
-                        AddChat(Brushes.Red, "Unknown packet " + packetId.ToString() + ": " + Encoding.ASCII.GetString(reader.ReadToEnd()).Replace((char)0, '.'));
+                        AddChat(ChatColors.ServerError, "Unknown packet " + packetId.ToString() + ": " + Encoding.ASCII.GetString(reader.ReadToEnd()).Replace((char)0, '.'));
                         break;
                 }
             }

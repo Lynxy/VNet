@@ -65,6 +65,11 @@ namespace LynxVN
             Paragraph para = new Paragraph();
             Run run;
             para.Margin = new Thickness(0);
+
+            run = new Run("[" + DateTime.Now.ToShortTimeString() + "] ", rtbChat.CaretPosition.DocumentEnd);
+            run.Foreground = ChatColors.TimeStamp;
+            para.Inlines.Add(run);
+
             for (int i = 0; i < val.Length; i += 2)
             {
                 col = (Brush)val[i];
@@ -81,6 +86,7 @@ namespace LynxVN
         {
             if (socket != null)
                 socket.Close();
+            socket = null;
             SetupSocket();
             //try
             //{
@@ -135,7 +141,7 @@ namespace LynxVN
 
                 packet.Clear().InsertStringNT(msg).Send(VNET_CHATEVENT);
                 if (msg[0] != '/')
-                    AddChat(Brushes.DarkCyan, "<" + MyName + "> ", Brushes.White, msg);
+                    AddChat(ChatColors.UsernameLocal, "<" + MyName + "> ", ChatColors.ChatMsg, msg);
             }
         }
     }

@@ -38,6 +38,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,6 +68,7 @@
     </Compile>
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Colors.cs" />
     <Compile Include="Socket.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -104,6 +106,18 @@
       <Project>{6D7E9160-813C-4EA1-8A4B-CD9428CA7BA4}</Project>
       <Name>LynxyLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\user_idle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\user_active.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\user_invisible.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\user_ignored.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
