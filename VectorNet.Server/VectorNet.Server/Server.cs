@@ -40,6 +40,7 @@ namespace VectorNet.Server
             ConnectToDatabase("vnet.sqlite");
 
             console = new User(null, true);
+            console.Username = "";
         }
 
         public void WireConsoleUserDataRecv(Action<byte[]> ReceiveDataEvent)
