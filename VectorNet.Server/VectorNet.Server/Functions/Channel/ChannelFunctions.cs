@@ -37,12 +37,11 @@ namespace VectorNet.Server
 
         protected List<User> GetUsersInChannel(Channel channel)
         {
-            return GetUsersInChannel(console, channel, false);
+            return GetUsersInChannel(console, channel, true);
         }
 
         protected List<User> GetUsersInChannel(User userPerspective, Channel channel, bool excludeUser)
         {
-            //TODO: user perspective
             List<User> ret = channel.GetCompleteUserList();
             if (excludeUser && ret.Contains(userPerspective))
                 ret.Remove(userPerspective);
@@ -51,9 +50,6 @@ namespace VectorNet.Server
                 if (CanUserSeeUser(userPerspective, ret[i]) == false)
                     ret.RemoveAt(i);
             }
-            if (userPerspective == console)
-                if (ret.Contains(console) == false)
-                    ret.Add(console);
             return ret;
         }
 

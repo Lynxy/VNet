@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VectorNet.Server\Classes\Configuration.cs" />
     <Compile Include="VectorNet.Server\Listener.cs" />
+    <Compile Include="VectorNet.Server\Sending Methods\Console.cs" />
     <Compile Include="VectorNet.Server\Sending Methods\VNET_LIST.cs" />
     <Compile Include="VectorNet.Server\Sending Methods\VNET_LOGON.cs" />
     <Compile Include="VectorNet.Server\Server.cs" />

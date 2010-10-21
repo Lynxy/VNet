@@ -68,7 +68,10 @@ namespace VectorNet.Server
                         if (text[0] == '/')
                             HandleCommand(user, text.Substring(1));
                         else
+                        {
+                            ConsoleSendUserTalk(user, text); 
                             SendUserTalk(user, text);
+                        }
                         break;
 
                     case 0x04:
