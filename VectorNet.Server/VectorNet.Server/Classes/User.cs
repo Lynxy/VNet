@@ -45,6 +45,7 @@ namespace VectorNet.Server
 
             protected void SendDataFinal(ref byte[] data)
             {
+                DataCounter.bytesSent += data.Length;
                 socket.AsyncSend(data, data.Length);
             }
 
