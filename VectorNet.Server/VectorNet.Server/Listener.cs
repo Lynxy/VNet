@@ -17,7 +17,7 @@ namespace VectorNet.Server
             listener = new TcpListenerWrapper(Config.ListenPort);
             listener.OnClientConnected += new TcpListenerWrapper.ClientConnectedDelegate(listener_OnClientConnected);
 
-            clients = new ClientHandler(this);
+            clients = new ClientHandler();
             clients.UserPacketReceived += new ClientHandler.UserPacketReceivedDelegate(HandlePacket);
             clients.UserDisconnected += new ClientHandler.UserDisconnectedDelegate(clients_UserDisconnected);
 
@@ -31,8 +31,7 @@ namespace VectorNet.Server
 
         protected void clients_UserDisconnected(User user)
         {
-            SendUserLeftChannel(user);
-            SendUserLeftServer(user);
+            DisconnectUser(user);
             Users.Remove(user);
         }
     }

@@ -20,12 +20,6 @@ namespace VectorNet.Server
             public Dictionary<User, byte[]> UserBuffers = new Dictionary<User, byte[]>();
 
             private readonly object _locker = new object();
-            protected Server _server;
-
-            public ClientHandler(Server server)
-            {
-                _server = server;
-            }
 
             public User AddNewClient(TcpClientWrapper client)
             {
@@ -40,8 +34,8 @@ namespace VectorNet.Server
 
             protected void client_DataRead(TcpClientWrapper sender, byte[] data)
             {
-                lock (_locker)
-                {
+                //lock (_locker)
+                //{
                     User user = TcpClientUsers[sender];
                     byte[] buffer = UserBuffers[user];
                     int oldLen = buffer.Length;
@@ -55,22 +49,20 @@ namespace VectorNet.Server
                         UserPacketReceived(user, new PacketReader(completePacket));
                     }
                     UserBuffers[user] = buffer;
-                }
+                //}
             }
 
             protected void client_Disconnected(TcpClientWrapper sender)
             {
-                lock (_locker)
-                {
+                //lock (_locker)
+                //{
                     if (!TcpClientUsers.ContainsKey(sender))
                         return;
                     User user = TcpClientUsers[sender];
                     if (UserDisconnected != null)
                         UserDisconnected(user);
-                    user.IsOnline = false;
-                    _server.DisconnectUser(user);
                     TcpClientUsers.Remove(sender);
-                }
+                //}
             }
         }
     }

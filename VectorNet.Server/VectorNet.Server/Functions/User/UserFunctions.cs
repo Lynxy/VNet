@@ -13,8 +13,9 @@ namespace VectorNet.Server
         //This class is for methods that deal with a single user, not multiple users
         protected void DisconnectUser(User user)
         {
-            RemoveUserFromChannel(user);
             user.IsOnline = false;
+            RemoveUserFromChannel(user);
+            SendUserLeftServer(user);
             user.Socket.Close();
         }
 
