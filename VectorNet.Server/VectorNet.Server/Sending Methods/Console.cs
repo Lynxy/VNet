@@ -20,7 +20,8 @@ namespace VectorNet.Server
 
         protected void ConsoleSendUserTalk(User user, string msg)
         {
-            console.Packet.InsertStringNT(user.Username)
+            console.Packet.Clear()
+                .InsertStringNT(user.Username)
                 .InsertByte((byte)user.Flags)
                 .InsertStringNT(user.Channel.Name)
                 .InsertStringNT(msg)
@@ -29,7 +30,8 @@ namespace VectorNet.Server
 
         protected void ConsoleSendUserJoinedChannel(User user)
         {
-            console.Packet.InsertStringNT(user.Username)
+            console.Packet.Clear()
+                .InsertStringNT(user.Username)
                 .InsertByte((byte)user.Flags)
                 .InsertStringNT(user.Channel.Name)
                 .Send((byte)ConsolePacketID.UserJoinedChannel);

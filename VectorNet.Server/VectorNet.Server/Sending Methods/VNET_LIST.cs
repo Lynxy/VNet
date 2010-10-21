@@ -36,7 +36,8 @@ namespace VectorNet.Server
                 case ListType.UsersBannedFromChannel:
                     List<User> banned = GetUsersBannedFromChannel(user.Channel);
 
-                    user.Packet.InsertByte((byte)ListType.UsersBannedFromChannel)
+                    user.Packet.Clear()
+                        .InsertByte((byte)ListType.UsersBannedFromChannel)
                         .InsertWord((short)banned.Count);
 
                     foreach (User tmp in banned)
@@ -61,8 +62,9 @@ namespace VectorNet.Server
                         }
                     }
 
-                    user.Packet.InsertByte((byte)ListType.UsersOnServer)
-                               .InsertWord((short)Users.Count);
+                    user.Packet.Clear()
+                        .InsertByte((byte)ListType.UsersOnServer)
+                        .InsertWord((short)Users.Count);
 
                     foreach (User usr in Users)
                     {
