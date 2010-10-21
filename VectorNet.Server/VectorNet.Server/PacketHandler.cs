@@ -17,9 +17,15 @@ namespace VectorNet.Server
             try
             {
                 byte packetId = reader.ReadByte();
+                if (!user.IsOnline && packetId != VNET_LOGON)
+                {
+                    SendServerError(user, "You must logon first.");
+                    DisconnectUser(user);
+                }
+
                 switch (packetId)
                 {
-                     
+
                     case VNET_LOGON: //0x01
                         username = reader.ReadStringNT();
                         string password = reader.ReadStringNT();
