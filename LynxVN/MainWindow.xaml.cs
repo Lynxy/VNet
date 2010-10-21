@@ -130,7 +130,13 @@ namespace LynxVN
                 if (msg.Length == 0)
                     return;
 
-                if (msg == "test")
+                if (msg == "stress")
+                {
+                    (new StressTest()).Show();
+                    this.Close();
+                    return;
+                }
+                if (msg == "spam")
                 {
                     packet.Clear().InsertStringNT("----------------------").Send(VNET_CHATEVENT);
                     for (int j = 0; j < 1000; j++)

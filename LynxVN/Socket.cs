@@ -70,7 +70,7 @@ namespace LynxVN
             }
         }
 
-        protected void packet_DataSent(ref byte[] data)
+        protected void packet_DataSent(Packet packet, ref byte[] data)
         {
             bufferer.QueuePacket(ref data);
         }
