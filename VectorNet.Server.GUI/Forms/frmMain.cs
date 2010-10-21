@@ -11,45 +11,64 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 using VectorNet.Server;
+using Lynxy.Network;
 
 namespace VectorNet.Server.GUI
 {
     public partial class frmMain : Form
     {
-        protected ServerLoader loader = null;
-        protected bool serverMode = false;
+        protected Server VNet;
 
         public frmMain()
         {
             InitializeComponent();
-            DiscoverServerMode();
+            SetupServer();
         }
 
-        protected void DiscoverServerMode()
+        protected void SetupServer()
         {
-            try
-            {
-                System.Reflection.Assembly.LoadFrom("VectorNet.Server.dll");
-                serverMode = true;
-            }
-            catch (Exception) { }
+            VNet = new Server("config.xml");
 
-            if (serverMode)
-                loader = new ServerLoader(RecvData);
-        }
-
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-            AddChat("Server mode = " + serverMode.ToString());
-            if (serverMode)
-                loader.HandleConsoleCommand("join test");
-            
-
+            VNet.WireConsoleUserDataRecv(RecvData);
+            VNet.StartListening();
         }
 
         private void RecvData(byte[] data)
         {
-            AddChat(Encoding.ASCII.GetString(data) + "\r\n");
+            PacketReader reader = new PacketReader(data);
+            byte PacketID = reader.ReadByte();
+
+            string username;
+            string channel;
+            string text;
+            byte flags;
+
+            switch (PacketID)
+            {
+                case 0x00: //user joined server
+                    break;
+
+                case 0x01: //user joined server
+                    break;
+
+                case 0x02: //user list
+                    break;
+
+                case 0x03: //user talk
+                    username = reader.ReadStringNT();
+                    flags = reader.ReadByte();
+                    channel = reader.ReadStringNT();
+                    text = reader.ReadStringNT();
+                    AddChat("<" + channel + " - " + username + " [" + flags.ToString("X") + "]> " + text);
+                    break;
+
+                case 0x04: //user join channel
+                    username = reader.ReadStringNT();
+                    flags = reader.ReadByte();
+                    channel = reader.ReadStringNT();
+                    AddChat("-- " + username + " [" + flags.ToString("X") + "] joined channel " + channel + " --");
+                    break;
+            }
         }
 
         private void AddChat(string msg)
@@ -59,6 +78,8 @@ namespace VectorNet.Server.GUI
             rtbChat.Invoke(new Action(delegate
             {
                 rtbChat.Text += "[" + DateTime.Now.ToShortTimeString() + "] " + msg + "\r\n";
+                rtbChat.SelectionStart = rtbChat.Text.Length;
+                rtbChat.ScrollToCaret();
             }));
         }
 

@@ -61,7 +61,6 @@
             this.Controls.Add(this.rtbChat);
             this.Name = "frmMain";
             this.Text = "VectorNet Server Listener";
-            this.Load += new System.EventHandler(this.frmMain_Load);
             this.ResumeLayout(false);
 
         }
