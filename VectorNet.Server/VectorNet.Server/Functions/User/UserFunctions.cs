@@ -19,6 +19,12 @@ namespace VectorNet.Server
             user.Socket.Close();
         }
 
+        protected void DisconnectUser(User user, string message)
+        {
+            SendServerError(user, message);
+            DisconnectUser(user);
+        }
+
         protected void JoinUserToChannel(User user, Channel channel)
         {
             RemoveUserFromChannel(user);

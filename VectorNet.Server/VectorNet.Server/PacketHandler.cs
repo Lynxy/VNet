@@ -19,8 +19,7 @@ namespace VectorNet.Server
                 byte packetId = reader.ReadByte();
                 if (!user.IsOnline && packetId != VNET_LOGON)
                 {
-                    SendServerError(user, "You must logon first.");
-                    DisconnectUser(user);
+                    DisconnectUser(user, "You must logon first.");
                 }
 
                 switch (packetId)
@@ -31,6 +30,23 @@ namespace VectorNet.Server
                         string password = reader.ReadStringNT();
                         client = reader.ReadStringNT();
                         byte queueSharing = reader.ReadByte();
+
+                        if (ContainsNonPrintable(username))
+                        {
+                            DisconnectUser(user, "Usernames cannot contain non-printable characters");
+                            return;
+                        }
+                        else if (ContainsNonPrintable(password))
+                        {
+                            DisconnectUser(user, "Passwords cannot contain non-printable characters");
+                            return;
+                        }
+                        else if (ContainsNonPrintable(client))
+                        {
+                            DisconnectUser(user, "Client names cannot contain non-printable characters");
+                            return;
+                        }
+
 
                         //check client name
                         
@@ -71,6 +87,13 @@ namespace VectorNet.Server
 
                     case VNET_CHATEVENT: //0x03
                         text = reader.ReadStringNT();
+
+                        if (ContainsNonPrintable(text))
+                        {
+                            SendServerError(user, "Chat events cannot contain non-printable characters");
+                            return;
+                        }
+
                         if (text[0] == '/')
                             HandleCommand(user, text.Substring(1));
                         else

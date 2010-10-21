@@ -137,5 +137,14 @@ namespace VectorNet.Server
             HandleCommand(console, cmd);
         }
 
+        protected bool ContainsNonPrintable(string str)
+        {
+            bool foundBadChars = false;
+            foreach (char c in str)
+                if ((byte)c < 32)
+                    foundBadChars = true;
+            return foundBadChars;
+        }
+
     }
 }
