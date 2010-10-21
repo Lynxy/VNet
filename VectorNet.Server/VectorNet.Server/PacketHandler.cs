@@ -125,6 +125,7 @@ namespace VectorNet.Server
             }
             catch (Exception ex)
             {
+                Console.WriteLine("ERR - " + ex.Message);
                 //TODO: log exception
             }
         }

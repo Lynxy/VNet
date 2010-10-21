@@ -35,6 +35,8 @@ namespace VectorNet.Server.GUI
 
         private void RecvData(byte[] data)
         {
+            return;
+
             PacketReader reader = new PacketReader(data);
             byte PacketID = reader.ReadByte();
 
