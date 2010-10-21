@@ -32,7 +32,7 @@ namespace VectorNet.Server
                 Flags = UserFlags.Normal;
             }
 
-            protected void packet_SendData(ref byte[] data)
+            protected void packet_SendData(Packet packet, ref byte[] data)
             {
                 if (_isConsole)
                 {
