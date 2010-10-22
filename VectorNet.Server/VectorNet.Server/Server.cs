@@ -15,6 +15,7 @@ namespace VectorNet.Server
         protected List<User> Users;
         protected List<Channel> Channels;
         protected Timer timerCheck;
+        protected Timer timerGarbage;
 
         protected User console;
 
@@ -39,15 +40,23 @@ namespace VectorNet.Server
             Users = new List<User>();
             Channels = new List<Channel>();
 
-            timerCheck = new Timer(1000);
-            timerCheck.Elapsed += new ElapsedEventHandler(timerCheck_Elapsed);
-            timerCheck.Start();
-
+            SetupTimers();
             CreateDefaultChannels();
             ConnectToDatabase("vnet.sqlite");
 
             console = new User(null, true);
             console.Username = "";
+        }
+
+        protected void SetupTimers()
+        {
+            timerCheck = new Timer(1000);
+            timerCheck.Elapsed += new ElapsedEventHandler(timerCheck_Elapsed);
+            timerCheck.Start();
+
+            timerGarbage = new Timer(5000);
+            timerGarbage.Elapsed += new ElapsedEventHandler(timerGarbage_Elapsed);
+            timerGarbage.Start();
         }
 
         protected void timerCheck_Elapsed(object sender, ElapsedEventArgs e)
@@ -61,6 +70,17 @@ namespace VectorNet.Server
 
             ServerStats.lastBytesSent = ServerStats.bytesSent;
             ServerStats.lastBytesRecv = ServerStats.bytesRecv;
+        }
+
+        protected void timerGarbage_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            timerGarbage.Stop();
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(delegate
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    timerGarbage.Start();
+                }));
         }
 
         public void WireConsoleUserDataRecv(Action<byte[]> ReceiveDataEvent)
