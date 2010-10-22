@@ -185,7 +185,14 @@ namespace Lynxy.Network
         /// <remarks><c>Address</c> and <c>Port</c> must have already been set.</remarks>
         public void AsyncConnect()
         {
-            BeginConnect(myAddr, myPort, new AsyncCallback(EndASConnect), null);
+            try
+            {
+                BeginConnect(myAddr, myPort, new AsyncCallback(EndASConnect), null);
+            }
+            catch (SocketException)
+            {
+                OnConnectionRefused();
+            }
         }
 
         private void EndASConnect(IAsyncResult ar)
@@ -204,6 +211,10 @@ namespace Lynxy.Network
                 OnConnectionEstablished();
             }
             catch (IOException)
+            {
+                OnDisconnected();
+            }
+            catch (InvalidOperationException)
             {
                 OnDisconnected();
             }
@@ -234,6 +245,10 @@ namespace Lynxy.Network
             {
                 OnDisconnected();
             }
+            catch (InvalidOperationException)
+            {
+                OnDisconnected();
+            }
         }
 
         /// <summary>
@@ -254,6 +269,10 @@ namespace Lynxy.Network
                 GetStream().Write(data, 0, size);
             }
             catch (IOException)
+            {
+                OnDisconnected();
+            }
+            catch (InvalidOperationException)
             {
                 OnDisconnected();
             }
@@ -281,9 +300,12 @@ namespace Lynxy.Network
             {
                 OnDisconnected();
             }
+            catch (InvalidOperationException)
+            {
+                OnDisconnected();
+            }
         }
 
-        //TODO: FIX ME
         private void EndASSend(IAsyncResult ar)
         {
             try
@@ -298,6 +320,10 @@ namespace Lynxy.Network
                 OnDataSent();
             }
             catch (IOException)
+            {
+                OnDisconnected();
+            }
+            catch (InvalidOperationException)
             {
                 OnDisconnected();
             }
@@ -344,6 +370,11 @@ namespace Lynxy.Network
                 OnDisconnected();
                 return new byte[0];
             }
+            catch (InvalidOperationException)
+            {
+                OnDisconnected();
+                return new byte[0];
+            }
         }
 
         /// <summary>
@@ -375,6 +406,10 @@ namespace Lynxy.Network
                 GetStream().BeginRead(asReadBuffer, 0, asReadSize, new AsyncCallback(EndASRead), null);
             }
             catch (IOException)
+            {
+                OnDisconnected();
+            }
+            catch (InvalidOperationException)
             {
                 OnDisconnected();
             }
@@ -412,6 +447,10 @@ namespace Lynxy.Network
                 }
             }
             catch (IOException)
+            {
+                OnDisconnected();
+            }
+            catch (InvalidOperationException)
             {
                 OnDisconnected();
             }
