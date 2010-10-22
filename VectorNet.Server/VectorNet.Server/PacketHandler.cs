@@ -20,6 +20,11 @@ namespace VectorNet.Server
                 if (!user.IsOnline && packetId != VNET_LOGON)
                 {
                     DisconnectUser(user, "You must logon first.");
+                    return;
+                }
+                else if (!user.CanSendData)
+                { //they're still trying to send data after we disconnected them
+                    return;
                 }
 
                 switch (packetId)

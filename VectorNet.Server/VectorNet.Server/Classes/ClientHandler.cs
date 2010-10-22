@@ -37,6 +37,8 @@ namespace VectorNet.Server
                 ServerStats.bytesRecv += data.Length;
                 lock (_locker)
                 {
+                    if (!TcpClientUsers.ContainsKey(sender))
+                        return;
                     User user = TcpClientUsers[sender];
                     byte[] buffer = UserBuffers[user];
                     int oldLen = buffer.Length;
