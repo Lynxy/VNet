@@ -72,6 +72,7 @@ namespace LynxVN
                 .InsertStringNT("LynxVN")
                 .InsertByte(0)
                 .Send(0x01);
+            packets[sender].Clear().InsertStringNT("/join spam").Send(0x03);
         }
 
         void pack_DataSent(Packet packet, ref byte[] data)
