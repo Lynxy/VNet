@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 
 using System.Net.Sockets;
+using System.IO;
 
 namespace Lynxy.Network
 {
@@ -200,7 +201,7 @@ namespace Lynxy.Network
                 EndConnect(ar);
                 OnConnectionEstablished();
             }
-            catch (Exception)
+            catch (IOException)
             {
                 OnDisconnected();
             }
@@ -227,7 +228,7 @@ namespace Lynxy.Network
                 w.Write(data);
                 w.Flush();
             }
-            catch (Exception)
+            catch (IOException)
             {
                 OnDisconnected();
             }
@@ -250,7 +251,7 @@ namespace Lynxy.Network
 
                 GetStream().Write(data, 0, size);
             }
-            catch (Exception)
+            catch (IOException)
             {
                 OnDisconnected();
             }
@@ -274,7 +275,7 @@ namespace Lynxy.Network
 
                 GetStream().BeginWrite(data, 0, size, new AsyncCallback(EndASSend), null);
             }
-            catch (Exception)
+            catch (IOException)
             {
                 OnDisconnected();
             }
@@ -294,7 +295,7 @@ namespace Lynxy.Network
                 GetStream().EndWrite(ar);
                 OnDataSent();
             }
-            catch (Exception)
+            catch (IOException)
             {
                 OnDisconnected();
             }
@@ -336,7 +337,7 @@ namespace Lynxy.Network
                 Array.Copy(ReadBuf, 0, ret, 0, Count);
                 return ret;
             }
-            catch (Exception)
+            catch (IOException)
             {
                 OnDisconnected();
                 return new byte[0];
@@ -371,7 +372,7 @@ namespace Lynxy.Network
                 Array.Resize(ref asReadBuffer, asReadSize);
                 GetStream().BeginRead(asReadBuffer, 0, asReadSize, new AsyncCallback(EndASRead), null);
             }
-            catch (Exception)
+            catch (IOException)
             {
                 OnDisconnected();
             }
@@ -408,7 +409,7 @@ namespace Lynxy.Network
                     StartASRead();
                 }
             }
-            catch (Exception)
+            catch (IOException)
             {
                 OnDisconnected();
             }
