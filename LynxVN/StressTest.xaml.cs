@@ -38,9 +38,8 @@ namespace LynxVN
             {
                 foreach (TcpClientWrapper sock in sockets.Values)
                 {
-                    if (sock.Connected)
+                    if (sock.Client != null && sock.Connected)
                         packets[sock].Clear().InsertStringNT("wtf msg").Send(0x03);
-                    sock.Close();
                 }
             }
         }
