@@ -42,6 +42,8 @@ namespace VectorNet.Server
                 return;
             SendUserLeftChannel(user);
             user.Channel.RemoveUser(user);
+            if (user.Channel.UserCount == 0)
+                Channels.Remove(user.Channel);
         }
 
         protected List<User> GetUsersByIP(string IPAddress)
