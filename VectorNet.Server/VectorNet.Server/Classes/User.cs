@@ -18,6 +18,7 @@ namespace VectorNet.Server
             protected Packet packet;
             protected PacketBufferer bufferer;
             protected bool _isConsole = false;
+            protected bool _canSendData = true;
 
             public User(TcpClientWrapper clientSocket, bool isConsole)
             {
@@ -34,6 +35,8 @@ namespace VectorNet.Server
 
             protected void packet_SendData(Packet packet, ref byte[] data)
             {
+                if (!_canSendData)
+                    return;
                 if (_isConsole)
                 {
                     if (SendData != null)
@@ -45,6 +48,8 @@ namespace VectorNet.Server
 
             protected void SendDataFinal(ref byte[] data)
             {
+                if (!_canSendData)
+                    return;
                 ServerStats.bytesSent += data.Length;
                 socket.AsyncSend(data, data.Length);
             }
@@ -58,6 +63,7 @@ namespace VectorNet.Server
             public Channel Channel { get; set; }
             public int Ping { get; set; }
             public bool IsOnline { get; set; }
+            public bool CanSendData { get { return _canSendData; } set { _canSendData = value; } }
         }
     }
 }

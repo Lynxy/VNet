@@ -16,6 +16,7 @@ namespace VectorNet.Server
             if (user.IsOnline)
                 ServerStats.usersOnline--;
             user.IsOnline = false;
+            user.CanSendData = false;
             RemoveUserFromChannel(user);
             SendUserLeftServer(user);
             user.Socket.Close();
