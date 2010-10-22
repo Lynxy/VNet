@@ -51,7 +51,7 @@ namespace VectorNet.Server
 
                 case ListType.UsersOnServer:
                     Dictionary<User, List<string>> userBannedFrom = new Dictionary<User, List<string>>();
-                    foreach (Channel chan in Channels)
+                    foreach (Channel chan in Channels.ToList()) //duplicate to avoid thread conflicts
                     {
                         foreach (User usr in GetUsersBannedFromChannel(chan))
                         {
@@ -66,7 +66,7 @@ namespace VectorNet.Server
                         .InsertByte((byte)ListType.UsersOnServer)
                         .InsertWord((short)Users.Count);
 
-                    foreach (User usr in Users)
+                    foreach (User usr in Users.ToList()) //duplicate to avoid thread conflicts
                     {
                         user.Packet.InsertStringNT(usr.Username)
                                    .InsertStringNT(usr.Client)

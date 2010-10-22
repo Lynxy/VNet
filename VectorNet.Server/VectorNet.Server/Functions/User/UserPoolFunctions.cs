@@ -14,7 +14,8 @@ namespace VectorNet.Server
         protected User GetUserByName(string username)
         {
             User ret = Users.Find(u =>
-                u.IsOnline == true
+                u != null
+                && u.IsOnline == true
                 && u.Username != null
                 && u.Username.ToLower() == username.ToLower()
                 );
