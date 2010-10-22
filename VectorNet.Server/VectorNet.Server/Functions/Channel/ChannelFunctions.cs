@@ -35,6 +35,15 @@ namespace VectorNet.Server
             return ret;
         }
 
+        protected void AttemptToCloseChannel(Channel channel)
+        {
+            if (channel.UserCount == 0
+                && channel != Channel_Main
+                && channel != Channel_Void)
+                Channels.Remove(channel);
+
+        }
+
         protected List<User> GetUsersInChannel(Channel channel)
         {
             return GetUsersInChannel(console, channel, true);

@@ -81,10 +81,7 @@ namespace VectorNet.Server
                     Users.Remove(user);
 
             foreach (Channel chan in Channels.ToList())
-                if (chan != Channel_Main
-                    && chan != Channel_Void
-                    && chan.UserCount == 0)
-                    Channels.Remove(chan);
+                AttemptToCloseChannel(chan);
 
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(delegate
                 {
