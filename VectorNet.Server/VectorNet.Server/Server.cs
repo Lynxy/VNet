@@ -52,7 +52,15 @@ namespace VectorNet.Server
 
         protected void timerCheck_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("Users.Count = " + Users.Count + ", kb sent = " + (ServerStats.bytesSent / 1024).ToString());
+            Console.WriteLine("-----------------------------------");
+            Console.WriteLine("Total connections = " + ServerStats.totalConnections);
+            Console.WriteLine("Users online = " + ServerStats.usersOnline);
+            Console.WriteLine("KB sent = " + (ServerStats.bytesSent / 1024)
+                + " (" + ((ServerStats.bytesSent - ServerStats.lastBytesSent) / 1024) + " kb/s)");
+            Console.WriteLine("KB recv = " + (ServerStats.bytesRecv / 1024));
+
+            ServerStats.lastBytesSent = ServerStats.bytesSent;
+            ServerStats.lastBytesRecv = ServerStats.bytesRecv;
         }
 
         public void WireConsoleUserDataRecv(Action<byte[]> ReceiveDataEvent)

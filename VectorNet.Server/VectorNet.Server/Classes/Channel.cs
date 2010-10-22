@@ -47,6 +47,7 @@ namespace VectorNet.Server
             public List<User> Operators { get { return _Operators; } }
             public List<string> BannedIPs { get { return _BannedIPs; } set { _BannedIPs = value; } }
             public List<string> BannedUsers { get { return _BannedUsers; } set { _BannedUsers = value; } }
+            public int UserCount { get { return _Users.Count; } }
 
             public void AddUser(User user, bool isOperator)
             {

@@ -34,6 +34,7 @@ namespace VectorNet.Server
 
             protected void client_DataRead(TcpClientWrapper sender, byte[] data)
             {
+                ServerStats.bytesRecv += data.Length;
                 lock (_locker)
                 {
                     User user = TcpClientUsers[sender];

@@ -14,8 +14,8 @@ namespace VectorNet.Server
             string username;
             string text;
             string client;
-            try
-            {
+            //try
+            //{
                 byte packetId = reader.ReadByte();
                 if (!user.IsOnline && packetId != VNET_LOGON)
                 {
@@ -73,6 +73,7 @@ namespace VectorNet.Server
                         user.Username = username;
                         user.Client = client;
                         user.IsOnline = true;
+                        ServerStats.usersOnline++;
 
                         UpdateLastLogin(username);
                         SendLogonResult(user, LogonResult.Success);
@@ -122,12 +123,12 @@ namespace VectorNet.Server
                     case 0x0C:
                         break;
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERR - " + ex.Message);
-                //TODO: log exception
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("ERR - " + ex.Message);
+            //    //TODO: log exception
+            //}
         }
 
         

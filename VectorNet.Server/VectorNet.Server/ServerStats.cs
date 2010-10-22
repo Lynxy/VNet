@@ -13,6 +13,8 @@ namespace VectorNet.Server
         {
             static public long bytesSent = 0;
             static public long bytesRecv = 0;
+            static public long lastBytesSent = 0;
+            static public long lastBytesRecv = 0;
 
             static public long totalConnections = 0;
             static public long usersOnline = 0;
