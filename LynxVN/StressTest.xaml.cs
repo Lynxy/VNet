@@ -34,25 +34,35 @@ namespace LynxVN
 
         void tmr_Elapsed(object state)
         {
-            foreach (TcpClientWrapper sock in sockets.Values)
+            lock (sockets)
             {
-                if (sock.Connected)
-                    packets[sock].Clear().InsertStringNT("wtf msg").Send(0x03);
+                foreach (TcpClientWrapper sock in sockets.Values)
+                {
+                    if (sock.Connected)
+                        packets[sock].Clear().InsertStringNT("wtf msg").Send(0x03);
+                    sock.Close();
+                }
             }
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            TcpClientWrapper sock = new TcpClientWrapper();
-            sock.ConnectionEstablished += new TcpClientWrapper.ConnectionEstablishedDelegate(sock_ConnectionEstablished);
+            lock (sockets)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    TcpClientWrapper sock = new TcpClientWrapper();
+                    sock.ConnectionEstablished += new TcpClientWrapper.ConnectionEstablishedDelegate(sock_ConnectionEstablished);
 
-            Packet pack = new Packet();
-            pack.DataSent += new Packet.SendDataDelegate(pack_DataSent);
+                    Packet pack = new Packet();
+                    pack.DataSent += new Packet.SendDataDelegate(pack_DataSent);
 
-            sockets.Add(pack, sock);
-            packets.Add(sock, pack);
+                    sockets.Add(pack, sock);
+                    packets.Add(sock, pack);
 
-            sock.AsyncConnect("127.0.0.1", 4800);
+                    sock.AsyncConnect("127.0.0.1", 4800);
+                }
+            }
         }
 
         void sock_ConnectionEstablished(TcpClientWrapper sender)
