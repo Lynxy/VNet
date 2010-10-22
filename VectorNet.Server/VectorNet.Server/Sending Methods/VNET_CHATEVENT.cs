@@ -13,7 +13,7 @@ namespace VectorNet.Server
         //This class is for VNET_CHATEVENT sending methods
         protected void SendUserJoinedServer(User user)
         {
-            foreach (User u in Users.ToList()) //duplicate to avoid thread conflicts
+            foreach (User u in GetAllOnlineUsers())
                 if (u != user)
                     u.Packet.Clear()
                         .InsertByte((byte)ChatEventType.UserJoinedServer)
@@ -26,7 +26,7 @@ namespace VectorNet.Server
 
         protected void SendUserLeftServer(User user)
         {
-            foreach (User u in Users.ToList()) //duplicate to avoid thread conflicts
+            foreach (User u in GetAllOnlineUsers())
                 if (u != user)
                     u.Packet.Clear()
                         .InsertByte((byte)ChatEventType.UserLeftServer)
@@ -98,7 +98,7 @@ namespace VectorNet.Server
 
         protected void SendServerBroadcast(User userBroadcasting, string message)
         {
-            foreach (User u in Users.ToList()) //duplicate to avoid thread conflicts
+            foreach (User u in GetAllOnlineUsers()) 
                 u.Packet.Clear()
                     .InsertByte((byte)ChatEventType.ServerInfo)
                     .InsertDWord(userBroadcasting.Ping)

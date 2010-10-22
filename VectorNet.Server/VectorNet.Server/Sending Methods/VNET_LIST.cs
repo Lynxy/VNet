@@ -66,7 +66,7 @@ namespace VectorNet.Server
                         .InsertByte((byte)ListType.UsersOnServer)
                         .InsertWord((short)Users.Count);
 
-                    foreach (User usr in Users.ToList()) //duplicate to avoid thread conflicts
+                    foreach (User usr in GetAllOnlineUsers())
                     {
                         user.Packet.InsertStringNT(usr.Username)
                                    .InsertStringNT(usr.Client)

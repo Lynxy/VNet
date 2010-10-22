@@ -49,6 +49,14 @@ namespace VectorNet.Server
                 Channels.Remove(user.Channel);
         }
 
+        protected List<User> GetAllOnlineUsers()
+        {
+            List<User> ret = Users.Where(u => u.IsOnline == true).ToList();
+            if (ret == null)
+                ret = new List<User>();
+            return ret;
+        }
+
         protected List<User> GetUsersByIP(string IPAddress)
         {
             List<User> ret = Users.Where(u => u.IPAddress == IPAddress).ToList();
