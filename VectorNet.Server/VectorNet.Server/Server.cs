@@ -77,10 +77,13 @@ namespace VectorNet.Server
             timerGarbage.Stop();
 
             foreach (User user in GetAllOfflineUsers())
-                Users.Remove(user);
+                if (user != console)
+                    Users.Remove(user);
 
             foreach (Channel chan in Channels.ToList())
-                if (chan.UserCount == 0)
+                if (chan != Channel_Main
+                    && chan != Channel_Void
+                    && chan.UserCount == 0)
                     Channels.Remove(chan);
 
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(delegate
