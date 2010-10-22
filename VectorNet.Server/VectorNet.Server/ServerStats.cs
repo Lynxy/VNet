@@ -9,9 +9,13 @@ namespace VectorNet.Server
 {
     //public partial class Server
     //{
-        static public class DataCounter
+        static public class ServerStats
         {
             static public long bytesSent = 0;
+            static public long bytesRecv = 0;
+
+            static public long totalConnections = 0;
+            static public long usersOnline = 0;
         }
     //}
 }

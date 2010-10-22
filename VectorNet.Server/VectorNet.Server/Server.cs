@@ -52,7 +52,7 @@ namespace VectorNet.Server
 
         protected void timerCheck_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("Users.Count = " + Users.Count + ", kb sent = " + (DataCounter.bytesSent / 1024).ToString());
+            Console.WriteLine("Users.Count = " + Users.Count + ", kb sent = " + (ServerStats.bytesSent / 1024).ToString());
         }
 
         public void WireConsoleUserDataRecv(Action<byte[]> ReceiveDataEvent)
