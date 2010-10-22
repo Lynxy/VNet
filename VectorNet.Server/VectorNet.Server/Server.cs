@@ -75,6 +75,14 @@ namespace VectorNet.Server
         protected void timerGarbage_Elapsed(object sender, ElapsedEventArgs e)
         {
             timerGarbage.Stop();
+
+            foreach (User user in GetAllOfflineUsers())
+                Users.Remove(user);
+
+            foreach (Channel chan in Channels.ToList())
+                if (chan.UserCount == 0)
+                    Channels.Remove(chan);
+
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(delegate
                 {
                     GC.Collect();

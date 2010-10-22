@@ -57,6 +57,14 @@ namespace VectorNet.Server
             return ret;
         }
 
+        protected List<User> GetAllOfflineUsers()
+        {
+            List<User> ret = Users.Where(u => u.IsOnline == false).ToList();
+            if (ret == null)
+                ret = new List<User>();
+            return ret;
+        }
+
         protected List<User> GetUsersByIP(string IPAddress)
         {
             List<User> ret = Users.Where(u => u.IPAddress == IPAddress).ToList();
