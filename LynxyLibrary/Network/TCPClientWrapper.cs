@@ -190,6 +190,8 @@ namespace Lynxy.Network
 
         private void EndASConnect(IAsyncResult ar)
         {
+            if (Client == null)
+                return;
             try
             {
                 if (!Connected)
