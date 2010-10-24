@@ -34,7 +34,6 @@ namespace VectorNet.Server
                         username = reader.ReadStringNT();
                         string password = reader.ReadStringNT();
                         client = reader.ReadStringNT();
-                        byte queueSharing = reader.ReadByte();
 
                         if (ContainsNonPrintable(username))
                         {
