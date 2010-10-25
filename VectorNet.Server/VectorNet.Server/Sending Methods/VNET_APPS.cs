@@ -9,7 +9,7 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        public void HandleAppID(User fromSend, PacketReader reader,  User toSend, AppFlags flag)
+        protected void HandleAppID(User fromSend, PacketReader reader,  User toSend, AppFlags flag)
         {
 
 
