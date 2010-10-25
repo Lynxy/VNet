@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConfigurationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ListenPort>4800</ListenPort>
+  <HostedBy />
+  <MOTD />
+  <AllowAES>true</AllowAES>
+  <UseIdleSystem>false</UseIdleSystem>
+</ConfigurationData>

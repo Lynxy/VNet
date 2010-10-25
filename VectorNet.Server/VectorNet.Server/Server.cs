@@ -35,6 +35,11 @@ namespace VectorNet.Server
             
         }
 
+        public void Shutdown()
+        {
+            database.Close();
+        }
+
         protected void ServerInit()
         {
             Users = new List<User>();
@@ -62,11 +67,19 @@ namespace VectorNet.Server
         protected void timerCheck_Elapsed(object sender, ElapsedEventArgs e)
         {
             Console.WriteLine("-----------------------------------");
-            Console.WriteLine("Total connections = " + ServerStats.totalConnections);
-            Console.WriteLine("Users online = " + ServerStats.usersOnline);
+            Console.WriteLine("Total connections = " + ServerStats.totalConnections + " (" + ServerStats.usersOnline + " online)");
             Console.WriteLine("KB sent = " + (ServerStats.bytesSent / 1024)
-                + " (" + ((ServerStats.bytesSent - ServerStats.lastBytesSent) / 1024) + " kb/s)");
-            Console.WriteLine("KB recv = " + (ServerStats.bytesRecv / 1024));
+                + " (" + ((ServerStats.bytesSent - ServerStats.lastBytesSent) / 1024) + " kb/s) | " +
+                "KB recv = " + (ServerStats.bytesRecv / 1024));
+
+            int c1, c2;
+            System.Threading.ThreadPool.GetAvailableThreads(out c1, out c2);
+            Console.WriteLine("GetAvailableThreads = " + c1 + "/" + c2);
+
+            string test = "";
+            foreach (User u in GetAllOnlineUsers())
+                test += u.Socket.ct1 + "/" + u.Socket.ct2 + " ";
+            Console.WriteLine("Missed/Total packets = " + test);
 
             ServerStats.lastBytesSent = ServerStats.bytesSent;
             ServerStats.lastBytesRecv = ServerStats.bytesRecv;
@@ -78,7 +91,11 @@ namespace VectorNet.Server
 
             foreach (User user in GetAllOfflineUsers())
                 if (user != console)
+                {
+                    if (user.CanSendData)
+                        DisconnectUser(user, "Server has detected your status is no longer Online.");
                     Users.Remove(user);
+                }
 
             foreach (Channel chan in Channels.ToList())
                 AttemptToCloseChannel(chan);

@@ -61,6 +61,7 @@
             this.Controls.Add(this.rtbChat);
             this.Name = "frmMain";
             this.Text = "VectorNet Server Listener";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.ResumeLayout(false);
 
         }

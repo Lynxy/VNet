@@ -35,7 +35,7 @@ namespace VectorNet.Server.GUI
 
         private void RecvData(byte[] data)
         {
-            //return;
+            return;
 
             PacketReader reader = new PacketReader(data);
             byte PacketID = reader.ReadByte();
@@ -83,6 +83,11 @@ namespace VectorNet.Server.GUI
                 rtbChat.SelectionStart = rtbChat.Text.Length;
                 rtbChat.ScrollToCaret();
             }));
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            VNet.Shutdown();
         }
 
     }
