@@ -133,7 +133,7 @@ namespace LynxVN
                 if (msg == "stress")
                 {
                     (new StressTest()).Show();
-                    this.Close();
+                    //this.Close();
                     return;
                 }
                 if (msg == "spam")
