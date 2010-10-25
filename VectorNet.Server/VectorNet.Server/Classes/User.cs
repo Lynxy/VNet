@@ -28,7 +28,7 @@ namespace VectorNet.Server
                 packet = new Packet();
                 packet.skipHeaders = isConsole;
                 packet.DataSent += new Packet.SendDataDelegate(packet_SendData);
-                bufferer = new PacketBufferer(SendDataFinal, 200);
+                bufferer = new PacketBufferer(SendDataFinal, null, 200);
 
                 Flags = UserFlags.Normal;
             }
@@ -46,7 +46,7 @@ namespace VectorNet.Server
                     bufferer.QueuePacket(ref data);
             }
 
-            protected void SendDataFinal(ref byte[] data)
+            protected void SendDataFinal(object state, ref byte[] data)
             {
                 if (!_canSendData)
                     return;

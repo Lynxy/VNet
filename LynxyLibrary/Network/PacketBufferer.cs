@@ -9,20 +9,22 @@ namespace Lynxy.Network
 {
     public class PacketBufferer
     {
-        public delegate void SendDataDelegate(ref byte[] data);
+        public delegate void SendDataDelegate(object state, ref byte[] data);
         protected SendDataDelegate _SendData;
 
         protected byte[] buffer = new byte[0];
+        protected object _state;
         protected Timer ticker;
         private readonly object _locker = new object();
 
-        public PacketBufferer(SendDataDelegate SendData)
-            : this(SendData, 100)
+        public PacketBufferer(SendDataDelegate SendData, object state)
+            : this(SendData, state, 100)
         {
         }
-        public PacketBufferer(SendDataDelegate SendData, int interval)
+        public PacketBufferer(SendDataDelegate SendData, object state, int interval)
         {
             _SendData = SendData;
+            _state = state;
             ticker = new Timer(ticker_Elapsed, null, interval, interval);
         }
 
@@ -32,7 +34,7 @@ namespace Lynxy.Network
             //{
                 if (buffer.Length > 0)
                 {
-                    _SendData(ref buffer);
+                    _SendData(_state, ref buffer);
                     Array.Resize(ref buffer, 0);
                 }
             //}
