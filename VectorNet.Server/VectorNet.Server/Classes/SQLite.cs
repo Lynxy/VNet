@@ -23,6 +23,11 @@ namespace VectorNet.Server
                 CheckDBExistsAndConnect();
             }
 
+            public void Close()
+            {
+                conn.Close();
+            }
+
             public void Dispose()
             {
                 Dispose(true);
@@ -56,6 +61,9 @@ namespace VectorNet.Server
                     SQLiteConnection.CreateFile(dbFile);
                     ConnectDB();
                     SetupDB();
+
+                    //Close();
+                    //ConnectDB();
                 }
             }
 
@@ -83,24 +91,24 @@ namespace VectorNet.Server
 
             public SQLiteDataReader ExecuteReader(string query)
             {
-                if (cmd.Transaction == null)
-                    cmd.Transaction = conn.BeginTransaction();
+                //if (cmd.Transaction == null)
+                //    cmd.Transaction = conn.BeginTransaction();
                 cmd.CommandText = query;
                 return cmd.ExecuteReader();
             }
 
             public object ExecuteScalar(string query)
             {
-                if (cmd.Transaction == null)
-                    cmd.Transaction = conn.BeginTransaction();
+                //if (cmd.Transaction == null)
+                //    cmd.Transaction = conn.BeginTransaction();
                 cmd.CommandText = query;
                 return cmd.ExecuteScalar();
             }
 
             public int ExecuteNonQuery(string query)
             {
-                if (cmd.Transaction == null)
-                    cmd.Transaction = conn.BeginTransaction();
+                //if (cmd.Transaction == null)
+                //    cmd.Transaction = conn.BeginTransaction();
                 cmd.CommandText = query;
                 return cmd.ExecuteNonQuery();
             }
