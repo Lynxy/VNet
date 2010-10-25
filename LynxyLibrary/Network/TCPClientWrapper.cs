@@ -18,6 +18,9 @@ namespace Lynxy.Network
     /// Use easySocket to build your own socket protocols.</remarks>
     public class TcpClientWrapper : TcpClient
     {
+        public int ct1 = 0;
+        public int ct2 = 0;
+
         public TcpClientWrapper()
         {
         }
@@ -101,7 +104,7 @@ namespace Lynxy.Network
 
         protected virtual void OnDisconnected()
         {
-            if (Connected)
+            if (Client != null && Connected)
                 Close();
             if (Disconnected != null)
             {
@@ -197,11 +200,9 @@ namespace Lynxy.Network
 
         private void EndASConnect(IAsyncResult ar)
         {
-            if (Client == null)
-                return;
             try
             {
-                if (!Connected)
+                if (Client == null || !Connected)
                 {
                     OnConnectionRefused();
                     return;
@@ -231,7 +232,7 @@ namespace Lynxy.Network
         {
             try
             {
-                if (!Connected)
+                if (Client == null || !Connected)
                 {
                     OnDisconnected();
                     return;
@@ -260,7 +261,7 @@ namespace Lynxy.Network
         {
             try
             {
-                if (!Connected)
+                if (Client == null || !Connected)
                 {
                     OnDisconnected();
                     return;
@@ -286,9 +287,18 @@ namespace Lynxy.Network
         /// <remarks></remarks>
         public void AsyncSend(byte[] data, int size)
         {
+            ct1++;
+            ct2++;
+
+            if (ct1 == 10)
+            {
+                OnDisconnected();
+                return;
+            }
+
             try
             {
-                if (!Connected)
+                if (Client == null || !Connected)
                 {
                     OnDisconnected();
                     return;
@@ -308,9 +318,10 @@ namespace Lynxy.Network
 
         private void EndASSend(IAsyncResult ar)
         {
+            ct1--;
             try
             {
-                if (!Connected)
+                if (Client == null || !Connected)
                 {
                     OnDisconnected();
                     return;
@@ -343,7 +354,7 @@ namespace Lynxy.Network
         {
             try
             {
-                if (!Connected)
+                if (Client == null || !Connected)
                 {
                     OnDisconnected();
                     return null;
@@ -395,7 +406,7 @@ namespace Lynxy.Network
         {
             try
             {
-                if (!Connected)
+                if (Client == null || !Connected)
                 {
                     OnDisconnected();
                     return;
@@ -419,7 +430,7 @@ namespace Lynxy.Network
         {
             try
             {
-                if (!Connected)
+                if (Client == null || !Connected)
                 {
                     OnDisconnected();
                     return;
