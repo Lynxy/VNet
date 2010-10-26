@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.rtbChat = new System.Windows.Forms.RichTextBox();
             this.lvVNUsers = new System.Windows.Forms.TreeView();
+            this.tmrTest = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // rtbChat
@@ -52,6 +54,12 @@
             this.lvVNUsers.Size = new System.Drawing.Size(248, 274);
             this.lvVNUsers.TabIndex = 1;
             // 
+            // tmrTest
+            // 
+            this.tmrTest.Enabled = true;
+            this.tmrTest.Interval = 1000;
+            this.tmrTest.Tick += new System.EventHandler(this.tmrTest_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -70,6 +78,7 @@
 
         private System.Windows.Forms.RichTextBox rtbChat;
         private System.Windows.Forms.TreeView lvVNUsers;
+        private System.Windows.Forms.Timer tmrTest;
     }
 }
 

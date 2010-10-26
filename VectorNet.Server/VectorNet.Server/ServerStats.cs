@@ -18,6 +18,7 @@ namespace VectorNet.Server
 
             static public long totalConnections = 0;
             static public long usersOnline = 0;
+            static public string test = "";
         }
     //}
 }

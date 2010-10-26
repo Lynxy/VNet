@@ -90,5 +90,22 @@ namespace VectorNet.Server.GUI
             VNet.Shutdown();
         }
 
+        private void tmrTest_Tick(object sender, EventArgs e)
+        {
+            string str = "";
+            str += "Total connections = " + ServerStats.totalConnections + " (" + ServerStats.usersOnline + " online)";
+            str += "\r\nKB sent = " + (ServerStats.bytesSent / 1024)
+                + " (" + ((ServerStats.bytesSent - ServerStats.lastBytesSent) / 1024) + " kb/s) | " +
+                "KB recv = " + (ServerStats.bytesRecv / 1024);
+
+            int c1, c2;
+            System.Threading.ThreadPool.GetAvailableThreads(out c1, out c2);
+            str += "\r\nGetAvailableThreads = " + c1 + "/" + c2;
+
+            str += "\r\nMissed/Total packets = " + ServerStats.test;
+
+            rtbChat.Text = str;
+        }
+
     }
 }

@@ -79,6 +79,7 @@ namespace VectorNet.Server
             string test = "";
             foreach (User u in GetAllOnlineUsers())
                 test += u.Socket.ct1 + "/" + u.Socket.ct2 + " ";
+            ServerStats.test = test;
             Console.WriteLine("Missed/Total packets = " + test);
 
             ServerStats.lastBytesSent = ServerStats.bytesSent;
@@ -98,7 +99,12 @@ namespace VectorNet.Server
                 }
 
             foreach (Channel chan in Channels.ToList())
+            {
+                foreach (User user in chan.GetCompleteUserList())
+                    if (user == null)
+                        chan.RemoveUser(user);
                 AttemptToCloseChannel(chan);
+            }
 
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(delegate
                 {
