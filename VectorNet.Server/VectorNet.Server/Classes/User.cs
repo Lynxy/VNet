@@ -10,10 +10,11 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        protected class User
+        protected class User : IDisposable
         {
             public event Action<byte[]> SendData;
 
+            private bool disposed = false;
             protected TcpClientWrapper socket;
             protected Packet packet;
             protected PacketBufferer bufferer;
@@ -31,6 +32,31 @@ namespace VectorNet.Server
                 bufferer = new PacketBufferer(SendDataFinal, null, 200);
 
                 Flags = UserFlags.Normal;
+            }
+
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+
+            private void Dispose(bool disposing)
+            {
+                if (!this.disposed)
+                {
+                    if (disposing)
+                    {
+                        socket = null;
+                        packet = null;
+                        bufferer = null;
+                    }
+                    disposed = true;
+                }
+            }
+
+            ~User()
+            {
+                Dispose(false);
             }
 
             protected void packet_SendData(Packet packet, ref byte[] data)

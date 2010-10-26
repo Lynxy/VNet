@@ -66,6 +66,8 @@ namespace VectorNet.Server
                         UserDisconnected(user);
                     TcpClientUsers.Remove(sender);
                     UserBuffers.Remove(user);
+                    user.Dispose();
+                    user = null;
                 }
             }
         }
