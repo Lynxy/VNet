@@ -20,12 +20,15 @@ namespace Lynxy.Network
     {
         public int ct1 = 0;
         public int ct2 = 0;
+        protected int _sendBacklog;
 
-        public TcpClientWrapper()
+        public TcpClientWrapper(int SendBacklog)
         {
+            _sendBacklog = SendBacklog;
         }
-        public TcpClientWrapper(TcpClient duplicateSocket)
+        public TcpClientWrapper(int SendBacklog, TcpClient duplicateSocket)
         {
+            _sendBacklog = SendBacklog;
             this.Client = new Socket(duplicateSocket.Client.DuplicateAndClose(System.Diagnostics.Process.GetCurrentProcess().Id));
         }
 
@@ -290,7 +293,7 @@ namespace Lynxy.Network
             ct1++;
             ct2++;
 
-            if (ct1 == 10)
+            if (ct1 == _sendBacklog)
             {
                 OnDisconnected();
                 return;

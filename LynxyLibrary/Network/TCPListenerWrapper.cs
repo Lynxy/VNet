@@ -35,7 +35,7 @@ namespace Lynxy.Network
         public void AcceptTcpClientCallback(IAsyncResult ar)
 		{
 			TcpListenerWrapper listener = (TcpListenerWrapper)ar.AsyncState;
-            TcpClientWrapper client = new TcpClientWrapper(listener.EndAcceptTcpClient(ar));
+            TcpClientWrapper client = new TcpClientWrapper(30, listener.EndAcceptTcpClient(ar));
             listener.OnClientConnected(client); //not on calling thread
 			listener.StartListening();
 		}
