@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using Lynxy.Network;
-using System.Threading;
+using System.Timers;
 
 namespace LynxVN
 {
@@ -32,18 +32,16 @@ namespace LynxVN
         public StressTest()
         {
             InitializeComponent();
-            tmr = new Timer(tmr_Elapsed, null, 1000, 1000);
+            tmr = new Timer(500);
+            tmr.Elapsed += new ElapsedEventHandler(tmr_Elapsed);
+            tmr.Start();
         }
 
-        void tmr_Elapsed(object state)
+        void tmr_Elapsed(object sender, ElapsedEventArgs e)
         {
-            checkBox1.Dispatcher.Invoke(new Action(delegate
-            {
-                doTalk = (bool)checkBox1.IsChecked;
-            }));
-
             if (!doTalk)
                 return;
+
             lock (sockets)
             {
                 foreach (TcpClientWrapper sock in sockets.Values)
@@ -62,14 +60,14 @@ namespace LynxVN
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    TcpClientWrapper sock = new TcpClientWrapper();
+                    TcpClientWrapper sock = new TcpClientWrapper(20);
                     sock.ConnectionEstablished += new TcpClientWrapper.ConnectionEstablishedDelegate(sock_ConnectionEstablished);
                     sock.DataRead += new TcpClientWrapper.DataReadDelegate(sock_DataRead);
 
                     Packet pack = new Packet();
                     pack.DataSent += new Packet.SendDataDelegate(pack_DataSent);
 
-                    PacketBufferer bufferer = new PacketBufferer(SendDataFinal, sock);
+                    PacketBufferer bufferer = new PacketBufferer(SendDataFinal, sock, 100);
 
                     sockets.Add(pack, sock);
                     packets.Add(sock, pack);
@@ -105,6 +103,16 @@ namespace LynxVN
         {
             TcpClientWrapper sock = (TcpClientWrapper)state;
             sock.AsyncSend(data, data.Length);
+        }
+
+        private void checkBox1_Checked(object sender, RoutedEventArgs e)
+        {
+            doTalk = true;
+        }
+
+        private void checkBox1_Unchecked(object sender, RoutedEventArgs e)
+        {
+            doTalk = false;
         }
     }
 }

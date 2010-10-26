@@ -25,7 +25,7 @@ namespace LynxVN
 
         protected void SetupSocket()
         {
-            socket = new TcpClientWrapper();
+            socket = new TcpClientWrapper(20);
             socket.ConnectionEstablished += new TcpClientWrapper.ConnectionEstablishedDelegate(socket_ConnectionEstablished);
             socket.ConnectionRefused += new TcpClientWrapper.ConnectionRefusedDelegate(socket_ConnectionRefused);
             socket.Disconnected += new TcpClientWrapper.DisconnectedDelegate(socket_Disconnected);
