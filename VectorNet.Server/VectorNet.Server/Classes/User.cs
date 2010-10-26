@@ -49,6 +49,7 @@ namespace VectorNet.Server
                         socket = null;
                         packet = null;
                         bufferer = null;
+                        Channel = null;
                     }
                     disposed = true;
                 }
