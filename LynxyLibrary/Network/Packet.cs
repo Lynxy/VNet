@@ -104,22 +104,26 @@ namespace Lynxy.Network
         #region String
         public Packet InsertString(string data)
         {
+            if (data == null) return this;
             return InsertString(data, buffer.Length);
         }
 
         public Packet InsertString(string data, int position)
         {
+            if (data == null) return this;
             buffer.Insert(position, data);
             return this;
         }
 
         public Packet InsertStringNT(string data)
         {
+            if (data == null) return this;
             return InsertStringNT(data, buffer.Length);
         }
 
         public Packet InsertStringNT(string data, int position)
         {
+            if (data == null) return this;
             buffer.Insert(position, data + (char)0);
             return this;
         }
