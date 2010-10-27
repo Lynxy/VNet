@@ -19,7 +19,7 @@ namespace VectorNet.Server
             {
                 case "join":
                 case "j":
-                    if (aryCmd.Length < 2)
+                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
                         SendServerError(user, "You must specify a channel.");
                     else
                     {
@@ -39,7 +39,7 @@ namespace VectorNet.Server
                     break;
 
                 case "who":
-                    if (aryCmd.Length < 2)
+                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
                         SendServerError(user, "You must specify a channel.");
                     else
                     {
@@ -73,7 +73,7 @@ namespace VectorNet.Server
                     break;
 
                 case "ban":
-                    if (aryCmd.Length < 2)
+                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
                         SendServerError(user, "You must specify a user to ban.");
                     else
                     {
@@ -93,7 +93,7 @@ namespace VectorNet.Server
                 case "banip":
                 case "ipban":
                     //TODO: Check permissions to ban
-                    if (aryCmd.Length < 2)
+                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
                         SendServerError(user, "You must specify a user to IP ban.");
                     else
                     {
@@ -111,7 +111,7 @@ namespace VectorNet.Server
                     break;
 
                 case "unban":
-                    if (aryCmd.Length < 2)
+                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
                         SendServerError(user, "You must specify a user to unban.");
                     else
                     {
