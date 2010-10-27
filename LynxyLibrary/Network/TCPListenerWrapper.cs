@@ -15,15 +15,21 @@ namespace Lynxy.Network
         public delegate void ClientConnectedDelegate(TcpClientWrapper newSock);
         public event ClientConnectedDelegate OnClientConnected;
 
+        protected int _clientSendBacklog = 30;
 
         public TcpListenerWrapper(int port)
-            : base(IPAddress.Parse("0.0.0.0"), port)
+            : this("0.0.0.0", port)
+        {
+        }
+        public TcpListenerWrapper(string bindIP, int port)
+            : base(IPAddress.Parse(bindIP), port)
         {
         }
 
-        public void Listen(int backlog)
+        public void Listen(int listenerBacklog, int clientSendBacklog)
         {
-            base.Start(backlog);
+            base.Start(listenerBacklog);
+            _clientSendBacklog = clientSendBacklog;
             StartListening();
         }
 
@@ -35,8 +41,8 @@ namespace Lynxy.Network
         public void AcceptTcpClientCallback(IAsyncResult ar)
 		{
 			TcpListenerWrapper listener = (TcpListenerWrapper)ar.AsyncState;
-            TcpClientWrapper client = new TcpClientWrapper(30, listener.EndAcceptTcpClient(ar));
-            listener.OnClientConnected(client); //not on calling thread
+            TcpClientWrapper client = new TcpClientWrapper(_clientSendBacklog, listener.EndAcceptTcpClient(ar));
+            listener.OnClientConnected(client); //may not be on calling thread..
 			listener.StartListening();
 		}
 
