@@ -28,6 +28,17 @@ namespace VectorNet.Server
             DisconnectUser(user);
         }
 
+        protected User GetUserByName(string username)
+        {
+            User ret = Users.Find(u =>
+                u != null
+                && u.IsOnline == true
+                && u.Username != null
+                && u.Username.ToLower() == username.ToLower()
+                );
+            return ret;
+        }
+
         protected void JoinUserToChannel(User user, Channel channel)
         {
             RemoveUserFromChannel(user);
