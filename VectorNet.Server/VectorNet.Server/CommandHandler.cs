@@ -32,6 +32,12 @@ namespace VectorNet.Server
                     }
                     break;
 
+                case "me":
+                case "em":
+                case "emote":
+
+                    break;
+
                 case "who":
                     if (aryCmd.Length < 2)
                         SendServerError(user, "You must specify a channel.");

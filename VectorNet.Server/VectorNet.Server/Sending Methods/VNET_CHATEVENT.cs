@@ -26,6 +26,7 @@ namespace VectorNet.Server
 
         protected void SendUserLeftServer(User user)
         {
+            ConsoleSendUserLeftServer(user);
             foreach (User u in GetAllOnlineUsers())
                 if (u != user)
                     u.Packet.Clear()

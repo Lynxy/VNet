@@ -11,8 +11,8 @@ namespace VectorNet.Server
     {
         protected void HandlePacket(User user, PacketReader reader)
         {
-            try
-            {
+            //try
+            //{
                 byte packetId = reader.ReadByte();
                 if (!user.IsOnline && packetId != VNET_LOGON)
                 {
@@ -42,12 +42,12 @@ namespace VectorNet.Server
                         SendServerError(user, "Your client sent an unknown packet (0x" + packetId.ToString("X") + ")");
                         break;
                 }
-            }
-            catch (Exception ex)
-            {
-                ConsoleSendServerException(ex);
-                //TODO: log exception
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    ConsoleSendServerException(ex);
+            //    //TODO: log exception
+            //}
         }
 
         
