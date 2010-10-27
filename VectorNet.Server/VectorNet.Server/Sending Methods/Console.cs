@@ -18,23 +18,40 @@ namespace VectorNet.Server
             UserJoinedChannel = 0x04
         }
 
-        protected void ConsoleSendUserTalk(User user, string msg)
+        protected void ConsoleSendUserJoinServer(User user)
         {
-            console.Packet.Clear()
-                .InsertStringNT(user.Username)
-                .InsertByte((byte)user.Flags)
-                .InsertStringNT(user.Channel.Name)
-                .InsertStringNT(msg)
-                .Send((byte)ConsolePacketID.UserTalk);
+            if (EventUserJoinServer != null)
+                EventUserJoinServer(user.Username, (byte)user.Flags);
         }
 
-        protected void ConsoleSendUserJoinedChannel(User user)
+        protected void ConsoleSendUserLeftServer(User user)
         {
-            console.Packet.Clear()
-                .InsertStringNT(user.Username)
-                .InsertByte((byte)user.Flags)
-                .InsertStringNT(user.Channel.Name)
-                .Send((byte)ConsolePacketID.UserJoinedChannel);
+            if (EventUserLeftServer != null)
+                EventUserLeftServer(user.Username, (byte)user.Flags);
+        }
+
+        protected void ConsoleSendUserJoinChannel(User user)
+        {
+            if (EventUserJoinChannel != null)
+                EventUserJoinChannel(user.Username, (byte)user.Flags, user.Channel.Name);
+        }
+
+        protected void ConsoleSendUserLeftChannel(User user)
+        {
+            if (EventUserLeftChannel != null)
+                EventUserLeftChannel(user.Username, (byte)user.Flags, user.Channel.Name);
+        }
+
+        protected void ConsoleSendUserTalk(User user, string msg)
+        {
+            if (EventUserTalk != null)
+                EventUserTalk(user.Username, (byte)user.Flags, user.Channel.Name, msg);
+        }
+
+        protected void ConsoleSendUserEmote(User user, string msg)
+        {
+            if (EventUserEmote != null)
+                EventUserEmote(user.Username, (byte)user.Flags, user.Channel.Name, msg);
         }
     }
 }

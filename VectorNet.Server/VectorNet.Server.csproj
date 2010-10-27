@@ -60,12 +60,12 @@
     <Compile Include="VectorNet.Server\Classes\ClientHandler.cs" />
     <Compile Include="VectorNet.Server\Classes\SQLite.cs" />
     <Compile Include="VectorNet.Server\Constants.cs" />
+    <Compile Include="VectorNet.Server\Events.cs" />
     <Compile Include="VectorNet.Server\Sending Methods\VNET_APPS.cs" />
     <Compile Include="VectorNet.Server\ServerStats.cs" />
     <Compile Include="VectorNet.Server\Database.cs" />
-    <Compile Include="VectorNet.Server\Functions\Channel\ChannelFunctions.cs" />
-    <Compile Include="VectorNet.Server\Functions\User\UserPoolFunctions.cs" />
-    <Compile Include="VectorNet.Server\Functions\User\UserFunctions.cs" />
+    <Compile Include="VectorNet.Server\Functions\ChannelFunctions.cs" />
+    <Compile Include="VectorNet.Server\Functions\UserFunctions.cs" />
     <Compile Include="VectorNet.Server\PacketHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VectorNet.Server\Classes\Configuration.cs" />

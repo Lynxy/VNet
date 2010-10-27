@@ -12,8 +12,6 @@ namespace VectorNet.Server
     {
         protected class User : IDisposable
         {
-            public event Action<byte[]> SendData;
-
             private bool disposed = false;
             protected TcpClientWrapper socket;
             protected Packet packet;
@@ -64,12 +62,7 @@ namespace VectorNet.Server
             {
                 if (!_canSendData)
                     return;
-                if (_isConsole)
-                {
-                    if (SendData != null)
-                        SendData(data);
-                }
-                else
+                if (!_isConsole)
                     bufferer.QueuePacket(ref data);
             }
 

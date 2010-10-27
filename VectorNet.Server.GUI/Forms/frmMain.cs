@@ -29,59 +29,57 @@ namespace VectorNet.Server.GUI
         {
             VNet = new Server("config.xml");
 
-            VNet.WireConsoleUserDataRecv(RecvData);
             VNet.StartListening();
+
+            VNet.EventUserJoinServer += new Server.UserJoinServerDelegate(VNet_EventUserJoinServer);
+            VNet.EventUserLeftServer += new Server.UserLeftServerDelegate(VNet_EventUserLeftServer);
+            
+            VNet.EventUserJoinChannel += new Server.UserJoinChannelDelegate(VNet_EventUserJoinChannel);
+            VNet.EventUserLeftChannel += new Server.UserLeftChannelDelegate(VNet_EventUserLeftChannel);
+
+            VNet.EventUserTalk += new Server.UserTalkDelegate(VNet_EventUserTalk);
+            VNet.EventUserEmote += new Server.UserEmoteDelegate(VNet_EventUserEmote);
         }
 
-        private void RecvData(byte[] data)
+        void VNet_EventUserJoinServer(string username, byte flags)
         {
-            return;
+            
+        }
 
-            PacketReader reader = new PacketReader(data);
-            byte PacketID = reader.ReadByte();
+        void VNet_EventUserLeftServer(string username, byte flags)
+        {
 
-            string username;
-            string channel;
-            string text;
-            byte flags;
+        }
 
-            switch (PacketID)
-            {
-                case 0x00: //user joined server
-                    break;
+        void VNet_EventUserJoinChannel(string username, byte flags, string channel)
+        {
+            AddChat("-- " + username + " [" + flags.ToString("X") + "] joined channel " + channel + " --");
+        }
 
-                case 0x01: //user joined server
-                    break;
+        void VNet_EventUserLeftChannel(string username, byte flags, string channel)
+        {
+            
+        }
 
-                case 0x02: //user list
-                    break;
+        void VNet_EventUserTalk(string username, byte flags, string channel, string message)
+        {
+            AddChat("<" + channel + " - " + username + " [" + flags.ToString("X") + "]> " + message);
+        }
 
-                case 0x03: //user talk
-                    username = reader.ReadStringNT();
-                    flags = reader.ReadByte();
-                    channel = reader.ReadStringNT();
-                    text = reader.ReadStringNT();
-                    AddChat("<" + channel + " - " + username + " [" + flags.ToString("X") + "]> " + text);
-                    break;
-
-                case 0x04: //user join channel
-                    username = reader.ReadStringNT();
-                    flags = reader.ReadByte();
-                    channel = reader.ReadStringNT();
-                    AddChat("-- " + username + " [" + flags.ToString("X") + "] joined channel " + channel + " --");
-                    break;
-            }
+        void VNet_EventUserEmote(string username, byte flags, string channel, string message)
+        {
+            
         }
 
         private void AddChat(string msg)
         {
             for (int i = 0; i < 32; i++)
                 msg = msg.Replace((char)i, '.');
-            rtbChat.Invoke(new Action(delegate
+            txtChat.Invoke(new Action(delegate
             {
-                rtbChat.Text += "[" + DateTime.Now.ToShortTimeString() + "] " + msg + "\r\n";
-                rtbChat.SelectionStart = rtbChat.Text.Length;
-                rtbChat.ScrollToCaret();
+                txtChat.Text += "[" + DateTime.Now.ToShortTimeString() + "] " + msg + "\r\n";
+                txtChat.SelectionStart = txtChat.Text.Length;
+                txtChat.ScrollToCaret();
             }));
         }
 
@@ -104,7 +102,7 @@ namespace VectorNet.Server.GUI
 
             str += "\r\nMissed/Total packets = " + ServerStats.test;
 
-            rtbChat.Text = str;
+            txtStatus.Text = str;
         }
 
     }

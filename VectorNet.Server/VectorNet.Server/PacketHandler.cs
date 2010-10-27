@@ -78,6 +78,7 @@ namespace VectorNet.Server
                         user.Client = client;
                         user.IsOnline = true;
                         ServerStats.usersOnline++;
+                        ConsoleSendUserJoinServer(user);
 
                         UpdateLastLogin(username);
                         SendLogonResult(user, LogonResult.Success);

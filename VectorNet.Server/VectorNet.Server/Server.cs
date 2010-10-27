@@ -113,10 +113,5 @@ namespace VectorNet.Server
                     timerGarbage.Start();
                 }));
         }
-
-        public void WireConsoleUserDataRecv(Action<byte[]> ReceiveDataEvent)
-        {
-            console.SendData += ReceiveDataEvent;
-        }
     }
 }

@@ -41,10 +41,13 @@ namespace VectorNet.Server
 
         protected void JoinUserToChannel(User user, Channel channel)
         {
+            ConsoleSendUserLeftChannel(user);
+
             RemoveUserFromChannel(user);
             channel.AddUser(user, false);
 
-            ConsoleSendUserJoinedChannel(user);
+            ConsoleSendUserJoinChannel(user);
+
             SendUserJoinedChannel(user);
             SendJoinedChannelSuccessfully(user);
             SendList(user, ListType.UsersInChannel);
