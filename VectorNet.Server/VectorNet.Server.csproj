@@ -61,6 +61,9 @@
     <Compile Include="VectorNet.Server\Classes\SQLite.cs" />
     <Compile Include="VectorNet.Server\Constants.cs" />
     <Compile Include="VectorNet.Server\Events.cs" />
+    <Compile Include="VectorNet.Server\Packet Handlers\VNET_CHATEVENT.cs" />
+    <Compile Include="VectorNet.Server\Packet Handlers\VNET_SERVERCHALLENGE.cs" />
+    <Compile Include="VectorNet.Server\Packet Handlers\VNET_LOGON.cs" />
     <Compile Include="VectorNet.Server\Sending Methods\VNET_APPS.cs" />
     <Compile Include="VectorNet.Server\ServerStats.cs" />
     <Compile Include="VectorNet.Server\Database.cs" />
