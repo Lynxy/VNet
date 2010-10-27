@@ -9,13 +9,10 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        protected enum ConsolePacketID
+        protected void ConsoleSendServerException(Exception err)
         {
-            UserJoinedServer = 0x00,
-            UserLeftServer = 0x01,
-            UserList = 0x02,
-            UserTalk = 0x03,
-            UserJoinedChannel = 0x04
+            if (EventServerException != null)
+                EventServerException(err);
         }
 
         protected void ConsoleSendUserJoinServer(User user)

@@ -9,6 +9,9 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
+        public delegate void ServerExceptionDelegate(Exception err);
+        public event ServerExceptionDelegate EventServerException;
+
         public delegate void UserJoinServerDelegate(string username, byte flags);
         public event UserJoinServerDelegate EventUserJoinServer;
         public delegate void UserLeftServerDelegate(string username, byte flags);

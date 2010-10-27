@@ -31,6 +31,8 @@ namespace VectorNet.Server.GUI
 
             VNet.StartListening();
 
+            VNet.EventServerException += new Server.ServerExceptionDelegate(VNet_EventServerException);
+
             VNet.EventUserJoinServer += new Server.UserJoinServerDelegate(VNet_EventUserJoinServer);
             VNet.EventUserLeftServer += new Server.UserLeftServerDelegate(VNet_EventUserLeftServer);
             
@@ -39,6 +41,11 @@ namespace VectorNet.Server.GUI
 
             VNet.EventUserTalk += new Server.UserTalkDelegate(VNet_EventUserTalk);
             VNet.EventUserEmote += new Server.UserEmoteDelegate(VNet_EventUserEmote);
+        }
+
+        void VNet_EventServerException(Exception err)
+        {
+            AddChat("[ERROR] " + err.Message); //stack trace anyone?
         }
 
         void VNet_EventUserJoinServer(string username, byte flags)
