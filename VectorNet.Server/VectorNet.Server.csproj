@@ -85,12 +85,16 @@
     <Compile Include="VectorNet.Server\Classes\User.cs" />
     <Compile Include="VectorNet.Server\Sending Methods\VNET_CHATEVENT.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\LynxyLibrary\LynxyLibrary.csproj">
       <Project>{6D7E9160-813C-4EA1-8A4B-CD9428CA7BA4}</Project>
       <Name>LynxyLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\SQLite_Create_VnetDB.txt">
+      <Link>Data\SQLite_Create_VnetDB.txt</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

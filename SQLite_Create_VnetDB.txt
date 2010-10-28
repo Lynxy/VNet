@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS [Users];
+
+CREATE TABLE [Users] (
+[Username] VARCHAR(50)  NOT NULL PRIMARY KEY,
+[Password] VARCHAR(32)  NOT NULL,
+[RegistrationIP] VARCHAR(15)  NOT NULL,
+[LastLogin] VARCHAR(19),
+[Banned] BOOLEAN  NOT NULL
+);

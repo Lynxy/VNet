@@ -61,9 +61,6 @@ namespace VectorNet.Server
                     SQLiteConnection.CreateFile(dbFile);
                     ConnectDB();
                     SetupDB();
-
-                    //Close();
-                    //ConnectDB();
                 }
             }
 
@@ -78,15 +75,13 @@ namespace VectorNet.Server
 
             protected void SetupDB()
             {
-                ExecuteNonQuery(@"DROP TABLE IF EXISTS users");
-                ExecuteNonQuery(@"CREATE TABLE users (
-                                    username VARCHAR(50) NOT NULL PRIMARY KEY ASC,
-                                    password CHAR(32) NOT NULL,
-                                    reg_ip VARCHAR(15) NOT NULL,
-                                    banned BOOL NOT NULL DEFAULT false,
-                                    last_login TEXT(19)
-                                )");
-                //ExecuteNonQuery(@"CREATE INDEX idx_username ON users (username ASC)");
+                System.Reflection.Assembly asm = this.GetType().Assembly;
+                string asmName = asm.GetName().Name.ToString();
+
+                System.IO.Stream SQLStream = asm.GetManifestResourceStream(asmName + ".Data.SQLite_Create_VnetDB.txt");
+                System.IO.StreamReader sr = new System.IO.StreamReader(SQLStream);
+
+                ExecuteNonQuery(sr.ReadToEnd());
             }
 
             public SQLiteDataReader ExecuteReader(string query)

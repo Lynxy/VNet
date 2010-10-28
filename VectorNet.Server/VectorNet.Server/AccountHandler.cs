@@ -19,11 +19,11 @@ namespace VectorNet.Server
 
         protected AccountState GetAccountState(string username, string password)
         {
-            using (SQLiteDataReader reader = database.ExecuteReader("SELECT * FROM users WHERE username = '" + username + "'"))
+            using (SQLiteDataReader reader = database.ExecuteReader("SELECT * FROM [Users] WHERE [Username] = '" + username + "'"))
             {
                 if (!reader.HasRows)
                     return AccountState.NewAccount;
-                string dbPass = reader["password"] as string;
+                string dbPass = reader["Password"] as string;
                 if (password != dbPass)
                     return AccountState.InvalidPassword;
                 return AccountState.AccountOk;
@@ -37,12 +37,12 @@ namespace VectorNet.Server
 
         protected void CreateNewAccount(string username, string password, string IP)
         {
-            database.ExecuteNonQuery("INSERT INTO users (username, password, reg_ip) VALUES ('" + username + "', '" + password + "', '" + IP + "')");
+            database.ExecuteNonQuery("INSERT INTO [Users] ([Username], [Password], [RegistrationIP]) VALUES ('" + username + "', '" + password + "', '" + IP + "')");
         }
 
         protected void UpdateLastLogin(string username)
         {
-            database.ExecuteNonQuery("UPDATE users SET last_login = '" + GetNow() + "' WHERE username = '" + username + "'");
+            database.ExecuteNonQuery("UPDATE [Users] SET [LastLogin] = '" + GetNow() + "' WHERE [Username] = '" + username + "'");
         }
 
     }
