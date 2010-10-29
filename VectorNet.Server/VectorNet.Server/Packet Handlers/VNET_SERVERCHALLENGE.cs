@@ -14,12 +14,14 @@ namespace VectorNet.Server
             string GrabChallenge = reader.ReadStringNT();
 
             if (IsEmptyChallenge(user.Username, GrabChallenge))
-                // blah
+                ; // blah
             else
-                if (!GetChallengeState(user.Username, GrabChallenge)
+            {
+                if (!GetChallengeState(user.Username, GrabChallenge))
                 {
                     DisconnectUser(user, "You have provided an incorrect challenge.");
                 }
+            }
         }
     }
 }
