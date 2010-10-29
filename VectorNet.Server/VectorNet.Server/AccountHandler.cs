@@ -45,5 +45,20 @@ namespace VectorNet.Server
             database.ExecuteNonQuery("UPDATE [Users] SET [LastLogin] = '" + GetNow() + "' WHERE [Username] = '" + username + "'");
         }
 
+        protected void InsertChallenge(string username, string challenge)
+        { 
+        
+        }
+
+        protected bool IsEmptyChallenge(string username, string challenge)
+        {
+            return false;
+        }
+
+        protected bool GetChallengeState(string username, string challenge)
+        { 
+            //database.ExecuteNonQuery("SELECT [Challenge] FROM [Users] WHERE [Username] = '" + username + "'");
+            return true;
+        }
     }
 }
