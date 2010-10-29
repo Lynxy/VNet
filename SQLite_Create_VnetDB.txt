@@ -5,5 +5,5 @@ CREATE TABLE [Users] (
 [Password] VARCHAR(32)  NOT NULL,
 [RegistrationIP] VARCHAR(15)  NOT NULL,
 [LastLogin] VARCHAR(19),
-[Banned] BOOLEAN  NOT NULL
+[Banned] BOOLEAN  NOT NULL DEFAULT false
 );

@@ -37,7 +37,7 @@ namespace VectorNet.Server
 
         protected void CreateNewAccount(string username, string password, string IP)
         {
-            database.ExecuteNonQuery("INSERT INTO [Users] ([Username], [Password], [RegistrationIP]) VALUES ('" + username + "', '" + password + "', '" + IP + "')");
+            database.ExecuteNonQuery("INSERT INTO [Users] ([Username], [Password], [RegistrationIP], [Banned]) VALUES ('" + username + "', '" + password + "', '" + IP + "', 'false')");
         }
 
         protected void UpdateLastLogin(string username)
