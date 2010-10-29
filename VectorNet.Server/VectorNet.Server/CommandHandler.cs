@@ -145,10 +145,15 @@ namespace VectorNet.Server
 
         protected bool ContainsNonPrintable(string str)
         {
+            return str.ToList().Find(n => (byte)n.To
+
             bool foundBadChars = false;
             foreach (char c in str)
                 if ((byte)c < 32)
+                {
                     foundBadChars = true;
+                    break;
+                }
             return foundBadChars;
         }
 
