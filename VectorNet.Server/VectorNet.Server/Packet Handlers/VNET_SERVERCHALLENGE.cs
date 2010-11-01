@@ -14,7 +14,7 @@ namespace VectorNet.Server
             string GrabChallenge = reader.ReadStringNT();
 
             if (IsEmptyChallenge(user.Username, GrabChallenge))
-                ; // blah
+                InsertChallenge(user.Username, GrabChallenge);
             else
             {
                 if (!GetChallengeState(user.Username, GrabChallenge))
