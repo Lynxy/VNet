@@ -73,63 +73,115 @@ namespace VectorNet.Server
                     break;
 
                 case "ban":
-                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                        SendServerError(user, "You must specify a user to ban.");
-                    else
+                    if (user.Flags == UserFlags.Admin || user.Flags == UserFlags.Moderator || user.Flags == UserFlags.Operator)
                     {
-                        targetUser = GetUserByName(aryCmd[1]);
-                        if (targetUser == null)
-                            SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
+                        if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
+                            SendServerError(user, "You must specify a user to ban.");
                         else
                         {
-                            if (user.Channel.BannedUsers.Contains(targetUser.Username))
-                                SendServerError(user, "That user is already banned from this channel.");
+                            targetUser = GetUserByName(aryCmd[1]);
+                            if (targetUser == null)
+                                SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
                             else
-                                BanUserByUsername(user, targetUser, user.Channel);
+                            {
+                                if (targetUser.Flags == UserFlags.Normal)
+                                {
+                                    if (user.Channel.BannedUsers.Contains(targetUser.Username))
+                                        SendServerError(user, "That user is already banned from this channel.");
+                                    else
+                                        BanUserByUsername(user, targetUser, user.Channel);
+                                }
+                                else
+                                    SendServerError(user, "You cannot ban this user.");
+                            }
                         }
                     }
                     break;
 
                 case "banip":
                 case "ipban":
-                    //TODO: Check permissions to ban
-                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                        SendServerError(user, "You must specify a user to IP ban.");
-                    else
+                    if (user.Flags == UserFlags.Admin)
                     {
-                        targetUser = GetUserByName(aryCmd[1]);
-                        if (targetUser == null)
-                            SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
+                        if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
+                            SendServerError(user, "You must specify a user to IP ban.");
                         else
                         {
-                            if (user.Channel.BannedIPs.Contains(targetUser.IPAddress))
-                                SendServerError(user, "That user's IP is already banned from this channel.");
+                            targetUser = GetUserByName(aryCmd[1]);
+                            if (targetUser == null)
+                                SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
                             else
-                                BanUserByIP(user, targetUser, user.Channel);
+                            {
+                                if (targetUser.Flags == UserFlags.Normal)
+                                {
+                                    if (user.Channel.BannedIPs.Contains(targetUser.IPAddress))
+                                        SendServerError(user, "That user's IP is already banned from this channel.");
+                                    else
+                                        BanUserByIP(user, targetUser, user.Channel);
+                                }
+                                else
+                                    SendServerError(user, "You cannot IP that user.");
+                            }
                         }
                     }
                     break;
 
-                case "unban":
-                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                        SendServerError(user, "You must specify a user to unban.");
-                    else
+                case "unipban":
+                case "unbanip":
+                    if (user.Flags == UserFlags.Admin)
                     {
-                        targetUser = GetUserByName(aryCmd[1]);
-                        if (targetUser == null)
-                            SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
+                        if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
+                            SendServerError(user, "You must specify a user to Un-IPBan.");
                         else
                         {
-                            if (!user.Channel.IsUserBanned(targetUser))
-                                SendServerError(user, "That user is not banned from this channel.");
+                            targetUser = GetUserByName(aryCmd[1]);
+
+                            if (targetUser == null)
+                                SendServerError(user, "There is no user named " + aryCmd[1] + " online.");
                             else
-                                UnbanUser(user, targetUser, user.Channel);
+                                if (!user.Channel.BannedIPs.Contains(aryCmd[1]))
+                                    SendServerError(user, "That user is not IP banned.");
+                                else
+                                    UnbanUserByIP(user, targetUser, user.Channel);
+                        }
+                    }
+                    break;
+                case "unban":
+                    if (user.Flags == UserFlags.Admin || user.Flags == UserFlags.Moderator || user.Flags == UserFlags.Operator)
+                    {
+                        if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
+                            SendServerError(user, "You must specify a user to unban.");
+                        else
+                        {
+                            targetUser = GetUserByName(aryCmd[1]);
+                            if (targetUser == null)
+                                SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
+                            else
+                            {
+                                if (!user.Channel.IsUserBanned(targetUser))
+                                    SendServerError(user, "That user is not banned from this channel.");
+                                else
+                                    UnbanUser(user, targetUser, user.Channel, false);
+                            }
                         }
                     }
                     break;
 
                 case "users":
                     SendList(user, ListType.UsersOnServer);
+                    break;
+
+                case "op":
+                    if (user.Flags == UserFlags.Admin || user.Flags == UserFlags.Moderator || user.Flags == UserFlags.Operator)
+                    {
+                        targetUser = GetUserByName(aryCmd[1]);
+
+                        if (user.Channel == targetUser.Channel)
+                        { }
+                        //TODO: Determine environment for opping users
+                        else
+                            SendServerError(user, "That user is not in the same channel as you.");
+                    }
+
                     break;
 
                 default:
