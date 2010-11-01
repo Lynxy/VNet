@@ -190,6 +190,56 @@ namespace VectorNet.Server
             }
         }
 
+        protected User ExtractUserFromParameterOne(User user, ref string[] str, string failMsg)
+        {
+            if (str.Length < 2 && str[1].Length == 0)
+            {
+            SendServerError(user, failMsg);
+            return null;
+            }
+
+            User ret = GetUserByName(str[1]);
+            if (ret == null)
+                SendServerError(user, "There is no user by the name \"" + str[1] + "\" online.");
+
+            return ret;
+        }
+
+        protected bool RequireAdmin(User user)
+        {
+            if (user.Flags == UserFlags.Admin)
+                return true;
+            SendServerError(user, "You must be an Admin to use that command.");
+            return false;
+        }
+
+        protected bool RequireModerator(User user)
+        {
+            if (user.Flags == UserFlags.Admin
+                || user.Flags == UserFlags.Moderator)
+                return true;
+            SendServerError(user, "You must be a Moderator or higher to use that command.");
+            return false;
+        }
+
+        protected bool RequireOperator(User user)
+        {
+            if (user.Flags == UserFlags.Admin
+                || user.Flags == UserFlags.Moderator
+                || user.Flags == UserFlags.Operator)
+                return true;
+            SendServerError(user, "You must be an Operator or higher to use that command.");
+            return false;
+        }
+
+        protected bool RequireModerationRights(User user, User targetUser)
+        {
+            if (CanUserModerateUser(user, targetUser))
+                return true;
+            SendServerError(user, "You do not have sufficient rights to performs actions on that user.");
+            return false;
+        }
+
         public void HandleConsoleCommand(string cmd)
         {
             HandleCommand(console, cmd);
