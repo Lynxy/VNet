@@ -73,29 +73,15 @@ namespace VectorNet.Server
                     break;
 
                 case "ban":
-                    if (user.Flags == UserFlags.Admin || user.Flags == UserFlags.Moderator || user.Flags == UserFlags.Operator)
-                    {
-                        if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                            SendServerError(user, "You must specify a user to ban.");
-                        else
-                        {
-                            targetUser = GetUserByName(aryCmd[1]);
-                            if (targetUser == null)
-                                SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
-                            else
-                            {
-                                if (targetUser.Flags == UserFlags.Normal)
-                                {
-                                    if (user.Channel.BannedUsers.Contains(targetUser.Username))
-                                        SendServerError(user, "That user is already banned from this channel.");
-                                    else
-                                        BanUserByUsername(user, targetUser, user.Channel);
-                                }
-                                else
-                                    SendServerError(user, "You cannot ban this user.");
-                            }
-                        }
-                    }
+                    if (RequireOperator(user) == false) return;
+                    if ((targetUser = ExtractUserFromParameterOne(user, ref aryCmd, "You must specify a user to ban.")) == null) return;
+                    if (RequireModerationRights(user, targetUser) == false) return;
+
+                    if (user.Channel.BannedUsers.Contains(targetUser.Username))
+                        SendServerError(user, "That user is already banned from this channel.");
+                    else
+                        BanUserByUsername(user, targetUser, user.Channel);
+
                     break;
 
                 case "banip":
@@ -190,12 +176,12 @@ namespace VectorNet.Server
             }
         }
 
-        protected User ExtractUserFromParameterOne(User user, ref string[] str, string failMsg)
+        protected User ExtractUserFromParameterOne(User user, ref string[] str, string failMsgTooShort)
         {
             if (str.Length < 2 && str[1].Length == 0)
             {
-            SendServerError(user, failMsg);
-            return null;
+                SendServerError(user, failMsgTooShort);
+                return null;
             }
 
             User ret = GetUserByName(str[1]);
