@@ -19,6 +19,14 @@ namespace VectorNet.Server
             user.CanSendData = false;
             RemoveUserFromChannel(user);
             SendUserLeftServer(user);
+
+            List<Channel> chans = Channels.Where(c => c.Owner == user).ToList();
+            foreach (Channel chan in chans)
+            {
+                User newOwner = chan.PromoteNewOwner();
+                SendList(newOwner, ListType.UsersFlagsUpdate);
+            }
+
             user.Socket.Close();
         }
 
@@ -61,11 +69,6 @@ namespace VectorNet.Server
             SendUserLeftChannel(user);
             chan.RemoveUser(user);
 
-            if (chan.Owner == user)
-            {
-                User newOwner = chan.PromoteNewOwner();
-                SendList(newOwner, ListType.UsersFlagsUpdate);
-            }
             AttemptToCloseChannel(chan);
         }
 
