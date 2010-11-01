@@ -122,5 +122,30 @@ namespace VectorNet.Server
             }
             return true;
         }
+
+        protected bool CanUserModerateUser(User user, User targetUser)
+        {
+            if (user == console) return true; //console can do all
+            if (targetUser == console) return false; //no one can do anything to console
+
+
+            if (targetUser.Flags == UserFlags.Admin) return false; //this level and below cant touch admins
+            if (user.Flags == UserFlags.Admin) return true; //admin can do all
+
+
+            if (targetUser.Flags == UserFlags.Moderator) return false; //this level and below cant touch moderators
+            if (user.Flags == UserFlags.Moderator) return true;
+
+
+            if (user.Flags == UserFlags.Operator)
+            {
+                if (targetUser.Flags == UserFlags.Operator && user.Channel == targetUser.Channel)
+                    return false; //operator cant touch operator in same channel
+                return true;
+            }
+
+            return false; //there will be no touching
+        }
+
     }
 }
