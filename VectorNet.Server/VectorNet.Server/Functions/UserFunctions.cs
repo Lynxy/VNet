@@ -64,8 +64,7 @@ namespace VectorNet.Server
             if (chan.Owner == user)
             {
                 User newOwner = chan.PromoteNewOwner();
-                //TODO: inform channel new user got ops
-                
+                SendList(newOwner, ListType.UsersFlagsUpdate);
             }
             AttemptToCloseChannel(chan);
         }

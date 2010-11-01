@@ -118,7 +118,12 @@ namespace VectorNet.Server
 
 
                     if (user.Channel == targetUser.Channel)
-                        ; //TODO: Determine environment for opping users
+                    {
+                        //TODO: Determine environment for opping users (Lynxy: is this done?)
+                        targetUser.Flags |= UserFlags.Operator;
+                        SendServerInfoToChannel(targetUser.Channel, user.Username + " has promoted " + targetUser.Username + " to Operator.");
+                        SendList(targetUser, ListType.UsersFlagsUpdate);
+                    }
                     else
                         SendServerError(user, "That user is not in the same channel as you.");
 
