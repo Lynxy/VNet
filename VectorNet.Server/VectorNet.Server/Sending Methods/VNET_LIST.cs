@@ -13,19 +13,20 @@ namespace VectorNet.Server
 
         protected void SendList(User user, ListType listType)
         {
+            List<User> users;
             switch (listType)
             {
                 case ListType.UsersInChannel:
-                    List<User> u = GetUsersInChannel(user, user.Channel, false); //dont exclude current user from channel listing
+                    users = GetUsersInChannel(user, user.Channel, false); //dont exclude current user from channel listing
 
-                    if (u == null)
+                    if (users == null)
                         return;
 
                     user.Packet.Clear()
                         .InsertByte((byte)ListType.UsersInChannel)
-                        .InsertWord((short)u.Count);
+                        .InsertWord((short)users.Count);
 
-                    foreach (User tmp in u)
+                    foreach (User tmp in users)
                         user.Packet.InsertStringNT(tmp.Username)
                             .InsertStringNT(tmp.Client)
                             .InsertDWord(tmp.Ping)
@@ -82,6 +83,21 @@ namespace VectorNet.Server
                                    .InsertByte((byte)usr.Flags);
                     }
                     user.Packet.Send(VNET_LIST);
+                    break;
+
+                case ListType.UsersFlagsUpdate:
+                    users = GetUsersInChannel(user, user.Channel, false); //dont exclude current user from channel listing
+
+                    if (users == null)
+                        return;
+
+                    foreach (User u in users)
+                        u.Packet.InsertStringNT(user.Username)
+                            .InsertStringNT(user.Client)
+                            .InsertDWord(user.Ping)
+                            .InsertByte((byte)user.Flags)
+                            .Send(VNET_LIST);
+
                     break;
 
             }
