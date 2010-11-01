@@ -178,17 +178,35 @@ namespace VectorNet.Server
 
         protected User ExtractUserFromParameterOne(User user, ref string[] str, string failMsgTooShort)
         {
-            if (str.Length < 2 && str[1].Length == 0)
-            {
-                SendServerError(user, failMsgTooShort);
+            if (RequireParameterOne(user, ref str, failMsgTooShort) == false)
                 return null;
-            }
 
             User ret = GetUserByName(str[1]);
             if (ret == null)
                 SendServerError(user, "There is no user by the name \"" + str[1] + "\" online.");
 
             return ret;
+        }
+
+        protected Channel ExtractChannelFromParameterOne(User user, ref string[] str, bool allowCreation, string failMsgTooShort)
+        {
+            if (RequireParameterOne(user, ref str, failMsgTooShort) == false)
+                return null;
+
+            Channel ret = GetChannelByName(str[1], allowCreation);
+            if (ret == null)
+                SendServerError(user, "That channel does not exist.");
+
+            return ret;
+        }
+
+        protected bool RequireParameterOne(User user, ref string[] str, string failMsgTooShort)
+        {
+            if (str.Length >= 2 && str[1].Length > 0)
+                return true;
+
+            SendServerError(user, failMsgTooShort);
+            return false;
         }
 
         protected bool RequireAdmin(User user)
