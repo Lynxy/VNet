@@ -44,7 +44,7 @@ namespace VectorNet.Server
             ConsoleSendUserLeftChannel(user);
 
             RemoveUserFromChannel(user);
-            channel.AddUser(user, false);
+            channel.AddUser(user);
 
             ConsoleSendUserJoinChannel(user);
 
@@ -55,11 +55,19 @@ namespace VectorNet.Server
 
         protected void RemoveUserFromChannel(User user)
         {
-            if (user.Channel == null)
+            Channel chan = null;
+            if ((chan = user.Channel) == null)
                 return;
             SendUserLeftChannel(user);
-            user.Channel.RemoveUser(user);
-            AttemptToCloseChannel(user.Channel);
+            chan.RemoveUser(user);
+
+            if (chan.Owner == user)
+            {
+                User newOwner = chan.PromoteNewOwner();
+                //TODO: inform channel new user got ops
+                
+            }
+            AttemptToCloseChannel(chan);
         }
 
         protected List<User> GetAllOnlineUsers()

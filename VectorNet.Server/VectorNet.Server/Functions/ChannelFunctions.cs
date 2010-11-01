@@ -23,13 +23,14 @@ namespace VectorNet.Server
             Channels.Add(Channel_Void);
         }
 
-        protected Channel GetChannelByName(string channel, bool allowCreation)
+        protected Channel GetChannelByName(User user, string channel, bool allowCreation)
         {
             Channel ret = Channels.Find(c =>
                 c.Name.ToLower() == channel.ToLower());
             if (ret == null && allowCreation)
             {
                 ret = new Channel(channel);
+                ret.Owner = user;
                 Channels.Add(ret);
             }
             return ret;

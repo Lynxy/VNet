@@ -12,7 +12,6 @@ namespace VectorNet.Server
             protected ChannelFlags _Flags;
             protected string _Name;
             protected List<User> _Users;
-            protected List<User> _Operators;
             protected List<string> _BannedIPs;
             protected List<string> _BannedUsers;
 
@@ -26,7 +25,6 @@ namespace VectorNet.Server
                 _Name = name;
                 _Flags = flags;
                 _Users = new List<User>();
-                _Operators = new List<User>();
                 _BannedIPs = new List<string>();
                 _BannedUsers = new List<string>();
             }
@@ -44,21 +42,18 @@ namespace VectorNet.Server
             }
 
             public User Owner { get; set; }
-            public List<User> Operators { get { return _Operators; } }
             public List<string> BannedIPs { get { return _BannedIPs; } set { _BannedIPs = value; } }
             public List<string> BannedUsers { get { return _BannedUsers; } set { _BannedUsers = value; } }
             public int UserCount { get { return _Users.Count; } }
 
-            public void AddUser(User user, bool isOperator)
+            public void AddUser(User user)
             {
                 if (!_Users.Contains(user))
                     _Users.Add(user);
-                if (isOperator && !_Operators.Contains(user))
-                    _Operators.Add(user);
                 if (Owner == null)
                     Owner = user;
                 user.Channel = this;
-                if (isOperator)
+                if (user == Owner)
                     user.Flags |= UserFlags.Operator;
             }
 
@@ -66,11 +61,17 @@ namespace VectorNet.Server
             {
                 if (_Users.Contains(user))
                     _Users.Remove(user);
-                if (_Operators.Contains(user))
+                user.Flags ^= UserFlags.Operator;
+            }
+
+            public User PromoteNewOwner()
+            {
+                if (_Users.Count > 0)
                 {
-                    _Operators.Remove(user);
-                    user.Flags -= UserFlags.Operator;
+                    Owner = _Users[0];
+                    Owner.Flags |= UserFlags.Operator;
                 }
+                return Owner;
             }
 
             public List<User> GetCompleteUserList()

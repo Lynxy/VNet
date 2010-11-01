@@ -102,7 +102,7 @@ namespace VectorNet.Server
             {
                 foreach (User user in chan.GetCompleteUserList())
                     if (user == null)
-                        chan.RemoveUser(user);
+                        RemoveUserFromChannel(user);
                 AttemptToCloseChannel(chan);
             }
 

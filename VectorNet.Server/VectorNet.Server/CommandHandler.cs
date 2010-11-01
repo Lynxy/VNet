@@ -150,7 +150,7 @@ namespace VectorNet.Server
             string cmd = String.Join(" ", str);
             cmd = cmd.Substring(cmd.IndexOf(' ') + 1);
 
-            Channel ret = GetChannelByName(cmd, allowCreation);
+            Channel ret = GetChannelByName(user, cmd, allowCreation);
             if (ret == null)
                 SendServerError(user, "That channel does not exist.");
 
