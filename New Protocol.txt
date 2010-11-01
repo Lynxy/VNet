@@ -56,6 +56,9 @@ Changes:
  - Added missing ID information (0x05) to VNET_QUEUESHARING (0x06) Client -> Server
  - Added missing information to ID 0x03 (VNET_SERVER_LIST) of packet 0x05 (VNET_LIST)
 
+11/1/2010
+ - Added an additional ID to VNET_LIST (0x050 to indicate a stat update
+
 VNET_KEEPALIVE (0x00) Client <-> Server
     Data:
 		None
@@ -216,7 +219,6 @@ VNET_LIST (0x05) Client -> Server
 		0x02: Banned users in channel
 		0x03: Users on VectorNet
 
-
 VNET_LIST (0x05) Server -> Client
     Data:
 	BYTE    List Type
@@ -226,6 +228,7 @@ VNET_LIST (0x05) Server -> Client
 		0x01: Users in client's current channel
 		0x02: Banned users in client's channel
 		0x03: Users currently on VectorNet
+		0x04: Indicates a stat update
 
 	For Each User:
 		STRING    Username
