@@ -1,0 +1,17 @@
+Commands on VectorNet:
+
+Commands should be documented as follows:
+/Command <required> [optional]
+Explanation: what the command does
+Restrictions: The restrictions (which group can use it, which group cannot use it, etc.)
+Example: If sole description is not enough
+
+/who <channel>
+Explanation: Grabs the users that exist in that channel.
+Restrictions: None
+Example output is like this:
+  Users in channel test:
+  bob1, bob2
+  bob3
+
+/ban <user> [reason]
