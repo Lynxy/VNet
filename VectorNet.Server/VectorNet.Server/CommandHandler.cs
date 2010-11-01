@@ -10,26 +10,26 @@ namespace VectorNet.Server
         protected void HandleCommand(User user, string cmd)
         {
             string[] aryCmd = cmd.ToString().Split(' ');
-            string text;
+            string cmd1 = aryCmd[0].ToLower();
             List<string> msgs;
             Channel channel;
             User targetUser;
 
-            switch (aryCmd[0].ToLower())
+            switch (cmd1)
             {
+                case "users":
+                    SendList(user, ListType.UsersOnServer);
+                    break;
+
                 case "join":
                 case "j":
-                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                        SendServerError(user, "You must specify a channel.");
+                    if ((channel = ExtractChannelFromParameterOne(user, ref aryCmd, true, "You must specify a channel.")) == null) return;
+
+                    if (channel.IsUserBanned(user))
+                        SendServerError(user, "You are banned from that channel.");
                     else
-                    {
-                        text = cmd.Substring(cmd.IndexOf(' ') + 1);
-                        channel = GetChannelByName(text, true);
-                        if (channel.IsUserBanned(user))
-                            SendServerError(user, "You are banned from that channel.");
-                        else
-                            JoinUserToChannel(user, channel);
-                    }
+                        JoinUserToChannel(user, channel);
+
                     break;
 
                 case "me":
@@ -39,148 +39,88 @@ namespace VectorNet.Server
                     break;
 
                 case "who":
-                    if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                        SendServerError(user, "You must specify a channel.");
+                    if ((channel = ExtractChannelFromParameterOne(user, ref aryCmd, false, "You must specify a channel.")) == null) return;
+
+                    List<User> u = GetUsersInChannel(user, channel, false);
+                    if (u.Count == 0)
+                        SendServerError(user, "That channel doesn't exist.");
                     else
                     {
-                        text = cmd.Substring(cmd.IndexOf(' ') + 1);
-
-                        channel = GetChannelByName(text, false);
-                        if (channel == null)
-                            SendServerError(user, "That channel doesn't exist.");
-                        else
+                        msgs = new List<string>();
+                        msgs.Add("Users in channel " + channel.Name + ":");
+                        for (int i = 0; i < u.Count; i++)
                         {
-                            List<User> u = GetUsersInChannel(user, channel, false);
-                            if (u.Count == 0)
-                                SendServerError(user, "That channel doesn't exist.");
+                            if (i % 2 == 0)
+                                msgs.Add(u[i].Username);
                             else
-                            {
-                                msgs = new List<string>();
-                                msgs.Add("Users in channel " + channel.Name + ":");
-                                for (int i = 0; i < u.Count; i++)
-                                {
-                                    if (i % 2 == 0)
-                                        msgs.Add(u[i].Username);
-                                    else
-                                        msgs[msgs.Count - 1] += ", " + u[i].Username;
-                                }
-                                foreach (string msg in msgs)
-                                    SendServerInfo(user, msg);
-                                msgs = null;
-                            }
+                                msgs[msgs.Count - 1] += ", " + u[i].Username;
                         }
+                        foreach (string msg in msgs)
+                            SendServerInfo(user, msg);
+                        msgs = null;
                     }
+
                     break;
 
                 case "ban":
-                    if (user.Flags == UserFlags.Admin || user.Flags == UserFlags.Moderator || user.Flags == UserFlags.Operator)
-                    {
-                        if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                            SendServerError(user, "You must specify a user to ban.");
-                        else
-                        {
-                            targetUser = GetUserByName(aryCmd[1]);
-                            if (targetUser == null)
-                                SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
-                            else
-                            {
-                                if (targetUser.Flags == UserFlags.Normal)
-                                {
-                                    if (user.Channel.BannedUsers.Contains(targetUser.Username))
-                                        SendServerError(user, "That user is already banned from this channel.");
-                                    else
-                                        BanUserByUsername(user, targetUser, user.Channel);
-                                }
-                                else
-                                    SendServerError(user, "You cannot ban this user.");
-                            }
-                        }
-                    }
-                    break;
-
                 case "banip":
                 case "ipban":
-                    if (user.Flags == UserFlags.Admin)
+                    if (RequireOperator(user) == false) return;
+                    if ((targetUser = ExtractUserFromParameterOne(user, ref aryCmd, "You must specify a user to ban.")) == null) return;
+                    if (RequireModerationRights(user, targetUser) == false) return;
+
+                    if (cmd1 == "ban")
                     {
-                        if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                            SendServerError(user, "You must specify a user to IP ban.");
+                        if (user.Channel.BannedUsers.Contains(targetUser.Username))
+                            SendServerError(user, "That user is already banned from this channel.");
                         else
-                        {
-                            targetUser = GetUserByName(aryCmd[1]);
-                            if (targetUser == null)
-                                SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
-                            else
-                            {
-                                if (targetUser.Flags == UserFlags.Normal)
-                                {
-                                    if (user.Channel.BannedIPs.Contains(targetUser.IPAddress))
-                                        SendServerError(user, "That user's IP is already banned from this channel.");
-                                    else
-                                        BanUserByIP(user, targetUser, user.Channel);
-                                }
-                                else
-                                    SendServerError(user, "You cannot IP that user.");
-                            }
-                        }
+                            BanUserByUsername(user, targetUser, user.Channel);
                     }
+                    else
+                    {
+                        if (user.Channel.BannedIPs.Contains(targetUser.IPAddress))
+                            SendServerError(user, "That user's IP is already banned from this channel.");
+                        else
+                            BanUserByIP(user, targetUser, user.Channel);
+                    }
+                                    
                     break;
 
+                case "unban":
                 case "unipban":
                 case "unbanip":
-                    if (user.Flags == UserFlags.Admin)
-                    {
-                        if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                            SendServerError(user, "You must specify a user to Un-IPBan.");
-                        else
-                        {
-                            targetUser = GetUserByName(aryCmd[1]);
+                    if (RequireOperator(user) == false) return;
+                    if ((targetUser = ExtractUserFromParameterOne(user, ref aryCmd, "You must specify a user to unban.")) == null) return;
+                    if (RequireModerationRights(user, targetUser) == false) return;
 
-                            if (targetUser == null)
-                                SendServerError(user, "There is no user named " + aryCmd[1] + " online.");
-                            else
-                                if (!user.Channel.BannedIPs.Contains(aryCmd[1]))
-                                    SendServerError(user, "That user is not IP banned.");
-                                else
-                                    UnbanUserByIP(user, targetUser, user.Channel);
-                        }
-                    }
-                    break;
-                case "unban":
-                    if (user.Flags == UserFlags.Admin || user.Flags == UserFlags.Moderator || user.Flags == UserFlags.Operator)
-                    {
-                        if (aryCmd.Length < 2 || aryCmd[1].Length == 0)
-                            SendServerError(user, "You must specify a user to unban.");
-                        else
-                        {
-                            targetUser = GetUserByName(aryCmd[1]);
-                            if (targetUser == null)
-                                SendServerError(user, "There is no user by the name " + aryCmd[1] + " online.");
-                            else
-                            {
-                                if (!user.Channel.IsUserBanned(targetUser))
-                                    SendServerError(user, "That user is not banned from this channel.");
-                                else
-                                    UnbanUser(user, targetUser, user.Channel, false);
-                            }
-                        }
-                    }
-                    break;
 
-                case "users":
-                    SendList(user, ListType.UsersOnServer);
+                    if (cmd1 == "unban")
+                    {
+                        if (!user.Channel.IsUserBanned(targetUser))
+                            SendServerError(user, "That user is not banned from this channel.");
+                        else
+                            UnbanUser(user, targetUser, user.Channel, false);
+                    }
+                    else
+                    {
+                        if (!user.Channel.IsUserBanned(targetUser))
+                            SendServerError(user, "That user is not IP banned.");
+                        else
+                            UnbanUserByIP(user, targetUser, user.Channel);
+                    }
+
                     break;
 
                 case "op":
-                    if (user.Flags == UserFlags.Admin || user.Flags == UserFlags.Moderator || user.Flags == UserFlags.Operator)
-                    {
-                        targetUser = GetUserByName(aryCmd[1]);
+                    if (RequireOperator(user) == false) return;
+                    if ((targetUser = ExtractUserFromParameterOne(user, ref aryCmd, "You must specify a user to promote to Operator.")) == null) return;
+                    if (RequireModerationRights(user, targetUser) == false) return;
 
-                        if (user.Channel == targetUser.Channel)
-                        { }
-                        //TODO: Determine environment for opping users
-                        else
-                            SendServerError(user, "That user is not in the same channel as you.");
-                    }
+
+                    if (user.Channel == targetUser.Channel)
+                        ; //TODO: Determine environment for opping users
+                    else
+                        SendServerError(user, "That user is not in the same channel as you.");
 
                     break;
 
@@ -188,6 +128,77 @@ namespace VectorNet.Server
                     SendServerError(user, "That is not a valid command.");
                     break;
             }
+        }
+
+        protected User ExtractUserFromParameterOne(User user, ref string[] str, string failMsgTooShort)
+        {
+            if (RequireParameterOne(user, ref str, failMsgTooShort) == false)
+                return null;
+
+            User ret = GetUserByName(str[1]);
+            if (ret == null)
+                SendServerError(user, "There is no user by the name \"" + str[1] + "\" online.");
+
+            return ret;
+        }
+
+        protected Channel ExtractChannelFromParameterOne(User user, ref string[] str, bool allowCreation, string failMsgTooShort)
+        {
+            if (RequireParameterOne(user, ref str, failMsgTooShort) == false)
+                return null;
+
+            string cmd = String.Join(" ", str);
+            cmd = cmd.Substring(cmd.IndexOf(' ') + 1);
+
+            Channel ret = GetChannelByName(cmd, allowCreation);
+            if (ret == null)
+                SendServerError(user, "That channel does not exist.");
+
+            return ret;
+        }
+
+        protected bool RequireParameterOne(User user, ref string[] str, string failMsgTooShort)
+        {
+            if (str.Length >= 2 && str[1].Length > 0)
+                return true;
+
+            SendServerError(user, failMsgTooShort);
+            return false;
+        }
+
+        protected bool RequireAdmin(User user)
+        {
+            if (user.Flags == UserFlags.Admin)
+                return true;
+            SendServerError(user, "You must be an Admin to use that command.");
+            return false;
+        }
+
+        protected bool RequireModerator(User user)
+        {
+            if (user.Flags == UserFlags.Admin
+                || user.Flags == UserFlags.Moderator)
+                return true;
+            SendServerError(user, "You must be a Moderator or higher to use that command.");
+            return false;
+        }
+
+        protected bool RequireOperator(User user)
+        {
+            if (user.Flags == UserFlags.Admin
+                || user.Flags == UserFlags.Moderator
+                || user.Flags == UserFlags.Operator)
+                return true;
+            SendServerError(user, "You must be an Operator or higher to use that command.");
+            return false;
+        }
+
+        protected bool RequireModerationRights(User user, User targetUser)
+        {
+            if (CanUserModerateUser(user, targetUser))
+                return true;
+            SendServerError(user, "You do not have sufficient rights to performs actions on that user.");
+            return false;
         }
 
         public void HandleConsoleCommand(string cmd)

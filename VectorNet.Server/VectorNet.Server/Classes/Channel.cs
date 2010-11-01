@@ -58,6 +58,8 @@ namespace VectorNet.Server
                 if (Owner == null)
                     Owner = user;
                 user.Channel = this;
+                if (isOperator)
+                    user.Flags |= UserFlags.Operator;
             }
 
             public void RemoveUser(User user)
@@ -65,7 +67,10 @@ namespace VectorNet.Server
                 if (_Users.Contains(user))
                     _Users.Remove(user);
                 if (_Operators.Contains(user))
+                {
                     _Operators.Remove(user);
+                    user.Flags -= UserFlags.Operator;
+                }
             }
 
             public List<User> GetCompleteUserList()
