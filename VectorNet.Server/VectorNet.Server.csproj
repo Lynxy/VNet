@@ -60,6 +60,8 @@
     <Compile Include="VectorNet.Server\Classes\ClientHandler.cs" />
     <Compile Include="VectorNet.Server\Classes\SQLite.cs" />
     <Compile Include="VectorNet.Server\Constants.cs" />
+    <Compile Include="VectorNet.Server\TimerGarbage.cs" />
+    <Compile Include="VectorNet.Server\TimerCheck.cs" />
     <Compile Include="VectorNet.Server\Events.cs" />
     <Compile Include="VectorNet.Server\Packet Handlers\VNET_CHATEVENT.cs" />
     <Compile Include="VectorNet.Server\Packet Handlers\VNET_SERVERCHALLENGE.cs" />
