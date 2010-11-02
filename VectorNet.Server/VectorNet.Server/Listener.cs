@@ -21,7 +21,7 @@ namespace VectorNet.Server
             clients.UserPacketReceived += new ClientHandler.UserPacketReceivedDelegate(HandlePacket);
             clients.UserDisconnected += new ClientHandler.UserDisconnectedDelegate(clients_UserDisconnected);
 
-            listener.Listen(20, 30);
+            listener.Listen(Config.MaxConnectionsBacklog, Config.MaxClientSendBacklog);
         }
 
         protected void listener_OnClientConnected(TcpClientWrapper client)

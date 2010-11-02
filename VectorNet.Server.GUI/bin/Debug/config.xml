@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ConfigurationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ListenPort>4800</ListenPort>
+  <ReadBufferSize>1024</ReadBufferSize>
+  <SendBufferInterval>200</SendBufferInterval>
+  <MaxConnectionsBacklog>20</MaxConnectionsBacklog>
+  <MaxClientSendBacklog>30</MaxClientSendBacklog>
+  <DatabaseFilename>vnet.sqlite</DatabaseFilename>
+  <MainChannel>Main</MainChannel>
+  <VoidChannel>The Void</VoidChannel>
   <HostedBy />
   <MOTD />
   <AllowAES>true</AllowAES>
   <UseIdleSystem>false</UseIdleSystem>
+  <TimerCheckInterval>1000</TimerCheckInterval>
+  <TimerGarbageInterval>5000</TimerGarbageInterval>
+  <MaxUsersPerIP>10</MaxUsersPerIP>
+  <MaxUsersPerChannel>50</MaxUsersPerChannel>
 </ConfigurationData>

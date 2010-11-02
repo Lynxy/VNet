@@ -16,10 +16,10 @@ namespace VectorNet.Server
 
         protected void CreateDefaultChannels()
         {
-            Channel_Main = new Channel("Main");
+            Channel_Main = new Channel(Config.MainChannel);
             Channels.Add(Channel_Main);
 
-            Channel_Void = new Channel("The Void");
+            Channel_Void = new Channel(Config.VoidChannel);
             Channels.Add(Channel_Void);
         }
 

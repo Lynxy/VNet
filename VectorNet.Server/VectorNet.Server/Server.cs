@@ -47,7 +47,7 @@ namespace VectorNet.Server
 
             SetupTimers();
             CreateDefaultChannels();
-            ConnectToDatabase("vnet.sqlite");
+            ConnectToDatabase(Config.DatabaseFilename);
 
             console = new User(null, true);
             console.Username = "";
@@ -55,11 +55,11 @@ namespace VectorNet.Server
 
         protected void SetupTimers()
         {
-            timerCheck = new Timer(1000);
+            timerCheck = new Timer(Config.TimerCheckInterval);
             timerCheck.Elapsed += new ElapsedEventHandler(timerCheck_Elapsed);
             timerCheck.Start();
 
-            timerGarbage = new Timer(5000);
+            timerGarbage = new Timer(Config.TimerGarbageInterval);
             timerGarbage.Elapsed += new ElapsedEventHandler(timerGarbage_Elapsed);
             timerGarbage.Start();
         }
