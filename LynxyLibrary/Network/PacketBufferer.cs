@@ -30,14 +30,7 @@ namespace Lynxy.Network
 
         protected void ticker_Elapsed(object obj)
         {
-            //lock (_locker)
-            //{
-                if (buffer.Length > 0)
-                {
-                    _SendData(_state, ref buffer);
-                    Array.Resize(ref buffer, 0);
-                }
-            //}
+            SendNow();
         }
 
         public void QueuePacket(ref byte[] packet)
@@ -47,6 +40,18 @@ namespace Lynxy.Network
                 int origLen = buffer.Length;
                 Array.Resize(ref buffer, origLen + packet.Length);
                 Array.Copy(packet, 0, buffer, origLen, packet.Length);
+            //}
+        }
+
+        public void SendNow()
+        {
+            //lock (_locker)
+            //{
+                if (buffer.Length > 0)
+                {
+                    _SendData(_state, ref buffer);
+                    Array.Resize(ref buffer, 0);
+                }
             //}
         }
     }
