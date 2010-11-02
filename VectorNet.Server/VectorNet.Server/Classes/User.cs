@@ -66,6 +66,11 @@ namespace VectorNet.Server
                     bufferer.QueuePacket(ref data);
             }
 
+            public void SendBufferNow()
+            {
+                bufferer.SendNow();
+            }
+
             protected void SendDataFinal(object state, ref byte[] data)
             {
                 if (!_canSendData)

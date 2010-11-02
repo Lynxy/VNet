@@ -18,6 +18,7 @@ namespace VectorNet.Server
             protected int _SendBufferInterval = 200;
             protected int _MaxConnectionsBacklog = 20;
             protected int _MaxClientSendBacklog = 30;
+            protected int _ClientCloseWait = 2000;
             protected string _DatabaseFilename = "vnet.sqlite";
             protected string _MainChannel = "Main";
             protected string _VoidChannel = "The Void";
@@ -39,6 +40,7 @@ namespace VectorNet.Server
             public int SendBufferInterval { get { return _SendBufferInterval; } set { _SendBufferInterval = value; } }
             public int MaxConnectionsBacklog { get { return _MaxConnectionsBacklog; } set { _MaxConnectionsBacklog = value; } }
             public int MaxClientSendBacklog { get { return _MaxClientSendBacklog; } set { _MaxClientSendBacklog = value; } }
+            public int ClientCloseWait { get { return _ClientCloseWait; } set { _ClientCloseWait = value; } }
             public string DatabaseFilename { get { return _DatabaseFilename; } set { _DatabaseFilename = value; } }
             public string MainChannel { get { return _MainChannel; } set { _MainChannel = value; } }
             public string VoidChannel { get { return _VoidChannel; } set { _VoidChannel = value; } }
