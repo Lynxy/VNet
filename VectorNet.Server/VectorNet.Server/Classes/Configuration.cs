@@ -23,6 +23,9 @@ namespace VectorNet.Server
             protected string _VoidChannel = "The Void";
             protected string _HostedBy = "";
             protected string _MOTD = "";
+            protected int _UsernameMinLength = 2;
+            protected int _UsernameMaxLength = 14;
+            protected string _UsernameRegex = @"^([a-zA-Z0-9]+?[\._\-]{0,1})*?$"; //alpha numeric 1 or more times + optional other char 0 to 1 times, repeat
             protected bool _AllowAES = true;
             protected bool _AllowChallenges = true;
             protected bool _UseIdleSystem = false;
@@ -41,6 +44,9 @@ namespace VectorNet.Server
             public string VoidChannel { get { return _VoidChannel; } set { _VoidChannel = value; } }
             public string HostedBy { get { return _HostedBy; } set { _HostedBy = value; } }
             public string MOTD { get { return _MOTD; } set { _MOTD = value; } }
+            public int UsernameMinLength { get { return _UsernameMinLength; } set { _UsernameMinLength = value; } }
+            public int UsernameMaxLength { get { return _UsernameMaxLength; } set { _UsernameMaxLength = value; } }
+            public string UsernameRegex { get { return _UsernameRegex; } set { _UsernameRegex = value; } }
             public bool AllowAES { get { return _AllowAES; } set { _AllowAES = value; } }
             public bool UseIdleSystem { get { return _UseIdleSystem; } set { _UseIdleSystem = value; } }
             public int TimerCheckInterval { get { return _TimerCheckInterval; } set { _TimerCheckInterval = value; } }

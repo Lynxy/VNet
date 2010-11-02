@@ -45,6 +45,7 @@ namespace VectorNet.Server
             Users = new List<User>();
             Channels = new List<Channel>();
 
+            SetupRegex();
             SetupTimers();
             CreateDefaultChannels();
             ConnectToDatabase(Config.DatabaseFilename);

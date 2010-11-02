@@ -10,6 +10,9 @@
   <VoidChannel>The Void</VoidChannel>
   <HostedBy />
   <MOTD />
+  <UsernameMinLength>2</UsernameMinLength>
+  <UsernameMaxLength>14</UsernameMaxLength>
+  <UsernameRegex>^([a-zA-Z0-9]+?[\._\-]{0,1})*?$</UsernameRegex>
   <AllowAES>true</AllowAES>
   <UseIdleSystem>false</UseIdleSystem>
   <TimerCheckInterval>1000</TimerCheckInterval>

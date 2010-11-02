@@ -15,24 +15,14 @@ namespace VectorNet.Server
             string password = reader.ReadStringNT();
             string client = reader.ReadStringNT();
 
-            if (ContainsNonPrintable(username))
+            string dcMsg = "";
+            if ((dcMsg = GetDisconnectMessage(username, password, client)) != "")
             {
-                DisconnectUser(user, "Usernames cannot contain non-printable characters");
-                return;
-            }
-            else if (ContainsNonPrintable(password))
-            {
-                DisconnectUser(user, "Passwords cannot contain non-printable characters");
-                return;
-            }
-            else if (ContainsNonPrintable(client))
-            {
-                DisconnectUser(user, "Client names cannot contain non-printable characters");
+                DisconnectUser(user, dcMsg);
                 return;
             }
 
-
-            //check client name
+            //check client name with saved client list
 
 
             //check username+pass combo
@@ -45,7 +35,7 @@ namespace VectorNet.Server
             if (state == AccountState.NewAccount)
                 CreateNewAccount(username, password, user.IPAddress);
 
-            //remember challenge
+            //check challenge (if any)
 
 
             if (GetUserByName(username) != null)
@@ -65,6 +55,23 @@ namespace VectorNet.Server
             if (state == AccountState.NewAccount)
                 SendServerInfo(user, "New account created!");
             JoinUserToChannel(user, Channel_Main);
+        }
+
+        protected string GetDisconnectMessage(string username, string password, string client)
+        {
+            if (username.Length < Config.UsernameMinLength)
+                return "Your username is too short. Minimum length: " + Config.UsernameMinLength;
+            if (username.Length < Config.UsernameMaxLength)
+                return "Your username is too long. Maximum length: " + Config.UsernameMaxLength;
+            if (ContainsNonPrintable(username))
+                return "Your username cannot contain non-printable characters";
+            if (CheckUsernameRegex(username) == false)
+                return "Your username did not pass the username test";
+            if (ContainsNonPrintable(password))
+                return "Your password cannot contain non-printable characters";
+            if (ContainsNonPrintable(client))
+                return "Your client name cannot contain non-printable characters";
+            return "";
         }
     }
 }
