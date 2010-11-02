@@ -103,9 +103,12 @@ namespace VectorNet.Server.GUI
                 + " (" + ((ServerStats.bytesSent - ServerStats.lastBytesSent) / 1024) + " kb/s) | " +
                 "KB recv = " + (ServerStats.bytesRecv / 1024);
 
+            str += "\r\nActive worker threads: " + ServerStats.activeWorkerThreads;
+            str += "\r\nActive IO threads: " + ServerStats.activeIOThreads;
+
             int c1, c2;
             System.Threading.ThreadPool.GetAvailableThreads(out c1, out c2);
-            str += "\r\nGetAvailableThreads = " + c1 + "/" + c2;
+            str += "\r\nAvailable Threads = " + c1 + " / " + c2 + " IO";
 
             str += "\r\nMissed/Total packets = " + ServerStats.test;
 
