@@ -28,7 +28,7 @@ namespace LynxVN
         protected const int VNET_QUEUESHARE = 0x07;
 
         [Flags]
-        protected enum UserFlags
+        public enum UserFlags
         {
             Normal = 0x00,
             Admin = 0x01,

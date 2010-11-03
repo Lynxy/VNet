@@ -23,7 +23,8 @@
         <ListView Background="Black" BorderBrush="{x:Null}" Foreground="White" Margin="8,29,12,44" Name="lvChannel" Grid.Column="1">
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
-                    <GridViewColumn Width="30" DisplayMemberBinding="{Binding Icon}" Header="Icon" />
+                    <GridViewColumn Width="0" DisplayMemberBinding="{Binding Icon}" Header="Icon" />
+                    <GridViewColumn Width="60" DisplayMemberBinding="{Binding Flags}" Header="Flags" />
                     <GridViewColumn DisplayMemberBinding="{Binding Username}" Header="Username" />
                 </GridView>
             </ListView.View>
