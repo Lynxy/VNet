@@ -48,7 +48,9 @@ namespace VectorNet.Server
             SetupRegex();
             SetupTimers();
             CreateDefaultChannels();
-            ConnectToDatabase(Config.DatabaseFilename);
+
+            database = new Database();
+            database.Open(Config.DatabaseFilename);
 
             console = new User(null, true);
             console.Username = "";

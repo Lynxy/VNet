@@ -16,11 +16,22 @@ namespace VectorNet.Server
             protected string dbFile = "";
             protected SQLiteConnection conn;
             protected SQLiteCommand cmd;
+            protected string _query = "";
 
             public SQLite(string databaseFile)
             {
                 dbFile = databaseFile;
                 CheckDBExistsAndConnect();
+            }
+
+            public string Query
+            {
+                get { return _query; }
+                set
+                {
+                    cmd.Parameters.Clear();
+                    _query = value;
+                }
             }
 
             public void Close()
@@ -81,30 +92,37 @@ namespace VectorNet.Server
                 System.IO.Stream SQLStream = asm.GetManifestResourceStream(asmName + ".Data.SQLite_Create_VnetDB.txt");
                 System.IO.StreamReader sr = new System.IO.StreamReader(SQLStream);
 
-                ExecuteNonQuery(sr.ReadToEnd());
+                cmd.CommandText = sr.ReadToEnd();
+                cmd.ExecuteNonQuery();
             }
 
-            public SQLiteDataReader ExecuteReader(string query)
+            public SQLite AddParameter(string parameterName, object parameterValue)
+            {
+                cmd.Parameters.Add(new SQLiteParameter(parameterName, parameterValue));
+                return this;
+            }
+
+            public SQLiteDataReader ExecuteReader()
             {
                 //if (cmd.Transaction == null)
                 //    cmd.Transaction = conn.BeginTransaction();
-                cmd.CommandText = query;
+                cmd.CommandText = Query;
                 return cmd.ExecuteReader();
             }
 
-            public object ExecuteScalar(string query)
+            public object ExecuteScalar()
             {
                 //if (cmd.Transaction == null)
                 //    cmd.Transaction = conn.BeginTransaction();
-                cmd.CommandText = query;
+                cmd.CommandText = Query;
                 return cmd.ExecuteScalar();
             }
 
-            public int ExecuteNonQuery(string query)
+            public int ExecuteNonQuery()
             {
                 //if (cmd.Transaction == null)
                 //    cmd.Transaction = conn.BeginTransaction();
-                cmd.CommandText = query;
+                cmd.CommandText = Query;
                 return cmd.ExecuteNonQuery();
             }
         }

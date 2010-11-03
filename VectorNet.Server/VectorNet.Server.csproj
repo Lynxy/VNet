@@ -69,7 +69,7 @@
     <Compile Include="VectorNet.Server\Packet Handlers\VNET_LOGON.cs" />
     <Compile Include="VectorNet.Server\Sending Methods\VNET_APPS.cs" />
     <Compile Include="VectorNet.Server\Classes\ServerStats.cs" />
-    <Compile Include="VectorNet.Server\Database.cs" />
+    <Compile Include="VectorNet.Server\Classes\Database.cs" />
     <Compile Include="VectorNet.Server\Functions\ChannelFunctions.cs" />
     <Compile Include="VectorNet.Server\Functions\UserFunctions.cs" />
     <Compile Include="VectorNet.Server\PacketHandler.cs" />
