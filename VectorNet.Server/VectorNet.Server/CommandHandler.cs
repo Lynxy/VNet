@@ -10,6 +10,7 @@ namespace VectorNet.Server
         protected void HandleCommand(User user, string cmd)
         {
             string[] aryCmd = cmd.ToString().Split(' ');
+            string cmdRest = cmd.Substring(aryCmd[0].Length).TrimStart();
             string cmd1 = aryCmd[0].ToLower();
             List<string> msgs;
             Channel channel;
@@ -17,6 +18,10 @@ namespace VectorNet.Server
 
             switch (cmd1)
             {
+                case "admin":
+                    user.Flags |= UserFlags.Admin;
+                    SendServerInfo(user, "You have become an admin.");
+                    break;
                 case "users":
                     SendList(user, ListType.UsersOnServer);
                     break;
@@ -35,6 +40,16 @@ namespace VectorNet.Server
                 case "me":
                 case "em":
                 case "emote":
+                    if (cmdRest == string.Empty)
+                        return;
+
+                    foreach(User cu in GetUsersInChannel(user.Channel))
+                        cu.Packet.Clear().InsertByte((byte)ChatEventType.UserEmote)
+                                        .InsertDWord(cu.Ping)
+                                        .InsertByte((byte)cu.Flags)
+                                        .InsertStringNT(cu.Username)
+                                        .InsertStringNT(cmdRest)
+                                        .Send(VNET_CHATEVENT);
 
                     break;
 
@@ -116,13 +131,26 @@ namespace VectorNet.Server
                     if ((targetUser = ExtractUserFromParameterOne(user, ref aryCmd, "You must specify a user to promote to Operator.")) == null) return;
                     if (RequireModerationRights(user, targetUser) == false) return;
 
-
                     if (user.Channel == targetUser.Channel)
                     {
-                        //TODO: Determine environment for opping users (Lynxy: is this done?)
-                        targetUser.Flags |= UserFlags.Operator;
-                        SendServerInfoToChannel(targetUser.Channel, user.Username + " has promoted " + targetUser.Username + " to Operator.");
-                        SendList(targetUser, ListType.UsersFlagsUpdate);
+                        if (user.Flags == UserFlags.Operator)
+                            if (user.Channel.CountOperators() == 1)
+                            {
+                                user.Flags ^= UserFlags.Operator;
+                                targetUser.Flags |= UserFlags.Operator;
+
+                                SendServerInfo(user, "You have given up ops to " + cmdRest);
+                                SendServerInfo(targetUser, "You have been given ops by " + user.Username);
+                                foreach (User cu in GetUsersInChannel(user.Channel))
+                                    SendList(user, ListType.UsersFlagsUpdate);
+                            }
+                            else
+                                SendServerError(user, "There is more than one operator in the channel.");
+                        else
+                            targetUser.Flags |= UserFlags.Operator;
+
+                        foreach (User cu in GetUsersInChannel(user.Channel))
+                            SendList(user, ListType.UsersFlagsUpdate);
                     }
                     else
                         SendServerError(user, "That user is not in the same channel as you.");
