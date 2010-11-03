@@ -15,7 +15,6 @@ namespace VectorNet.Server
         {
             if (user.IsOnline)
                 ServerStats.usersOnline--;
-            user.SendBufferNow();
             user.IsOnline = false;
             user.CanSendData = false;
             RemoveUserFromChannel(user);
@@ -28,6 +27,7 @@ namespace VectorNet.Server
                 SendList(newOwner, ListType.UsersFlagsUpdate);
             }
 
+            user.SendBufferNow();
             user.Socket.Client.Close(Config.ClientCloseWait);
         }
 

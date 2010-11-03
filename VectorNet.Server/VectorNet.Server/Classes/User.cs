@@ -68,6 +68,8 @@ namespace VectorNet.Server
 
             public void SendBufferNow()
             {
+                if (!_canSendData)
+                    return;
                 bufferer.SendNow();
             }
 

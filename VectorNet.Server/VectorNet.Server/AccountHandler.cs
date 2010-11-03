@@ -19,7 +19,9 @@ namespace VectorNet.Server
 
         protected AccountState GetAccountState(string username, string password)
         {
-            using (SQLiteDataReader reader = database.ExecuteReader("SELECT * FROM [Users] WHERE [Username] = '" + username + "'"))
+            using (SQLiteDataReader reader = database.Query("SELECT * FROM [Users] WHERE [Username] = @Username")
+                .AddParameter("@Username", username)
+                .ExecuteReader())
             {
                 if (!reader.HasRows)
                     return AccountState.NewAccount;
@@ -37,12 +39,19 @@ namespace VectorNet.Server
 
         protected void CreateNewAccount(string username, string password, string IP)
         {
-            database.ExecuteNonQuery("INSERT INTO [Users] ([Username], [Password], [RegistrationIP], [Banned]) VALUES ('" + username + "', '" + password + "', '" + IP + "', 'false')");
+            database.Query("INSERT INTO [Users] ([Username], [Password], [RegistrationIP], [Banned]) VALUES (@Username, @Password, @IP, 'false')")
+                .AddParameter("@Username", username)
+                .AddParameter("@Password", password)
+                .AddParameter("@IP", IP)
+                .ExecuteNonQuery();
         }
 
         protected void UpdateLastLogin(string username)
         {
-            database.ExecuteNonQuery("UPDATE [Users] SET [LastLogin] = '" + GetNow() + "' WHERE [Username] = '" + username + "'");
+            database.Query("UPDATE [Users] SET [LastLogin] = @LastLogin WHERE [Username] = @Username")
+                .AddParameter("@LastLogin", GetNow())
+                .AddParameter("@Username", username)
+                .ExecuteNonQuery();
         }
 
         protected void InsertChallenge(string username, string challenge)
