@@ -81,8 +81,8 @@ namespace LynxVN
                         {
                             AddChat(ChatColors.EmoteOther, "<",
                                 ChatColors.UsernameRemote, username,
-                                ChatColors.EmoteOther, "> ",
-                                ChatColors.EmoteMsg, text);
+                                ChatColors.EmoteMsg, " " + text,
+                                ChatColors.EmoteOther, ">");
                         }
                         else if (id == (byte)ChatEventType.ServerInfo)
                         {
@@ -140,6 +140,15 @@ namespace LynxVN
                             else if (id == (byte)ListType.UsersOnServer)
                             {
                                 AddChat(ChatColors.ServerInfo, "  " + username + (tmpByte == 0 ? "" : " - Banned from: " + tmpStr.Replace(((char)1).ToString(), ", ")));
+                            }
+                            else if (id == (byte)ListType.UsersFlagsUpdate)
+                            {
+                                User usr = Users.ToList().Find(u => u.Username.ToLower() == username.ToLower());
+                                if (usr != null)
+                                {
+                                    usr.Flags = (UserFlags)flags;
+                                    RefreshList();
+                                }
                             }
                         }
                         break;

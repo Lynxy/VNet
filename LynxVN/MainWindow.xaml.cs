@@ -106,6 +106,12 @@ namespace LynxVN
         protected void AddUser(User user)
         {
             Users.Add(user);
+            RefreshList();
+        }
+
+        protected void RefreshList()
+        {
+            lvChannel.ItemsSource = null;
             lvChannel.ItemsSource = Users;
         }
 
