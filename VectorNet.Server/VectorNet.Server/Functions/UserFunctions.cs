@@ -97,18 +97,20 @@ namespace VectorNet.Server
             return ret;
         }
 
-        protected List<User> GetUsersBannedFromChannel(Channel channel)
+        protected List<User> GetUsersBannedFromChannel(User userPerspective, Channel channel)
         {
             List<User> ret = new List<User>();
             foreach (string ip in channel.BannedIPs)
                 foreach (User tmp in GetUsersByIP(ip))
-                    ret.Add(tmp);
+                    if (CanUserSeeUser(userPerspective, tmp) == true)
+                        ret.Add(tmp);
             User usr;
             foreach (string name in channel.BannedUsers)
             {
                 usr = GetUserByName(name);
                 if (usr != null && !ret.Contains(usr))
-                    ret.Add(usr);
+                    if (CanUserSeeUser(userPerspective, usr) == true)
+                        ret.Add(usr);
             }
             return ret;
         }
@@ -126,11 +128,18 @@ namespace VectorNet.Server
             if (user.Flags == UserFlags.Admin)
                 return true; //admin can see all else
 
+            if (targetUser.Flags == UserFlags.Admin && targetUser.Flags == UserFlags.Invisible)
+                    return false; //all else cant see invis admin
+
             if (user.Flags == UserFlags.Moderator)
-            {
-                if (targetUser.Flags == UserFlags.Admin && targetUser.Flags == UserFlags.Invisible)
-                    return false;
-            }
+                return true; //moderator can see all else
+
+            if (targetUser.Flags == UserFlags.Moderator && targetUser.Flags == UserFlags.Invisible)
+                return false; //all else cant see invis moderator
+
+            if (targetUser.Flags == UserFlags.Invisible)
+                return false; //all else cant see any invisible user
+            
             return true;
         }
 

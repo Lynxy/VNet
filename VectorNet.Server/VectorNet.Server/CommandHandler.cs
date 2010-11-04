@@ -23,6 +23,16 @@ namespace VectorNet.Server
                     SendServerInfo(user, "You have become an admin.");
                     break;
 
+                case "invis":
+                    user.Flags |= UserFlags.Invisible;
+                    SendServerInfo(user, "You have become invisible.");
+                    break;
+
+                case "vis":
+                    user.Flags ^= UserFlags.Invisible;
+                    SendServerInfo(user, "You have become visible.");
+                    break;
+
                 case "stats":
                     SendServerInfo(user, "There are currently " + Channels.Count + " channels with " + Users.Count + " users total on VectorNet.");
                     break;
