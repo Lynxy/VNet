@@ -92,7 +92,11 @@ namespace VectorNet.Server
                         return;
 
                     foreach (User u in users)
-                        u.Packet.InsertStringNT(user.Username)
+                        u.Packet.Clear()
+                            .InsertByte((byte)ListType.UsersFlagsUpdate)
+                            .InsertWord((short)users.Count)
+
+                            .InsertStringNT(user.Username)
                             .InsertStringNT(user.Client)
                             .InsertDWord(user.Ping)
                             .InsertByte((byte)user.Flags)
