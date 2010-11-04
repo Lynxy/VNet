@@ -37,6 +37,33 @@ namespace VectorNet.Server
 
                     break;
 
+                case "w":
+                case "whisper":
+                    int LenToMsg = aryCmd[0].Length + aryCmd[1].Length;
+                    string GetToWhisper = aryCmd[1];
+                    string GetWhisper = cmd.Substring(LenToMsg + 2);
+
+                    User toUser = GetUserByName(GetToWhisper);
+
+                    if (toUser != null)
+                        if (toUser.IsOnline)
+                        {
+                            if (GetWhisper != string.Empty)
+                            {
+                                System.Windows.Forms.MessageBox.Show("Sending to " + GetToWhisper + ": " + GetWhisper);
+
+                                SendUserWhisperTo(user, toUser, GetWhisper);
+                                SendUserWhisperFrom(toUser, user, GetWhisper);
+                            }
+                            else
+                                SendServerError(user, "What do you want to say?");
+                        }
+                        else
+                            SendServerError(user, "An unexpected error occured, and the whisper was not sent.");
+                    else
+                        SendServerError(user, "That user is not online.");
+
+                    break;
                 case "me":
                 case "em":
                 case "emote":
