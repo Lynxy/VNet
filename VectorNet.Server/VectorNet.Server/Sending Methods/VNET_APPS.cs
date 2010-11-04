@@ -39,6 +39,10 @@ namespace VectorNet.Server
                         toSend.Packet.InsertByte(tttEventID).InsertString(reader.ReadToEnd().ToString());
 
                     break;
+                case AppFlags.VNetPad:
+                    toSend.Packet.Clear().InsertString(reader.ReadToEnd().ToString()).Send(VNET_APPS);
+
+                    break;
             }
         }
     }
