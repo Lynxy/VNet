@@ -63,6 +63,8 @@ namespace VectorNet.Server
                 return "Your username is too short. Minimum length: " + Config.UsernameMinLength;
             if (username.Length > Config.UsernameMaxLength)
                 return "Your username is too long. Maximum length: " + Config.UsernameMaxLength;
+            if (username.Contains('@') || username.Contains('*'))
+                return "Your username cannot contain the characters @ or *.";
             if (ContainsNonPrintable(username))
                 return "Your username cannot contain non-printable characters";
             if (CheckUsernameRegex(username) == false)

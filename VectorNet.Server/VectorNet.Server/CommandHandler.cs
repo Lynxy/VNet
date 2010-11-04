@@ -15,23 +15,29 @@ namespace VectorNet.Server
             aryCmd = cmdRest.Split(' ');
             List<string> msgs;
             Channel channel;
-            User targetUser;
+            User targetUser = null;
+            List<User> targetUsers = null;
 
             switch (cmd)
             {
                 case "admin":
                     user.Flags |= UserFlags.Admin;
                     SendServerInfo(user, "You have become an admin.");
+                    SendList(user, ListType.UsersFlagsUpdate);
                     break;
 
                 case "invis":
                     user.Flags |= UserFlags.Invisible;
                     SendServerInfo(user, "You have become invisible.");
+                    //special care must be taken here to make user leave channel to
+                    //those that cant see him, and update flags for those that can
                     break;
 
                 case "vis":
                     user.Flags ^= UserFlags.Invisible;
                     SendServerInfo(user, "You have become visible.");
+                    //special care must be taken here to make user leave channel to
+                    //those that cant see him, and update flags for those that can
                     break;
 
                 case "stats":
@@ -55,7 +61,7 @@ namespace VectorNet.Server
 
                 case "w":
                 case "whisper":
-                    if ((targetUser = ExtractUserFromText(user, ref cmdRest, "You must specify a user to whisper.")) == null) return;
+                    //if ((targetUser = ExtractUserFromText(user, ref cmdRest, "You must specify a user to whisper.")) == null) return;
                     if (RequireParameter(user, ref cmdRest, "What do you want to say?") == false) return;
 
                     SendUserWhisperTo(user, targetUser, cmdRest);
@@ -106,22 +112,27 @@ namespace VectorNet.Server
                 case "banip":
                 case "ipban":
                     if (RequireOperator(user) == false) return;
-                    if ((targetUser = ExtractUserFromText(user, ref cmdRest, "You must specify a user to ban.")) == null) return;
-                    if (RequireModerationRights(user, targetUser) == false) return;
+                    if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to ban.")) == null) return;
+                    foreach (User targ in targetUsers)
+                    {
+                        if (RequireModerationRights(user, targ) == false) goto EndLoop_Ban;
 
-                    if (cmd == "ban")
-                    {
-                        if (user.Channel.BannedUsers.Contains(targetUser.Username))
-                            SendServerError(user, "That user is already banned from this channel.");
+                        if (cmd == "ban")
+                        {
+                            if (user.Channel.BannedUsers.Contains(targ.Username))
+                                SendServerError(user, "That user is already banned from this channel.");
+                            else
+                                BanUserByUsername(user, targ, user.Channel);
+                        }
                         else
-                            BanUserByUsername(user, targetUser, user.Channel);
-                    }
-                    else
-                    {
-                        if (user.Channel.BannedIPs.Contains(targetUser.IPAddress))
-                            SendServerError(user, "That user's IP is already banned from this channel.");
-                        else
-                            BanUserByIP(user, targetUser, user.Channel);
+                        {
+                            if (user.Channel.BannedIPs.Contains(targ.IPAddress))
+                                SendServerError(user, "That user's IP is already banned from this channel.");
+                            else
+                                BanUserByIP(user, targ, user.Channel);
+                        }
+                    EndLoop_Ban:
+                        ;
                     }
                                     
                     break;
@@ -130,58 +141,69 @@ namespace VectorNet.Server
                 case "unipban":
                 case "unbanip":
                     if (RequireOperator(user) == false) return;
-                    if ((targetUser = ExtractUserFromText(user, ref cmdRest, "You must specify a user to unban.")) == null) return;
-                    if (RequireModerationRights(user, targetUser) == false) return;
+                    if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to unban.")) == null) return;
+                    foreach (User targ in targetUsers)
+                    {
+                        if (RequireModerationRights(user, targ) == false) goto EndLoop_Unban;
 
-                    if (cmd == "unban")
-                    {
-                        if (!user.Channel.IsUserBanned(targetUser))
-                            SendServerError(user, "That user is not banned from this channel.");
+                        if (cmd == "unban")
+                        {
+                            if (!user.Channel.IsUserBanned(targ))
+                                SendServerError(user, "That user is not banned from this channel.");
+                            else
+                                UnbanUser(user, targ, user.Channel, false);
+                        }
                         else
-                            UnbanUser(user, targetUser, user.Channel, false);
-                    }
-                    else
-                    {
-                        if (!user.Channel.IsUserBanned(targetUser))
-                            SendServerError(user, "That user is not IP banned.");
-                        else
-                            UnbanUserByIP(user, targetUser, user.Channel);
+                        {
+                            if (!user.Channel.IsUserBanned(targ))
+                                SendServerError(user, "That user is not IP banned.");
+                            else
+                                UnbanUserByIP(user, targ, user.Channel);
+                        }
+                    EndLoop_Unban:
+                        ;
                     }
 
                     break;
 
                 case "op":
                     if (RequireOperator(user) == false) return;
-                    if ((targetUser = ExtractUserFromText(user, ref cmdRest, "You must specify a user to promote to Operator.")) == null) return;
-                    if (RequireModerationRights(user, targetUser) == false) return;
-
-                    if (user.Channel != targetUser.Channel)
+                    if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to promote to Operator.")) == null) return;
+                    foreach (User targ in targetUsers)
                     {
-                        SendServerError(user, "That user is not in the same channel as you.");
-                        return;
-                    }
+                        if (RequireModerationRights(user, targ) == false) goto EndLoop_Op;
 
-                    if (user.Flags == UserFlags.Operator)
-                    { //if (user.Channel.CountOperators() == 1) //not used "There is more than one operator in the channel."
-                        user.Flags ^= UserFlags.Operator;
-                        targetUser.Flags |= UserFlags.Operator;
+                        if (user.Channel != targ.Channel)
+                        {
+                            SendServerError(user, "That user is not in the same channel as you.");
+                            goto EndLoop_Op;
+                        }
 
-                        if (user.Channel.Owner == user)
-                            user.Channel.Owner = targetUser;
+                        if (UserHasFlags(user, UserFlags.Operator))
+                        { //if (user.Channel.CountOperators() == 1) //not used "There is more than one operator in the channel."
+                            user.Flags ^= UserFlags.Operator;
+                            targ.Flags |= UserFlags.Operator;
 
-                        SendServerInfo(user, "You have given up ops to " + targetUser.Username);
-                        SendServerInfo(targetUser, "You have been given ops by " + user.Username);
+                            if (user.Channel.Owner == user)
+                                user.Channel.Owner = targ;
+
+                            SendList(user, ListType.UsersFlagsUpdate); //tell channel members to update flags for these people
+                            SendList(targ, ListType.UsersFlagsUpdate);
+                        }
+                        else
+                        {
+                            targ.Flags |= UserFlags.Operator;
+                            SendList(targ, ListType.UsersFlagsUpdate);
+                        }
+
+                        SendServerInfo(user, "You have given up ops to " + targ.Username);
+                        SendServerInfo(targ, "You have been given ops by " + user.Username);
                         foreach (User cu in GetUsersInChannel(user.Channel))
-                            if (cu != user && cu != targetUser)
-                                SendServerInfo(cu, user.Username + " has given Operator to " + targetUser.Username + ".");
+                            if (cu != user && cu != targ)
+                                SendServerInfo(cu, user.Username + " has given Operator to " + targ.Username + ".");
 
-                        SendList(user, ListType.UsersFlagsUpdate); //tell channel members to update flags for these people
-                        SendList(targetUser, ListType.UsersFlagsUpdate);
-                    }
-                    else
-                    {
-                        targetUser.Flags |= UserFlags.Operator;
-                        SendList(targetUser, ListType.UsersFlagsUpdate);
+                    EndLoop_Op:
+                        ;
                     }
 
                     break;
@@ -211,18 +233,57 @@ namespace VectorNet.Server
             return true;
         }
 
-        protected User ExtractUserFromText(User user, ref string str, string failMsgTooShort)
+        protected List<User> ExtractUserFromText(User user, ref string str, string failMsgTooShort)
         {
             if (RequireParameter(user, ref str, failMsgTooShort) == false) return null;
 
             string[] str2 = str.Split(new char[1] { ' ' }, 2);
+            string username = str2[0];
             str = (str2.Length == 1 ? "" : str2[1]);
-             
-            User ret = GetUserByName(str2[0]);
-            if (ret != null && CanUserSeeUser(user, ret) == false)
-                ret = null;
-            if (ret == null)
-                SendServerError(user, "There is no user by the name \"" + str2[0] + "\" online.");
+
+            Channel targetChan = user.Channel;
+            if (username.Contains('@'))
+            {
+                if (!UserHasFlags(user, UserFlags.Admin) && !UserHasFlags(user, UserFlags.Moderator))
+                {
+                    SendServerError(user, "You do not have permission to use the @ flag in usernames.");
+                    return null;
+                }
+                string channel = username.Substring(username.IndexOf('@') + 1);
+                Channel chan = null;
+                if (channel == "*")
+                {
+                    if (!UserHasFlags(user, UserFlags.Admin))
+                    {
+                        SendServerError(user, "You do not have permission to use * as the channel name.");
+                        return null;
+                    }
+                }
+                else
+                {
+                    chan = GetChannelByName(user, channel, false);
+                    if (chan == null)
+                    {
+                        SendServerError(user, "The channel " + channel + " was not found.");
+                        return null;
+                    }
+                }
+                targetChan = chan;
+                username = username.Substring(0, username.IndexOf('@'));
+            }
+
+            List<User> ret = GetUsersByName(username, targetChan);
+            if (ret.Count == 0)
+            {
+                SendServerError(user, "There is no user by the name \"" + username + "\" online.");
+                return null;
+            }
+
+            for (int i = ret.Count - 1; i >= 0; i--)
+            {
+                if (CanUserSeeUser(user, ret[i]) == false)
+                    ret.RemoveAt(i);
+            }
             return ret;
         }
 
@@ -255,7 +316,7 @@ namespace VectorNet.Server
 
         protected bool RequireAdmin(User user)
         {
-            if (user.Flags == UserFlags.Admin)
+            if (UserHasFlags(user, UserFlags.Admin))
                 return true;
             SendServerError(user, "You must be an Admin to use that command.");
             return false;
@@ -263,8 +324,8 @@ namespace VectorNet.Server
 
         protected bool RequireModerator(User user)
         {
-            if (user.Flags == UserFlags.Admin
-                || user.Flags == UserFlags.Moderator)
+            if (UserHasFlags(user, UserFlags.Admin)
+                || UserHasFlags(user, UserFlags.Moderator))
                 return true;
             SendServerError(user, "You must be a Moderator or higher to use that command.");
             return false;
@@ -272,9 +333,9 @@ namespace VectorNet.Server
 
         protected bool RequireOperator(User user)
         {
-            if (user.Flags == UserFlags.Admin
-                || user.Flags == UserFlags.Moderator
-                || user.Flags == UserFlags.Operator)
+            if (UserHasFlags(user, UserFlags.Admin)
+                || UserHasFlags(user, UserFlags.Moderator)
+                || UserHasFlags(user, UserFlags.Operator))
                 return true;
             SendServerError(user, "You must be an Operator or higher to use that command.");
             return false;
@@ -285,7 +346,7 @@ namespace VectorNet.Server
             if (user == targetUser)
             {
                 SendServerError(user, "You cannot perform moderation actions on yourself!");
-                return true; //TODO: true for debugging
+                return false;
             }
             if (CanUserModerateUser(user, targetUser))
                 return true;

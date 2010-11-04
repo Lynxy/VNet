@@ -29,6 +29,11 @@ namespace VectorNet.Server
                 c.Name.ToLower() == channel.ToLower());
             if (ret == null && allowCreation)
             {
+                if (channel == "*")
+                {
+                    SendServerError(user, "You cannot join channel * as it is a special channel.");
+                    return null;
+                }
                 ret = new Channel(channel);
                 ret.Owner = user;
                 Channels.Add(ret);

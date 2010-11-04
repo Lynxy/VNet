@@ -48,6 +48,45 @@ namespace VectorNet.Server
             return ret;
         }
 
+        protected List<User> GetUsersByName(string username, Channel limitChannel)
+        {
+            System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex(ConvertStringToRegexSafe(username));
+            List<User> ret = Users.Where(u =>
+                u != null
+                && u.IsOnline == true
+                && u.Username != null
+                && rx.IsMatch(u.Username)
+                && (limitChannel == null ? true : u.Channel == limitChannel)
+                ).ToList();
+            return ret;
+        }
+
+        protected string ConvertStringToRegexSafe(string str)
+        {
+            const string metaChars = @"\|()[{^$*+?.<>";
+            StringBuilder sb = new StringBuilder(250);
+            sb.Append("^(?i)");
+            foreach (char c in str)
+            {
+                if (c == '*')
+                    sb.Append(".*");
+                else if (metaChars.Contains(c))
+                {
+                    sb.Append(@"\");
+                    sb.Append(c);
+                }
+                else
+                    sb.Append(c);
+            }
+            sb.Append('$');
+            return sb.ToString();
+        }
+
+        protected bool UserHasFlags(User user, UserFlags flags)
+        {
+            return (user.Flags & flags) == flags;
+        }
+
         protected void JoinUserToChannel(User user, Channel channel)
         {
             ConsoleSendUserLeftChannel(user);
@@ -128,19 +167,19 @@ namespace VectorNet.Server
             if (user == targetUser)
                 return true; //user can always see themselves
 
-            if (user.Flags == UserFlags.Admin)
+            if (UserHasFlags(user, UserFlags.Admin))
                 return true; //admin can see all else
 
-            if (targetUser.Flags == UserFlags.Admin && targetUser.Flags == UserFlags.Invisible)
+            if (UserHasFlags(targetUser, UserFlags.Admin) && UserHasFlags(targetUser, UserFlags.Invisible))
                     return false; //all else cant see invis admin
             
-            if (user.Flags == UserFlags.Moderator)
+            if (UserHasFlags(user, UserFlags.Moderator))
                 return true; //moderator can see all else
 
-            if (targetUser.Flags == UserFlags.Moderator && targetUser.Flags == UserFlags.Invisible)
+            if (UserHasFlags(targetUser, UserFlags.Moderator) && UserHasFlags(targetUser, UserFlags.Invisible))
                 return false; //all else cant see invis moderator
 
-            if (targetUser.Flags == UserFlags.Invisible)
+            if (UserHasFlags(targetUser, UserFlags.Invisible))
                 return false; //all else cant see any invisible user
             
             return true;
@@ -154,17 +193,17 @@ namespace VectorNet.Server
             if (user == console) return true; //console can do all
             if (targetUser == console) return false; //no one can do anything to console
 
-            if (targetUser.Flags == UserFlags.Admin) return false; //this level and below cant touch admins
-            if (user.Flags == UserFlags.Admin) return true; //admin can do all
+            if (UserHasFlags(targetUser, UserFlags.Admin)) return false; //this level and below cant touch admins
+            if (UserHasFlags(user, UserFlags.Admin)) return true; //admin can do all
 
 
-            if (targetUser.Flags == UserFlags.Moderator) return false; //this level and below cant touch moderators
-            if (user.Flags == UserFlags.Moderator) return true;
+            if (UserHasFlags(targetUser, UserFlags.Moderator)) return false; //this level and below cant touch moderators
+            if (UserHasFlags(user, UserFlags.Moderator)) return true;
 
 
-            if (user.Flags == UserFlags.Operator)
+            if (UserHasFlags(user, UserFlags.Operator))
             {
-                if (targetUser.Flags == UserFlags.Operator && user.Channel == targetUser.Channel)
+                if (UserHasFlags(targetUser, UserFlags.Operator) && user.Channel == targetUser.Channel)
                     return false; //operator cant touch operator in same channel
                 return true;
             }
