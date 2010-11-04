@@ -38,10 +38,17 @@ namespace VectorNet.Server
 
         protected void AttemptToCloseChannel(Channel channel)
         {
-            if (channel.UserCount == 0
-                && channel != Channel_Main
-                && channel != Channel_Void)
-                Channels.Remove(channel);
+            if (channel.UserCount == 0)
+            {
+                if (channel == Channel_Main || channel == Channel_Void)
+                {
+                    channel.BannedIPs.Clear();
+                    channel.BannedUsers.Clear();
+                    channel.Owner = null;
+                }
+                else
+                    Channels.Remove(channel);
+            }
 
         }
 
