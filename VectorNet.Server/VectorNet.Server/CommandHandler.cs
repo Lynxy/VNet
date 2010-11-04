@@ -22,6 +22,11 @@ namespace VectorNet.Server
                     user.Flags |= UserFlags.Admin;
                     SendServerInfo(user, "You have become an admin.");
                     break;
+
+                case "stats":
+                    SendServerInfo(user, "There are currently " + Channels.Count + " channels with " + Users.Count + " users total on VectorNet.");
+                    break;
+
                 case "users":
                     SendList(user, ListType.UsersOnServer);
                     break;
@@ -50,8 +55,6 @@ namespace VectorNet.Server
                         {
                             if (GetWhisper != string.Empty)
                             {
-                                System.Windows.Forms.MessageBox.Show("Sending to " + GetToWhisper + ": " + GetWhisper);
-
                                 SendUserWhisperTo(user, toUser, GetWhisper);
                                 SendUserWhisperFrom(toUser, user, GetWhisper);
                             }
@@ -154,6 +157,7 @@ namespace VectorNet.Server
                     break;
 
                 case "op":
+                case "resign":
                     if (RequireOperator(user) == false) return;
                     if ((targetUser = ExtractUserFromParameterOne(user, ref aryCmd, "You must specify a user to promote to Operator.")) == null) return;
                     if (RequireModerationRights(user, targetUser) == false) return;
