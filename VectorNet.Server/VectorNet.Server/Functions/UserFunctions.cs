@@ -117,6 +117,9 @@ namespace VectorNet.Server
 
         protected bool CanUserSeeUser(User user, User targetUser)
         {
+            if (targetUser == null)
+                return false; //cant see people who arent Users!
+
             if (user == console)
                 return true; //console can see all
             if (targetUser == console)
@@ -130,7 +133,7 @@ namespace VectorNet.Server
 
             if (targetUser.Flags == UserFlags.Admin && targetUser.Flags == UserFlags.Invisible)
                     return false; //all else cant see invis admin
-
+            
             if (user.Flags == UserFlags.Moderator)
                 return true; //moderator can see all else
 
@@ -145,9 +148,11 @@ namespace VectorNet.Server
 
         protected bool CanUserModerateUser(User user, User targetUser)
         {
+            if (targetUser == null)
+                return false; //cant moderate people who arent Users!
+
             if (user == console) return true; //console can do all
             if (targetUser == console) return false; //no one can do anything to console
-
 
             if (targetUser.Flags == UserFlags.Admin) return false; //this level and below cant touch admins
             if (user.Flags == UserFlags.Admin) return true; //admin can do all

@@ -74,20 +74,21 @@ namespace VectorNet.Server
                 return Owner;
             }
 
-            public int CountOperators()
-            {
-                int OperCount = 0;
+            //Method currently not used:
+            //public int CountOperators()
+            //{
+            //    int OperCount = 0;
 
-                foreach (User u in _Users)
-                {
-                    if (u.Flags == UserFlags.Admin ||
-                        u.Flags == UserFlags.Moderator ||
-                        u.Flags == UserFlags.Operator)
-                        OperCount += 1;
-                }
+            //    foreach (User u in _Users)
+            //    {
+            //        if (u.Flags == UserFlags.Admin ||
+            //            u.Flags == UserFlags.Moderator ||
+            //            u.Flags == UserFlags.Operator)
+            //            OperCount += 1;
+            //    }
 
-                return OperCount;
-            }
+            //    return OperCount;
+            //}
 
             public List<User> GetCompleteUserList()
             {
