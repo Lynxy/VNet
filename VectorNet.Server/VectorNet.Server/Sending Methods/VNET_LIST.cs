@@ -35,7 +35,7 @@ namespace VectorNet.Server
                         
                     break;
                 case ListType.UsersBannedFromChannel:
-                    List<User> banned = GetUsersBannedFromChannel(user.Channel);
+                    List<User> banned = GetUsersBannedFromChannel(user, user.Channel);
 
                     user.Packet.Clear()
                         .InsertByte((byte)ListType.UsersBannedFromChannel)
@@ -54,7 +54,7 @@ namespace VectorNet.Server
                     Dictionary<User, List<string>> userBannedFrom = new Dictionary<User, List<string>>();
                     foreach (Channel chan in Channels.ToList()) //duplicate to avoid thread conflicts
                     {
-                        foreach (User usr in GetUsersBannedFromChannel(chan))
+                        foreach (User usr in GetUsersBannedFromChannel(user, chan))
                         {
                             if (!userBannedFrom.ContainsKey(usr))
                                 userBannedFrom.Add(usr, new List<string>());
@@ -92,7 +92,11 @@ namespace VectorNet.Server
                         return;
 
                     foreach (User u in users)
-                        u.Packet.InsertStringNT(user.Username)
+                        u.Packet.Clear()
+                            .InsertByte((byte)ListType.UsersFlagsUpdate)
+                            .InsertWord((short)users.Count)
+
+                            .InsertStringNT(user.Username)
                             .InsertStringNT(user.Client)
                             .InsertDWord(user.Ping)
                             .InsertByte((byte)user.Flags)

@@ -83,7 +83,8 @@ namespace LynxVN
         {
             UsersInChannel = 0x01,
             UsersBannedFromChannel = 0x02,
-            UsersOnServer = 0x03
+            UsersOnServer = 0x03,
+            UsersFlagsUpdate = 0x04
         }
     }
 }

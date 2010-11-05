@@ -29,6 +29,11 @@ namespace VectorNet.Server
                 c.Name.ToLower() == channel.ToLower());
             if (ret == null && allowCreation)
             {
+                if (channel == "*")
+                {
+                    SendServerError(user, "You cannot join channel * as it is a special channel.");
+                    return null;
+                }
                 ret = new Channel(channel);
                 ret.Owner = user;
                 Channels.Add(ret);
@@ -38,10 +43,17 @@ namespace VectorNet.Server
 
         protected void AttemptToCloseChannel(Channel channel)
         {
-            if (channel.UserCount == 0
-                && channel != Channel_Main
-                && channel != Channel_Void)
-                Channels.Remove(channel);
+            if (channel.UserCount == 0)
+            {
+                if (channel == Channel_Main || channel == Channel_Void)
+                {
+                    channel.BannedIPs.Clear();
+                    channel.BannedUsers.Clear();
+                    channel.Owner = null;
+                }
+                else
+                    Channels.Remove(channel);
+            }
 
         }
 
