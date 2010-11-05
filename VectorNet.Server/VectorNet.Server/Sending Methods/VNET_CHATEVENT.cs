@@ -113,9 +113,9 @@ namespace VectorNet.Server
         {
             user.Packet.Clear()
                 .InsertByte((byte)ChatEventType.ServerInfo)
-                .InsertDWord(0)
-                .InsertByte(0x05) //you joined channel
-                .InsertStringNT("")
+                .InsertDWord(0x05)//you joined channel
+                .InsertByte((byte)user.Channel.Flags) 
+                .InsertStringNT(user.Channel.Owner.Username)
                 .InsertStringNT(user.Channel.Name)
                 .Send(VNET_CHATEVENT);
         }

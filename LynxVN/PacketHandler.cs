@@ -86,16 +86,16 @@ namespace LynxVN
                         }
                         else if (id == (byte)ChatEventType.ServerInfo)
                         {
-                            if (flags == 0x01) //error
+                            if (ping == 0x01) //error
                                 AddChat(ChatColors.ServerError, "[VNET] " + text);
-                            else if (flags == 0x02) //info
+                            else if (ping == 0x02) //info
                                 AddChat(ChatColors.ServerInfo, "[VNET] " + text);
-                            else if (flags == 0x03) //acct-message
+                            else if (ping == 0x03) //acct-message
                                 AddChat(ChatColors.ServerError, "[VNET] " + text);
-                            else if (flags == 0x04) //broadcast
+                            else if (ping == 0x04) //broadcast
                                 AddChat(ChatColors.UsernameBroadcast, "<" + username + "> " + text);
-                            else if (flags == 0x05) //joined channel
-                                AddChat(ChatColors.UserJoinedChannel, "-- You joined channel ", ChatColors.UserJoinedChannel_Channel, text, ChatColors.UserJoinedChannel, " --");
+                            else if (ping == 0x05) //joined channel
+                                AddChat(ChatColors.UserJoinedChannel, "-- You joined channel ", ChatColors.UserJoinedChannel_Channel, text, ChatColors.UserJoinedChannel, " [0x" + flags.ToString("X") + "]--");
                         }
                         else if (id == (byte)ChatEventType.UserJoinedChannel)
                         {
