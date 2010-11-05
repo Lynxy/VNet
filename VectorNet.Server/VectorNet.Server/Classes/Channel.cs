@@ -45,6 +45,7 @@ namespace VectorNet.Server
             public List<string> BannedIPs { get { return _BannedIPs; } set { _BannedIPs = value; } }
             public List<string> BannedUsers { get { return _BannedUsers; } set { _BannedUsers = value; } }
             public int UserCount { get { return _Users.Count; } }
+            public DateTime OwnerLeft { get; set; }
 
             public void AddUser(User user)
             {
@@ -54,7 +55,9 @@ namespace VectorNet.Server
                     Owner = user;
                 user.Channel = this;
                 if (user == Owner)
+                {
                     user.Flags |= UserFlags.Operator;
+                }
             }
 
             public void RemoveUser(User user)
@@ -62,6 +65,8 @@ namespace VectorNet.Server
                 if (_Users.Contains(user))
                     _Users.Remove(user);
                 user.Flags ^= UserFlags.Operator;
+                if (Owner == user)
+                    OwnerLeft = DateTime.Now;
             }
 
             public User PromoteNewOwner()

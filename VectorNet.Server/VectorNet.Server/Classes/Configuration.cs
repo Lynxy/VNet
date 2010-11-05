@@ -22,6 +22,7 @@ namespace VectorNet.Server
             protected string _DatabaseFilename = "vnet.sqlite";
             protected string _MainChannel = "Main";
             protected string _VoidChannel = "The Void";
+            protected int _ChannelOwnerTimeout = 15;
             protected string _HostedBy = "";
             protected string _MOTD = "";
             protected int _UsernameMinLength = 2;
@@ -44,6 +45,7 @@ namespace VectorNet.Server
             public string DatabaseFilename { get { return _DatabaseFilename; } set { _DatabaseFilename = value; } }
             public string MainChannel { get { return _MainChannel; } set { _MainChannel = value; } }
             public string VoidChannel { get { return _VoidChannel; } set { _VoidChannel = value; } }
+            public int ChannelOwnerTimeout { get { return _ChannelOwnerTimeout; } set { _ChannelOwnerTimeout = value; } }
             public string HostedBy { get { return _HostedBy; } set { _HostedBy = value; } }
             public string MOTD { get { return _MOTD; } set { _MOTD = value; } }
             public int UsernameMinLength { get { return _UsernameMinLength; } set { _UsernameMinLength = value; } }

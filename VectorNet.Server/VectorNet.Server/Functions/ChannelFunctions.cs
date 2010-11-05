@@ -90,6 +90,15 @@ namespace VectorNet.Server
                     SendServerInfo(user, message);
         }
 
+        protected User PromoteNewUserToOwner(Channel chan)
+        {
+            User oldOwner = chan.Owner;
+            User user = chan.PromoteNewOwner();
+            SendList(user, ListType.UsersFlagsUpdate);
+            SendServerInfoToChannel(chan, user.Username + " has been made the new channel owner due to previous owner " + oldOwner.Username + " being gone too long.");
+            return user;
+        }
+
         protected void BanUserByUsername(User user, User targetUser, Channel fromChannel)
         {
             if (!fromChannel.BannedUsers.Contains(targetUser.Username))

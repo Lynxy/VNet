@@ -23,8 +23,7 @@ namespace VectorNet.Server
             List<Channel> chans = Channels.Where(c => c.Owner == user).ToList();
             foreach (Channel chan in chans)
             {
-                User newOwner = chan.PromoteNewOwner();
-                SendList(newOwner, ListType.UsersFlagsUpdate);
+                PromoteNewUserToOwner(chan);
             }
 
             user.SendBufferNow();

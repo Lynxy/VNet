@@ -9,6 +9,7 @@
   <DatabaseFilename>vnet.sqlite</DatabaseFilename>
   <MainChannel>Main</MainChannel>
   <VoidChannel>The Void</VoidChannel>
+  <ChannelOwnerTimeout>15</ChannelOwnerTimeout>
   <HostedBy />
   <MOTD />
   <UsernameMinLength>2</UsernameMinLength>
