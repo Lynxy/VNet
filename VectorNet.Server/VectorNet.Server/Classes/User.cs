@@ -88,6 +88,10 @@ namespace VectorNet.Server
             public string Client { get; set; }
             public UserFlags Flags { get; set; }
             public Channel Channel { get; set; }
+
+            // Strictly for queue sharing only
+            public string BattleNetChannel { get; set; }
+
             public int Ping { get; set; }
             public bool IsOnline { get; set; }
             public bool CanSendData { get { return _canSendData; } set { _canSendData = value; } }
