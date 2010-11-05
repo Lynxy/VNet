@@ -86,12 +86,25 @@ namespace VectorNet.Server
             return (user.Flags & flags) == flags;
         }
 
+        protected bool UserIsStaff(User user)
+        {
+            return (UserHasFlags(user, UserFlags.Admin) || UserHasFlags(user, UserFlags.Moderator));
+        }
+
         protected void JoinUserToChannel(User user, Channel channel)
         {
             if (channel.IsUserBanned(user))
             {
                 SendServerError(user, "You are banned from that channel.");
                 return;
+            }
+            if (channel == Channel_Admin)
+            {
+                if (UserIsStaff(user) == false)
+                {
+                    SendServerError(user, "Only staff can enter that channel.");
+                    return;
+                }
             }
 
             ConsoleSendUserLeftChannel(user);
@@ -104,6 +117,11 @@ namespace VectorNet.Server
             SendUserJoinedChannel(user);
             SendJoinedChannelSuccessfully(user);
             SendList(user, ListType.UsersInChannel);
+
+            if (ChannelHasFlags(channel, ChannelFlags.Administrative))
+                SendServerInfo(user, "Only Moderators and Admin can hear you in this channel.");
+            else if (ChannelHasFlags(channel, ChannelFlags.Silent))
+                SendServerInfo(user, "This channel does not have any chat privileges.");
         }
 
         protected void RemoveUserFromChannel(User user)

@@ -45,6 +45,11 @@ namespace VectorNet.Server
             return ret;
         }
 
+        protected bool ChannelHasFlags(Channel chan, ChannelFlags flags)
+        {
+            return (chan.Flags & flags) == flags;
+        }
+
         protected void AttemptToCloseChannel(Channel channel)
         {
             if (channel.UserCount == 0)

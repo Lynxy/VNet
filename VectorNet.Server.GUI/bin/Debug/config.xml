@@ -8,6 +8,7 @@
   <ClientCloseWait>2000</ClientCloseWait>
   <DatabaseFilename>vnet.sqlite</DatabaseFilename>
   <MainChannel>Main</MainChannel>
+  <AdminChannel>Backstage</AdminChannel>
   <VoidChannel>The Void</VoidChannel>
   <ChannelOwnerTimeout>15</ChannelOwnerTimeout>
   <HostedBy />

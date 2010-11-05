@@ -23,8 +23,19 @@ namespace VectorNet.Server
                 HandleCommand(user, text.Substring(1));
             else
             {
+                Channel chan = user.Channel;
                 ConsoleSendUserTalk(user, text);
-                SendUserTalk(user, text);
+                if (ChannelHasFlags(chan, ChannelFlags.Administrative) == true)
+                {
+                    foreach (User u in GetUsersInChannel(chan))
+                        if (UserIsStaff(u))
+                            SendUserTalkSingle(user, u, text);
+                }
+                else
+                    SendUserTalk(user, text); //send it always incase invis users
+
+                if (GetUsersInChannel(user, chan, true).Count == 0)
+                    SendServerInfo(user, "No one hears you.");
             }
         }
     }

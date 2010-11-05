@@ -40,7 +40,7 @@ namespace VectorNet.Server
 
                     foreach (User cu in GetUsersInChannel(user.Channel))
                     {
-                        if (UserHasFlags(cu, UserFlags.Admin) || UserHasFlags(cu, UserFlags.Moderator))
+                        if (UserIsStaff(cu))
                             SendList(cu, ListType.UsersFlagsUpdate);
                         else
                             SendUserLeftChannelSingle(cu, user);
@@ -61,7 +61,7 @@ namespace VectorNet.Server
                     SendServerInfo(user, "You have become visible.");
 
                     foreach(User cu in GetUsersInChannel(user.Channel))
-                        if (UserHasFlags(cu, UserFlags.Admin) || UserHasFlags(cu, UserFlags.Moderator))
+                        if (UserIsStaff(cu))
                             SendList(cu, ListType.UsersFlagsUpdate);
                         else
                             SendUserJoinedChannelSingle(cu, user);
@@ -265,7 +265,7 @@ namespace VectorNet.Server
             Channel targetChan = user.Channel;
             if (username.Contains('*'))
             {
-                if (!UserHasFlags(user, UserFlags.Admin) && !UserHasFlags(user, UserFlags.Moderator))
+                if (UserIsStaff(user) == false)
                 {
                     SendServerError(user, "You do not have permission to use the * flag in usernames.");
                     return null;
@@ -273,7 +273,7 @@ namespace VectorNet.Server
             }
             if (username.Contains('@'))
             {
-                if (!UserHasFlags(user, UserFlags.Admin) && !UserHasFlags(user, UserFlags.Moderator))
+                if (UserIsStaff(user) == false)
                 {
                     SendServerError(user, "You do not have permission to use the @ flag in usernames.");
                     return null;
