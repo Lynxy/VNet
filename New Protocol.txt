@@ -90,14 +90,14 @@ VNET_CHATEVENT (0x03) Server -> Client
 			Text: The name of their product
 		0x03: ID_USERTALK
 		0x04: ID_USEREMOTE
-		0x05: ID_SERVERINFO (Flag contains server message ID)
-			  -Username only exists on ID 0x04, in ID 0x05
-
+		0x05: ID_SERVERINFO (Ping field contains server message ID)
 			0x01: Server error messages
 			0x02: Server info messages
 			0x03: Account-related messages
 			0x04: Broadcast messages (Username contains name of broadcaster)
-			0x05: Successful channel join (Text contains proper cased channel name)
+			0x05: Successful channel join
+				- Text contains proper cased channel name
+				- Flags contains channel's flags
 		0x06: ID_USERJOINCHANNEL
 			Text:	Contains the name of their client
 		0x07: ID_USERLEAVECHANNEL
