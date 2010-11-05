@@ -15,7 +15,6 @@ namespace VectorNet.Server
             aryCmd = cmdRest.Split(' ');
             List<string> msgs;
             Channel channel;
-            User targetUser = null;
             List<User> targetUsers = null;
 
             switch (cmd)
@@ -89,20 +88,15 @@ namespace VectorNet.Server
 
                 case "w":
                 case "whisper":
-                    //if ((targetUser = ExtractUserFromText(user, ref cmdRest, "You must specify a user to whisper.")) == null) return;
+                    if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to whisper.")) == null) return;
                     if (RequireParameter(user, ref cmdRest, "What do you want to say?") == false) return;
-
-                    targetUser = GetUserByName(aryCmd[0]);
-
-                    if (targetUser != null)
+                    foreach (User targ in targetUsers)
                     {
-                        SendUserWhisperTo(user, targetUser, cmdRest);
-                        SendUserWhisperFrom(targetUser, user, cmdRest);
+                        SendUserWhisperTo(user, targ, cmdRest);
+                        SendUserWhisperFrom(targ, user, cmdRest);
                     }
-                    else
-                        SendServerError(user, "That user is not logged on.");
-                       
                     break;
+
                 case "me":
                 case "em":
                 case "emote":
@@ -121,7 +115,7 @@ namespace VectorNet.Server
                 case "who":
                     if ((channel = ExtractChannelFromText(user, ref cmdRest, false, "You must specify a channel.")) == null) return;
 
-                    List<User> u = GetUsersInChannel(channel);
+                    List<User> u = GetUsersInChannel(user, channel, false);
                     if (u.Count == 0)
                     { //channel may comtain invisible users
                         SendServerError(user, "That channel doesn't exist.");
@@ -277,6 +271,14 @@ namespace VectorNet.Server
             str = (str2.Length == 1 ? "" : str2[1]);
 
             Channel targetChan = user.Channel;
+            if (username.Contains('*'))
+            {
+                if (!UserHasFlags(user, UserFlags.Admin) && !UserHasFlags(user, UserFlags.Moderator))
+                {
+                    SendServerError(user, "You do not have permission to use the * flag in usernames.");
+                    return null;
+                }
+            }
             if (username.Contains('@'))
             {
                 if (!UserHasFlags(user, UserFlags.Admin) && !UserHasFlags(user, UserFlags.Moderator))

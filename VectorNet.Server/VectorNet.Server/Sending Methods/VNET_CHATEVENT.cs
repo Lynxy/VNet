@@ -162,6 +162,9 @@ namespace VectorNet.Server
 
         protected void SendUserLeftChannelSingle(User user, User userLeft)
         {
+            if (user == userLeft)
+                return;
+
             user.Packet.Clear()
                 .InsertByte((byte)ChatEventType.UserLeftChannel)
                 .InsertDWord(userLeft.Ping)
