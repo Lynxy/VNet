@@ -123,7 +123,7 @@ namespace VectorNet.Server
         protected void SendUserJoinedChannel(User user)
         {
             foreach (User u in GetUsersInChannel(user.Channel))
-                if (u != user)
+                if (u != user && CanUserSeeUser(u, user))
                     u.Packet.Clear()
                         .InsertByte((byte)ChatEventType.UserJoinedChannel)
                         .InsertDWord(user.Ping)
@@ -133,10 +133,24 @@ namespace VectorNet.Server
                         .Send(VNET_CHATEVENT);
         }
 
+        protected void SendUserJoinedChannelSingle(User user, User userJoined)
+        {
+            if (user == userJoined)
+                return;
+
+            user.Packet.Clear()
+                .InsertByte((byte)ChatEventType.UserJoinedChannel)
+                .InsertDWord(userJoined.Ping)
+                .InsertByte((byte)userJoined.Flags)
+                .InsertStringNT(userJoined.Username)
+                .InsertStringNT(userJoined.Client)
+                .Send(VNET_CHATEVENT);
+        }
+
         protected void SendUserLeftChannel(User user)
         {
             foreach (User u in GetUsersInChannel(user.Channel))
-                if (u != user)
+                if (u != user && CanUserSeeUser(u, user))
                     u.Packet.Clear()
                         .InsertByte((byte)ChatEventType.UserLeftChannel)
                         .InsertDWord(user.Ping)
@@ -144,6 +158,17 @@ namespace VectorNet.Server
                         .InsertStringNT(user.Username)
                         .InsertStringNT(user.Client)
                         .Send(VNET_CHATEVENT);
+        }
+
+        protected void SendUserLeftChannelSingle(User user, User userLeft)
+        {
+            user.Packet.Clear()
+                .InsertByte((byte)ChatEventType.UserLeftChannel)
+                .InsertDWord(userLeft.Ping)
+                .InsertByte((byte)userLeft.Flags)
+                .InsertStringNT(userLeft.Username)
+                .InsertStringNT(userLeft.Client)
+                .Send(VNET_CHATEVENT);
         }
 
         protected void SendUserWhisperTo(User userFrom, User userTo, string message)
