@@ -76,8 +76,8 @@ namespace VectorNet.Server
         {
             user.Packet.Clear()
                 .InsertByte((byte)ChatEventType.ServerInfo)
-                .InsertDWord(0)
-                .InsertByte(0x01) //error
+                .InsertDWord(0x01) //error
+                .InsertByte(0) 
                 .InsertStringNT("")
                 .InsertStringNT(message)
                 .Send(VNET_CHATEVENT);
@@ -87,8 +87,8 @@ namespace VectorNet.Server
         {
             user.Packet.Clear()
                 .InsertByte((byte)ChatEventType.ServerInfo)
-                .InsertDWord(0)
-                .InsertByte(0x02) //info
+                .InsertDWord(0x02) //info
+                .InsertByte(0) 
                 .InsertStringNT("")
                 .InsertStringNT(message)
                 .Send(VNET_CHATEVENT);
@@ -98,8 +98,8 @@ namespace VectorNet.Server
         {
             user.Packet.Clear()
                 .InsertByte((byte)ChatEventType.ServerInfo)
-                .InsertDWord(0)
-                .InsertByte(0x03) //account info
+                .InsertDWord(0x03) //account info
+                .InsertByte(0) 
                 .InsertStringNT("")
                 .InsertStringNT(message)
                 .Send(VNET_CHATEVENT);
@@ -110,8 +110,8 @@ namespace VectorNet.Server
             foreach (User u in GetAllOnlineUsers()) 
                 u.Packet.Clear()
                     .InsertByte((byte)ChatEventType.ServerInfo)
-                    .InsertDWord(userBroadcasting.Ping)
-                    .InsertByte(0x04) //broadcast
+                    .InsertDWord(0x04) //broadcast
+                    .InsertByte(0) 
                     .InsertStringNT(userBroadcasting.Username)
                     .InsertStringNT(message)
                     .Send(VNET_CHATEVENT);
