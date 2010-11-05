@@ -12,14 +12,18 @@ namespace VectorNet.Server
         //Channel Functions
         //This class is for methods that deal with a single channel, not multiple channels
         protected Channel Channel_Main;
+        protected Channel Channel_Admin;
         protected Channel Channel_Void;
 
         protected void CreateDefaultChannels()
         {
-            Channel_Main = new Channel(Config.MainChannel);
+            Channel_Main = new Channel(Config.MainChannel,ChannelFlags.Public, false);
             Channels.Add(Channel_Main);
 
-            Channel_Void = new Channel(Config.VoidChannel);
+            Channel_Admin = new Channel(Config.AdminChannel, ChannelFlags.Administrative, false);
+            Channels.Add(Channel_Admin);
+
+            Channel_Void = new Channel(Config.VoidChannel, ChannelFlags.Public | ChannelFlags.Silent, false);
             Channels.Add(Channel_Void);
         }
 
@@ -45,7 +49,7 @@ namespace VectorNet.Server
         {
             if (channel.UserCount == 0)
             {
-                if (channel == Channel_Main || channel == Channel_Void)
+                if (channel.Closeable == false)
                 {
                     channel.BannedIPs.Clear();
                     channel.BannedUsers.Clear();

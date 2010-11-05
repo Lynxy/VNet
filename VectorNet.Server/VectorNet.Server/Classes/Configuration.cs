@@ -21,6 +21,7 @@ namespace VectorNet.Server
             protected int _ClientCloseWait = 2000;
             protected string _DatabaseFilename = "vnet.sqlite";
             protected string _MainChannel = "Main";
+            protected string _AdminChannel = "Backstage";
             protected string _VoidChannel = "The Void";
             protected int _ChannelOwnerTimeout = 15;
             protected string _HostedBy = "";
@@ -44,6 +45,7 @@ namespace VectorNet.Server
             public int ClientCloseWait { get { return _ClientCloseWait; } set { _ClientCloseWait = value; } }
             public string DatabaseFilename { get { return _DatabaseFilename; } set { _DatabaseFilename = value; } }
             public string MainChannel { get { return _MainChannel; } set { _MainChannel = value; } }
+            public string AdminChannel { get { return _AdminChannel; } set { _AdminChannel = value; } }
             public string VoidChannel { get { return _VoidChannel; } set { _VoidChannel = value; } }
             public int ChannelOwnerTimeout { get { return _ChannelOwnerTimeout; } set { _ChannelOwnerTimeout = value; } }
             public string HostedBy { get { return _HostedBy; } set { _HostedBy = value; } }
