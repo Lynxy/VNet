@@ -11,19 +11,21 @@ namespace VectorNet.Server
         {
             protected ChannelFlags _Flags;
             protected string _Name;
+            protected bool _Closeable;
             protected List<User> _Users;
             protected List<string> _BannedIPs;
             protected List<string> _BannedUsers;
 
             public Channel(string name)
-                : this(name, ChannelFlags.Normal)
+                : this(name, ChannelFlags.Normal, true)
             {
             }
 
-            public Channel(string name, ChannelFlags flags)
+            public Channel(string name, ChannelFlags flags, bool closeable)
             {
                 _Name = name;
                 _Flags = flags;
+                _Closeable = closeable;
                 _Users = new List<User>();
                 _BannedIPs = new List<string>();
                 _BannedUsers = new List<string>();
@@ -39,6 +41,12 @@ namespace VectorNet.Server
             {
                 get { return _Flags; }
                 set { _Flags = value; }
+            }
+
+            public bool Closeable
+            {
+                get { return _Closeable; }
+                set { _Closeable = value; }
             }
 
             public User Owner { get; set; }
