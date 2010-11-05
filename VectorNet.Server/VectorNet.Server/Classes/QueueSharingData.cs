@@ -7,7 +7,7 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        public class QueueSharingData
+        protected class QueueSharingData
         {
             protected List<User> QueueUsers;
             protected string _channel;
