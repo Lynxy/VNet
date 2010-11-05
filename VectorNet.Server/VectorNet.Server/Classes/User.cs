@@ -16,6 +16,7 @@ namespace VectorNet.Server
             protected TcpClientWrapper socket;
             protected Packet packet;
             protected PacketBufferer bufferer;
+            protected UserFlags _Flags;
             protected bool _isConsole = false;
             protected bool _canSendData = true;
 
@@ -86,7 +87,24 @@ namespace VectorNet.Server
             public string IPAddress { get { return (socket == null ? null : ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString()); } }
             public string Username { get; set; }
             public string Client { get; set; }
-            public UserFlags Flags { get; set; }
+            public UserFlags Flags
+            {
+                get { return _Flags; }
+                set
+                {
+                    _Flags = value;
+                    if ((_Flags & UserFlags.Admin) == UserFlags.Admin)
+                    {
+                        _Flags ^= UserFlags.Moderator;
+                        _Flags ^= UserFlags.Operator;
+                    }
+                    else if ((_Flags & UserFlags.Moderator) == UserFlags.Moderator)
+                    {
+                        _Flags ^= UserFlags.Operator;
+                    }
+                        
+                }
+            }
             public Channel Channel { get; set; }
 
             // Strictly for queue sharing only
