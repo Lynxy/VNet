@@ -86,6 +86,12 @@ namespace VectorNet.Server
             return (user.Flags & flags) == flags;
         }
 
+        protected void RemoveFlagsFromUser(User user, UserFlags flags)
+        {
+            if (UserHasFlags(user, flags))
+                user.Flags ^= flags;
+        }
+
         protected bool UserIsStaff(User user)
         {
             return (UserHasFlags(user, UserFlags.Admin) || UserHasFlags(user, UserFlags.Moderator));

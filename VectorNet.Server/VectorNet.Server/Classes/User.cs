@@ -95,12 +95,15 @@ namespace VectorNet.Server
                     _Flags = value;
                     if ((_Flags & UserFlags.Admin) == UserFlags.Admin)
                     {
-                        _Flags ^= UserFlags.Moderator;
-                        _Flags ^= UserFlags.Operator;
+                        if ((_Flags & UserFlags.Moderator) == UserFlags.Moderator)
+                            _Flags ^= UserFlags.Moderator;
+                        if ((_Flags & UserFlags.Operator) == UserFlags.Operator)
+                            _Flags ^= UserFlags.Operator;
                     }
                     else if ((_Flags & UserFlags.Moderator) == UserFlags.Moderator)
                     {
-                        _Flags ^= UserFlags.Operator;
+                        if ((_Flags & UserFlags.Operator) == UserFlags.Operator)
+                            _Flags ^= UserFlags.Operator;
                     }
                         
                 }

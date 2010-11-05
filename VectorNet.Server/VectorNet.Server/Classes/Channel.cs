@@ -79,7 +79,8 @@ namespace VectorNet.Server
             {
                 if (_Users.Contains(user))
                     _Users.Remove(user);
-                user.Flags ^= UserFlags.Operator;
+                if ((user.Flags & UserFlags.Operator) == UserFlags.Operator)
+                    user.Flags ^= UserFlags.Operator;
                 if (Owner == user)
                     OwnerLeft = DateTime.Now;
             }

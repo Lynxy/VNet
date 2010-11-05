@@ -57,7 +57,7 @@ namespace VectorNet.Server
                         return;
                     }
 
-                    user.Flags ^= UserFlags.Invisible;
+                    RemoveFlagsFromUser(user, UserFlags.Invisible);
                     SendServerInfo(user, "You have become visible.");
 
                     foreach(User cu in GetUsersInChannel(user.Channel))
@@ -222,7 +222,7 @@ namespace VectorNet.Server
 
                             if (UserHasFlags(user, UserFlags.Operator))
                             { //if (user.Channel.CountOperators() == 1) //not used "There is more than one operator in the channel."
-                                user.Flags ^= UserFlags.Operator;
+                                RemoveFlagsFromUser(user, UserFlags.Operator);
                                 targ.Flags |= UserFlags.Operator;
 
                                 if (user.Channel.Owner == user)
@@ -249,7 +249,7 @@ namespace VectorNet.Server
 
                 case "resign":
                     if (RequireOperator(user) == false) return;
-                    user.Flags ^= UserFlags.Operator;
+                    RemoveFlagsFromUser(user, UserFlags.Operator);
                     SendServerInfoToChannel(user.Channel, user.Username + " has resigned from Operator status.", user, "You have resigned from operator status.");
                     SendList(user, ListType.UsersFlagsUpdate);
                     break;

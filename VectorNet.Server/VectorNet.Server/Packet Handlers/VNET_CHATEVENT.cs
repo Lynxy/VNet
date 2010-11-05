@@ -24,8 +24,17 @@ namespace VectorNet.Server
             else
             {
                 Channel chan = user.Channel;
+                int userCt = GetUsersInChannel(user, chan, true).Count;
                 ConsoleSendUserTalk(user, text);
-                if (ChannelHasFlags(chan, ChannelFlags.Administrative) == true)
+
+                if (UserIsStaff(user))
+                    SendUserTalk(user, text); //when staff talk, all can always hear
+                else
+                    if (ChannelHasFlags(chan, ChannelFlags.Silent) == true)
+                        userCt = 0;
+
+                if(ChannelHasFlags(chan, ChannelFlags.Administrative) == true
+                    || ChannelHasFlags(chan, ChannelFlags.Silent) == true)
                 {
                     foreach (User u in GetUsersInChannel(chan))
                         if (UserIsStaff(u))
@@ -34,7 +43,7 @@ namespace VectorNet.Server
                 else
                     SendUserTalk(user, text); //send it always incase invis users
 
-                if (GetUsersInChannel(user, chan, true).Count == 0)
+                if (userCt == 0)
                     SendServerInfo(user, "No one hears you.");
             }
         }
