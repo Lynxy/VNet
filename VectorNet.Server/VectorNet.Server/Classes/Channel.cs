@@ -17,15 +17,22 @@ namespace VectorNet.Server
             protected List<string> _BannedUsers;
 
             public Channel(string name)
-                : this(name, ChannelFlags.Normal, true)
+                : this(name, ChannelFlags.Normal, true, null)
             {
             }
 
-            public Channel(string name, ChannelFlags flags, bool closeable)
+            public Channel(string name, ChannelFlags flags)
+                : this(name, flags, true, null)
+            {
+            }
+
+            public Channel(string name, ChannelFlags flags, bool closeable, User owner)
             {
                 _Name = name;
                 _Flags = flags;
                 _Closeable = closeable;
+                if (closeable)
+                    Owner = owner;
                 _Users = new List<User>();
                 _BannedIPs = new List<string>();
                 _BannedUsers = new List<string>();

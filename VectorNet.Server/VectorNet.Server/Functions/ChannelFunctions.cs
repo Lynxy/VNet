@@ -17,13 +17,13 @@ namespace VectorNet.Server
 
         protected void CreateDefaultChannels()
         {
-            Channel_Main = new Channel(Config.MainChannel,ChannelFlags.Public, false);
+            Channel_Main = new Channel(Config.MainChannel, ChannelFlags.Public, false, console);
             Channels.Add(Channel_Main);
 
-            Channel_Admin = new Channel(Config.AdminChannel, ChannelFlags.Administrative, false);
+            Channel_Admin = new Channel(Config.AdminChannel, ChannelFlags.Administrative, false, console);
             Channels.Add(Channel_Admin);
 
-            Channel_Void = new Channel(Config.VoidChannel, ChannelFlags.Public | ChannelFlags.Silent, false);
+            Channel_Void = new Channel(Config.VoidChannel, ChannelFlags.Public | ChannelFlags.Silent, false, console);
             Channels.Add(Channel_Void);
         }
 

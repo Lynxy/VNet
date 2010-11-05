@@ -13,6 +13,7 @@ namespace VectorNet.Server
         protected void timerCheck_Elapsed(object sender, ElapsedEventArgs e)
         {
             IEnumerable<Channel> chans = Channels.Where(c => c.Owner != null
+                && c.Owner != console
                 && DateTime.Now.Subtract(c.OwnerLeft).Minutes >= Config.ChannelOwnerTimeout
                 && c.Owner.Channel != c );
             foreach (Channel chan in chans)
