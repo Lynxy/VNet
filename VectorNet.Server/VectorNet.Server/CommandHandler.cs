@@ -173,24 +173,23 @@ namespace VectorNet.Server
                     if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to unban.")) == null) return;
                     foreach (User targ in targetUsers)
                     {
-                        if (RequireModerationRights(user, targ) == false) goto EndLoop_Unban;
-
-                        if (cmd == "unban")
+                        if (RequireModerationRights(user, targ))
                         {
-                            if (!user.Channel.IsUserBanned(targ))
-                                SendServerError(user, "That user is not banned from this channel.");
+                            if (cmd == "unban")
+                            {
+                                if (!user.Channel.IsUserBanned(targ))
+                                    SendServerError(user, "That user is not banned from this channel.");
+                                else
+                                    UnbanUser(user, targ, user.Channel, false);
+                            }
                             else
-                                UnbanUser(user, targ, user.Channel, false);
+                            {
+                                if (!user.Channel.IsUserBanned(targ))
+                                    SendServerError(user, "That user is not IP banned.");
+                                else
+                                    UnbanUserByIP(user, targ, user.Channel);
+                            }
                         }
-                        else
-                        {
-                            if (!user.Channel.IsUserBanned(targ))
-                                SendServerError(user, "That user is not IP banned.");
-                            else
-                                UnbanUserByIP(user, targ, user.Channel);
-                        }
-                    EndLoop_Unban:
-                        ;
                     }
 
                     break;
@@ -200,39 +199,37 @@ namespace VectorNet.Server
                     if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to promote to Operator.")) == null) return;
                     foreach (User targ in targetUsers)
                     {
-                        if (RequireModerationRights(user, targ) == false) goto EndLoop_Op;
-
-                        if (user.Channel != targ.Channel)
+                        if (RequireModerationRights(user, targ))
                         {
-                            SendServerError(user, "That user is not in the same channel as you.");
-                            goto EndLoop_Op;
+                            if (user.Channel != targ.Channel)
+                            {
+                                SendServerError(user, "That user is not in the same channel as you.");
+                                continue;
+                            }
+
+                            if (UserHasFlags(user, UserFlags.Operator))
+                            { //if (user.Channel.CountOperators() == 1) //not used "There is more than one operator in the channel."
+                                user.Flags ^= UserFlags.Operator;
+                                targ.Flags |= UserFlags.Operator;
+
+                                if (user.Channel.Owner == user)
+                                    user.Channel.Owner = targ;
+
+                                SendList(user, ListType.UsersFlagsUpdate); //tell channel members to update flags for these people
+                                SendList(targ, ListType.UsersFlagsUpdate);
+                            }
+                            else
+                            {
+                                targ.Flags |= UserFlags.Operator;
+                                SendList(targ, ListType.UsersFlagsUpdate);
+                            }
+
+                            SendServerInfo(user, "You have given up ops to " + targ.Username);
+                            SendServerInfo(targ, "You have been given ops by " + user.Username);
+                            foreach (User cu in GetUsersInChannel(user.Channel))
+                                if (cu != user && cu != targ)
+                                    SendServerInfo(cu, user.Username + " has given Operator to " + targ.Username + ".");
                         }
-
-                        if (UserHasFlags(user, UserFlags.Operator))
-                        { //if (user.Channel.CountOperators() == 1) //not used "There is more than one operator in the channel."
-                            user.Flags ^= UserFlags.Operator;
-                            targ.Flags |= UserFlags.Operator;
-
-                            if (user.Channel.Owner == user)
-                                user.Channel.Owner = targ;
-
-                            SendList(user, ListType.UsersFlagsUpdate); //tell channel members to update flags for these people
-                            SendList(targ, ListType.UsersFlagsUpdate);
-                        }
-                        else
-                        {
-                            targ.Flags |= UserFlags.Operator;
-                            SendList(targ, ListType.UsersFlagsUpdate);
-                        }
-
-                        SendServerInfo(user, "You have given up ops to " + targ.Username);
-                        SendServerInfo(targ, "You have been given ops by " + user.Username);
-                        foreach (User cu in GetUsersInChannel(user.Channel))
-                            if (cu != user && cu != targ)
-                                SendServerInfo(cu, user.Username + " has given Operator to " + targ.Username + ".");
-
-                    EndLoop_Op:
-                        ;
                     }
 
                     break;
