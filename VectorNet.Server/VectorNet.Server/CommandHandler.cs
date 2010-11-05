@@ -189,6 +189,24 @@ namespace VectorNet.Server
 
                     break;
 
+                case "kick":
+                    if (RequireOperator(user) == false) return;
+                    if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to kick.")) == null) return;
+
+                    foreach (User targ in targetUsers)
+                    { 
+                        if (targ != user)
+                            if (RequireModerationRights(user, targ))
+                            {
+                                if (targ.Channel == user.Channel)
+                                    KickUserFromChannel(user, targ, cmdRest);
+                                else
+                                    SendServerError(user, "That user is not present in the channel.");
+                            }
+                    }
+
+                    break;
+
                 case "op":
                     if (RequireOperator(user) == false) return;
                     if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to promote to Operator.")) == null) return;
