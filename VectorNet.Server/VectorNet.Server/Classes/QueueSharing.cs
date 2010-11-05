@@ -9,7 +9,7 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        public class QueueSharing
+        protected class QueueSharing
         {
             protected List<QueueSharingData> QSQueues;
 

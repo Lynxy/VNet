@@ -27,17 +27,45 @@ namespace VectorNet.Server
                     break;
 
                 case "invis":
+                    if (!RequireAdmin(user))
+                        return;
+
+                    if (UserHasFlags(user, UserFlags.Invisible))
+                    {
+                        SendServerError(user, "You are already invisible.");
+                        return;
+                    }
+                        
                     user.Flags |= UserFlags.Invisible;
                     SendServerInfo(user, "You have become invisible.");
-                    //special care must be taken here to make user leave channel to
-                    //those that cant see him, and update flags for those that can
+
+                    foreach (User cu in GetUsersInChannel(user.Channel))
+                    {
+                        if (UserHasFlags(cu, UserFlags.Admin) || UserHasFlags(cu, UserFlags.Moderator))
+                            SendList(cu, ListType.UsersFlagsUpdate);
+                        else
+                            SendUserLeftChannelSingle(cu, user);
+                    }
                     break;
 
                 case "vis":
+                    if (!RequireAdmin(user))
+                        return;
+                    
+                    if (!UserHasFlags(user, UserFlags.Invisible))
+                    {
+                        SendServerError(user, "You are not invisible.");
+                        return;
+                    }
+
                     user.Flags ^= UserFlags.Invisible;
                     SendServerInfo(user, "You have become visible.");
-                    //special care must be taken here to make user leave channel to
-                    //those that cant see him, and update flags for those that can
+
+                    foreach(User cu in GetUsersInChannel(user.Channel))
+                        if (UserHasFlags(cu, UserFlags.Admin) || UserHasFlags(cu, UserFlags.Moderator))
+                            SendList(cu, ListType.UsersFlagsUpdate);
+                        else
+                            SendUserJoinedChannelSingle(cu, user);
                     break;
 
                 case "stats":
@@ -64,9 +92,16 @@ namespace VectorNet.Server
                     //if ((targetUser = ExtractUserFromText(user, ref cmdRest, "You must specify a user to whisper.")) == null) return;
                     if (RequireParameter(user, ref cmdRest, "What do you want to say?") == false) return;
 
-                    SendUserWhisperTo(user, targetUser, cmdRest);
-                    SendUserWhisperFrom(targetUser, user, cmdRest);
+                    targetUser = GetUserByName(aryCmd[0]);
 
+                    if (targetUser != null)
+                    {
+                        SendUserWhisperTo(user, targetUser, cmdRest);
+                        SendUserWhisperFrom(targetUser, user, cmdRest);
+                    }
+                    else
+                        SendServerError(user, "That user is not logged on.");
+                       
                     break;
                 case "me":
                 case "em":
@@ -86,7 +121,7 @@ namespace VectorNet.Server
                 case "who":
                     if ((channel = ExtractChannelFromText(user, ref cmdRest, false, "You must specify a channel.")) == null) return;
 
-                    List<User> u = GetUsersInChannel(user, channel, false);
+                    List<User> u = GetUsersInChannel(channel);
                     if (u.Count == 0)
                     { //channel may comtain invisible users
                         SendServerError(user, "That channel doesn't exist.");
