@@ -41,14 +41,22 @@ namespace VectorNet.Server
         protected void SendUserTalk(User user, string message)
         {
             foreach (User u in GetUsersInChannel(user.Channel))
-                if (u != user)
-                    u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.UserTalk)
-                        .InsertDWord(user.Ping)
-                        .InsertByte((byte)user.Flags)
-                        .InsertStringNT(user.Username)
-                        .InsertStringNT(message)
-                        .Send(VNET_CHATEVENT);
+                SendUserTalkSingle(user, u, message);
+                    
+        }
+
+        protected void SendUserTalkSingle(User user, User targetUser, string message)
+        {
+            if (user == targetUser)
+                return;
+
+            targetUser.Packet.Clear()
+                .InsertByte((byte)ChatEventType.UserTalk)
+                .InsertDWord(user.Ping)
+                .InsertByte((byte)user.Flags)
+                .InsertStringNT(user.Username)
+                .InsertStringNT(message)
+                .Send(VNET_CHATEVENT);
         }
 
         protected void SendUserEmote(User user, string message)
@@ -123,14 +131,8 @@ namespace VectorNet.Server
         protected void SendUserJoinedChannel(User user)
         {
             foreach (User u in GetUsersInChannel(user.Channel))
-                if (u != user && CanUserSeeUser(u, user))
-                    u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.UserJoinedChannel)
-                        .InsertDWord(user.Ping)
-                        .InsertByte((byte)user.Flags)
-                        .InsertStringNT(user.Username)
-                        .InsertStringNT(user.Client)
-                        .Send(VNET_CHATEVENT);
+                if (CanUserSeeUser(u, user))
+                    SendUserJoinedChannelSingle(u, user);
         }
 
         protected void SendUserJoinedChannelSingle(User user, User userJoined)
@@ -150,14 +152,8 @@ namespace VectorNet.Server
         protected void SendUserLeftChannel(User user)
         {
             foreach (User u in GetUsersInChannel(user.Channel))
-                if (u != user && CanUserSeeUser(u, user))
-                    u.Packet.Clear()
-                        .InsertByte((byte)ChatEventType.UserLeftChannel)
-                        .InsertDWord(user.Ping)
-                        .InsertByte((byte)user.Flags)
-                        .InsertStringNT(user.Username)
-                        .InsertStringNT(user.Client)
-                        .Send(VNET_CHATEVENT);
+                if (CanUserSeeUser(u, user))
+                    SendUserLeftChannelSingle(u, user);
         }
 
         protected void SendUserLeftChannelSingle(User user, User userLeft)
