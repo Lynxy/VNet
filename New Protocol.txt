@@ -83,21 +83,22 @@ VNET_CHATEVENT (0x03) Server -> Client
 	STRING   Text
 
     Data:
-	There are several message IDs, to which Username, text, and Flag might change:
+	There are several message IDs, to which Username, text, Ping, and Flag might change
 		0x01: ID_USERJOIN
  			Text: The name of their product
 		0x02: ID_USERLEAVE
 			Text: The name of their product
 		0x03: ID_USERTALK
 		0x04: ID_USEREMOTE
-		0x05: ID_SERVERINFO (Flag contains server message ID)
-			  -Username only exists on ID 0x04, in ID 0x05
-
+		0x05: ID_SERVERINFO (Ping field contains server message ID)
 			0x01: Server error messages
 			0x02: Server info messages
 			0x03: Account-related messages
 			0x04: Broadcast messages (Username contains name of broadcaster)
-			0x05: Successful channel join (Text contains proper cased channel name)
+			0x05: Successful channel join
+				- Username contains name of channel owner
+				- Text contains proper cased channel name
+				- Flags contains channel's flags
 		0x06: ID_USERJOINCHANNEL
 			Text:	Contains the name of their client
 		0x07: ID_USERLEAVECHANNEL
@@ -108,6 +109,14 @@ VNET_CHATEVENT (0x03) Server -> Client
 VNET_APPS (0x04) Client <-> Server
     Data:
 	BYTE     App ID
+	BYTE     App Flag
+	    App flag has the following values:
+		0x00: Client does not support this app
+		0x01: Default flag (send this in all communications)
+		0x02: Denied (User has denied the request)
+		0x03: App quit (send this when you want the other user to quit the app)
+		0xFF: Initial request (when you wish to start an app, send this first)
+
 	STRING   Name of user to send packet to (Server -> Client contains name of sender)
 	VOID     Rest of data
 
