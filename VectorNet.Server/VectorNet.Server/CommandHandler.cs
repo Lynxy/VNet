@@ -78,12 +78,7 @@ namespace VectorNet.Server
                 case "join":
                 case "j":
                     if ((channel = ExtractChannelFromText(user, ref cmdRest, true, "You must specify a channel.")) == null) return;
-                    
-                    if (channel.IsUserBanned(user))
-                        SendServerError(user, "You are banned from that channel.");
-                    else
-                        JoinUserToChannel(user, channel);
-
+                    JoinUserToChannel(user, channel);
                     break;
 
                 case "w":

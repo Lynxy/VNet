@@ -88,6 +88,12 @@ namespace VectorNet.Server
 
         protected void JoinUserToChannel(User user, Channel channel)
         {
+            if (channel.IsUserBanned(user))
+            {
+                SendServerError(user, "You are banned from that channel.");
+                return;
+            }
+
             ConsoleSendUserLeftChannel(user);
 
             RemoveUserFromChannel(user);
