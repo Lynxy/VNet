@@ -99,6 +99,15 @@ namespace VectorNet.Server
             return user;
         }
 
+        protected void KickUserFromChannel(User user, User targetUser, string cmdRest)
+        {
+            SendUserLeftChannel(targetUser);
+            JoinUserToChannel(targetUser, Channel_Void);
+            SendServerInfoToChannel(user.Channel, targetUser.Username + " was kicked from the channel by " + user.Username + (cmdRest != string.Empty ? "(" + cmdRest + ")" : "") + ".",
+                                    user, "You kicked " + targetUser.Username + " from the channel" + (cmdRest != string.Empty ? " (" + cmdRest + ")" : "") + ".");
+            SendServerInfo(targetUser, "You were kicked from the channel by " + user.Username + (cmdRest != string.Empty ? "(" + cmdRest + ")" : "") + ".");
+        }
+
         protected void BanUserByUsername(User user, User targetUser, Channel fromChannel)
         {
             if (!fromChannel.BannedUsers.Contains(targetUser.Username))
