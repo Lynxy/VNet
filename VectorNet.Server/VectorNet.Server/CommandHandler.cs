@@ -363,7 +363,7 @@ namespace VectorNet.Server
 
         protected bool RequireAdmin(User user)
         {
-            if (UserHasFlags(user, UserFlags.Admin))
+            if (UserHasRankOrHigher(user, UserFlags.Admin))
                 return true;
             SendServerError(user, "You must be an Admin to use that command.");
             return false;
@@ -371,8 +371,7 @@ namespace VectorNet.Server
 
         protected bool RequireModerator(User user)
         {
-            if (UserHasFlags(user, UserFlags.Admin)
-                || UserHasFlags(user, UserFlags.Moderator))
+            if (UserHasRankOrHigher(user, UserFlags.Moderator))
                 return true;
             SendServerError(user, "You must be a Moderator or higher to use that command.");
             return false;
@@ -380,9 +379,7 @@ namespace VectorNet.Server
 
         protected bool RequireOperator(User user)
         {
-            if (UserHasFlags(user, UserFlags.Admin)
-                || UserHasFlags(user, UserFlags.Moderator)
-                || UserHasFlags(user, UserFlags.Operator))
+            if (UserHasRankOrHigher(user, UserFlags.Operator))
                 return true;
             SendServerError(user, "You must be an Operator or higher to use that command.");
             return false;

@@ -97,6 +97,17 @@ namespace VectorNet.Server
             return (UserHasFlags(user, UserFlags.Admin) || UserHasFlags(user, UserFlags.Moderator));
         }
 
+        protected bool UserHasRankOrHigher(User user, UserFlags flags)
+        {
+            if (flags == UserFlags.Admin)
+                return UserHasFlags(user, UserFlags.Admin);
+            if (flags == UserFlags.Moderator)
+                return (UserHasFlags(user, UserFlags.Admin) || UserHasFlags(user, UserFlags.Moderator));
+            if (flags == UserFlags.Operator)
+                return (UserHasFlags(user, UserFlags.Admin) || UserHasFlags(user, UserFlags.Moderator) || UserHasFlags(user, UserFlags.Operator));
+            return false;
+        }
+
         protected void JoinUserToChannel(User user, Channel channel)
         {
             if (channel.IsUserBanned(user))
