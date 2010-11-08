@@ -39,7 +39,7 @@ VNET_LOGON (0x01) Server -> Client
     -The response to 0x01
 
     Data:
-	BYTE     Logon result (everything after this byte is included if result is 0x01)
+	BYTE     Logon result (everything after this byte is included if result is 0x00)
 	STRING   Server version string (VectorNet x.xx by Vector)
 	STRING   Hosted by name
 	STRING   Your name (#2, etc., if you log on the same name more than once)
