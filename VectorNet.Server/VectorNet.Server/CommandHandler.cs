@@ -116,22 +116,19 @@ namespace VectorNet.Server
                     break;
 
                 case "pop":
-                    if (!RequireAdmin(user))
-                        return;
-
+                    if (!RequireAdmin(user)) return;
                     if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "Who do you want to pop?")) == null) return;
                     if ((channel = ExtractChannelFromText(user, ref cmdRest, true, "Where do you want to pop?")) == null) return;
                     
                     foreach (User cu in targetUsers)
                     {
-                        if (cu != user)
-                            if (!UserIsStaff(cu))
-                            {
-                                SendServerInfo(user, "You have moved " + cu.Username + " to the channel " + channel.Name + ".");
-                                SendUserLeftChannel(cu);
+                        if (RequireModerationRights(user, cu, true))
+                        {
+                            SendServerInfo(user, "You have moved " + cu.Username + " to the channel " + channel.Name + ".");
+                            if (cu != user) 
                                 SendServerInfo(cu, "You have been moved to " + channel.Name + " by " + user.Username + ".");
-                                JoinUserToChannel(cu, channel, true);
-                            }
+                            JoinUserToChannel(cu, channel, true);
+                        }
                     }
 
                     break;
@@ -168,7 +165,7 @@ namespace VectorNet.Server
                     if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to ban.")) == null) return;
                     foreach (User targ in targetUsers)
                     {
-                        if (RequireModerationRights(user, targ) == false) goto EndLoop_Ban;
+                        if (RequireModerationRights(user, targ, false) == false) goto EndLoop_Ban;
 
                         if (cmd == "ban")
                         {
@@ -197,7 +194,7 @@ namespace VectorNet.Server
                     if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to unban.")) == null) return;
                     foreach (User targ in targetUsers)
                     {
-                        if (RequireModerationRights(user, targ))
+                        if (RequireModerationRights(user, targ, true))
                         {
                             if (cmd == "unban")
                             {
@@ -225,7 +222,7 @@ namespace VectorNet.Server
                     foreach (User targ in targetUsers)
                     { 
                         if (targ != user)
-                            if (RequireModerationRights(user, targ))
+                            if (RequireModerationRights(user, targ, false))
                             {
                                 if (targ.Channel == user.Channel)
                                     KickUserFromChannel(user, targ, cmdRest);
@@ -241,7 +238,7 @@ namespace VectorNet.Server
                     if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "You must specify a user to promote to Operator.")) == null) return;
                     foreach (User targ in targetUsers)
                     {
-                        if (RequireModerationRights(user, targ))
+                        if (RequireModerationRights(user, targ, false))
                         {
                             if (user.Channel != targ.Channel)
                             {
@@ -415,16 +412,16 @@ namespace VectorNet.Server
             return false;
         }
 
-        protected bool RequireModerationRights(User user, User targetUser)
+        protected bool RequireModerationRights(User user, User targetUser, bool CanTargetSelf)
         {
-            if (user == targetUser)
+            if (user == targetUser && !CanTargetSelf)
             {
                 SendServerError(user, "You cannot perform moderation actions on yourself!");
                 return false;
             }
             if (CanUserModerateUser(user, targetUser))
                 return true;
-            SendServerError(user, "You do not have sufficient rights to performs actions on that user.");
+            SendServerError(user, "You do not have sufficient rights to performs actions on user \"" + targetUser.Username + "\".");
             return false;
         }
 
