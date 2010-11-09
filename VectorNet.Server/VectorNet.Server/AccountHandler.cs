@@ -69,5 +69,16 @@ namespace VectorNet.Server
             //database.ExecuteNonQuery("SELECT [Challenge] FROM [Users] WHERE [Username] = '" + username + "'");
             return true;
         }
+
+        protected int AttachAccountNumber(string user)
+        {
+            int accNumber = 0;
+
+            foreach (User cu in Users)
+                if (user == cu.RealName)
+                    accNumber += 1;
+            
+            return (accNumber + 1);
+        }
     }
 }

@@ -110,11 +110,15 @@ namespace VectorNet.Server
 
         protected void KickUserFromChannel(User user, User targetUser, string cmdRest)
         {
+            foreach (User cu in GetUsersInChannel(targetUser.Channel))
+            {
+                if (cu != user && cu != targetUser)
+                    SendServerInfo(cu, targetUser.Username + " was kicked from the channel by " + user.Username + (cmdRest != string.Empty ? " (" + cmdRest + ")" : "") + ".");
+            }
+            SendServerInfo(targetUser, "You were kicked from the channel by " + user.Username + (cmdRest != string.Empty ? " (" + cmdRest + ")" : "") + ".");
+            SendServerInfo(user, "You kicked " + targetUser.Username + " from the channel" + (cmdRest != string.Empty ? " (" + cmdRest + ")" : "") + ".");
             SendUserLeftChannel(targetUser);
-            JoinUserToChannel(targetUser, Channel_Void);
-            SendServerInfoToChannel(user.Channel, targetUser.Username + " was kicked from the channel by " + user.Username + (cmdRest != string.Empty ? "(" + cmdRest + ")" : "") + ".",
-                                    user, "You kicked " + targetUser.Username + " from the channel" + (cmdRest != string.Empty ? " (" + cmdRest + ")" : "") + ".");
-            SendServerInfo(targetUser, "You were kicked from the channel by " + user.Username + (cmdRest != string.Empty ? "(" + cmdRest + ")" : "") + ".");
+            JoinUserToChannel(targetUser, Channel_Void, false);
         }
 
         protected void BanUserByUsername(User user, User targetUser, Channel fromChannel)
@@ -126,7 +130,7 @@ namespace VectorNet.Server
                 SendServerInfoToChannel(fromChannel, targetUser.Username + " was banned from the channel by " + user.Username + "!",
                         targetUser, "You have been banned from the channel by " + user.Username + "!");
                 if (targetUser.Channel == fromChannel)
-                    JoinUserToChannel(targetUser, Channel_Void);
+                    JoinUserToChannel(targetUser, Channel_Void, false);
                 else
                     SendServerInfo(targetUser, user.Username + " has banned you from channel " + fromChannel.Name + ".");
             }
@@ -149,7 +153,7 @@ namespace VectorNet.Server
                         SendServerInfoToChannel(fromChannel, target.Username + " was banned from the channel by " + user.Username + " [IP match]!",
                             target, "You have been banned from the channel by " + user.Username + " [IP match]!");
                         if (target.Channel == fromChannel)
-                            JoinUserToChannel(target, Channel_Void);
+                            JoinUserToChannel(target, Channel_Void, false);
                         else
                             SendServerInfo(target, user.Username + " has banned you from channel " + fromChannel.Name + ".");
                     }
