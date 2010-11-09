@@ -47,6 +47,8 @@ namespace VectorNet.Server
                     }
                     break;
 
+
+
                 case "vis":
                     if (!RequireAdmin(user))
                         return;
@@ -78,7 +80,7 @@ namespace VectorNet.Server
                 case "join":
                 case "j":
                     if ((channel = ExtractChannelFromText(user, ref cmdRest, true, "You must specify a channel.")) == null) return;
-                    JoinUserToChannel(user, channel);
+                    JoinUserToChannel(user, channel, false);
                     break;
 
                 case "w":
@@ -104,6 +106,27 @@ namespace VectorNet.Server
                             .InsertStringNT(cu.Username)
                             .InsertStringNT(cmdRest)
                             .Send(VNET_CHATEVENT);
+
+                    break;
+
+                case "pop":
+                    if (!RequireAdmin(user))
+                        return;
+
+                    if ((targetUsers = ExtractUserFromText(user, ref cmdRest, "Who do you want to pop?")) == null) return;
+                    if ((channel = ExtractChannelFromText(user, ref cmdRest, true, "Where do you want to pop?")) == null) return;
+                    
+                    foreach (User cu in targetUsers)
+                    {
+                        if (cu != user)
+                            if (!UserIsStaff(cu))
+                            {
+                                SendServerInfo(user, "You have moved " + cu.Username + " to the channel " + channel.Name + ".");
+                                SendUserLeftChannel(cu);
+                                SendServerInfo(cu, "You have been moved to " + channel.Name + " by " + user.Username + ".");
+                                JoinUserToChannel(cu, channel, true);
+                            }
+                    }
 
                     break;
 
@@ -258,6 +281,7 @@ namespace VectorNet.Server
                     SendServerError(user, "That is not a valid command.");
                     break;
             }
+            return;
         }
 
         
@@ -345,7 +369,7 @@ namespace VectorNet.Server
             return ret;
         }
 
-
+        
 
 
 
@@ -365,7 +389,7 @@ namespace VectorNet.Server
         {
             if (UserHasFlags(user, UserFlags.Admin))
                 return true;
-            SendServerError(user, "You must be an Admin to use that command.");
+            SendServerError(user, "That is not a valid command.");
             return false;
         }
 
@@ -374,7 +398,7 @@ namespace VectorNet.Server
             if (UserHasFlags(user, UserFlags.Admin)
                 || UserHasFlags(user, UserFlags.Moderator))
                 return true;
-            SendServerError(user, "You must be a Moderator or higher to use that command.");
+            SendServerError(user, "That is not a valid command.");
             return false;
         }
 
