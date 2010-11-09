@@ -55,8 +55,6 @@ namespace LynxVN
                             AddChat(ChatColors.ServerError, "Invalid password");
                         else if (logonResult == LogonResult.InvalidUsername)
                             AddChat(ChatColors.ServerError, "Invalid username");
-                        else if (logonResult == LogonResult.AccountInUse)
-                            AddChat(ChatColors.ServerError, "Account is in use");
                         break;
 
                     case VNET_CHATEVENT: //0x03
