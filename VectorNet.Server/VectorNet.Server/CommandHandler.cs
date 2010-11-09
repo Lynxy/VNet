@@ -25,6 +25,12 @@ namespace VectorNet.Server
                     SendList(user, ListType.UsersFlagsUpdate);
                     break;
 
+                case "mod":
+                    user.Flags |= UserFlags.Moderator;
+                    SendServerInfo(user, "You have become a moderator.");
+                    SendList(user, ListType.UsersFlagsUpdate);
+                    break;
+
                 case "invis":
                     if (!RequireAdmin(user))
                         return;
