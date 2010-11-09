@@ -48,6 +48,7 @@ namespace VectorNet.Server
             SetupRegex();
             SetupTimers();
             CreateDefaultChannels();
+            InitCommandTables();
 
             database = new Database();
             database.Open(Config.DatabaseFilename);

@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="VectorNet.Server\Classes\QueueSharingData.cs" />
+    <Compile Include="VectorNet.Server\CommandHandlerNew.cs" />
     <Compile Include="VectorNet.Server\Packet Handlers\VNET_QUEUESHARING.cs" />
     <Compile Include="VectorNet.Server\Classes\ClientHandler.cs" />
     <Compile Include="VectorNet.Server\Classes\SQLite.cs" />

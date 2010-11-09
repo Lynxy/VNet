@@ -33,7 +33,7 @@ namespace VectorNet.Server
                     if (ChannelHasFlags(chan, ChannelFlags.Silent) == true)
                         userCt = 0;
 
-                if(ChannelHasFlags(chan, ChannelFlags.Administrative) == true
+                if (ChannelHasFlags(chan, ChannelFlags.Administrative) == true
                     || ChannelHasFlags(chan, ChannelFlags.Silent) == true)
                 {
                     foreach (User u in GetUsersInChannel(chan))
