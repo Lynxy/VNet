@@ -97,7 +97,7 @@ namespace VectorNet.Server
             return (UserHasFlags(user, UserFlags.Admin) || UserHasFlags(user, UserFlags.Moderator));
         }
 
-        protected void JoinUserToChannel(User user, Channel channel)
+        protected void JoinUserToChannel(User user, Channel channel, bool AllowJoinOverride)
         {
             if (channel.IsUserBanned(user))
             {
@@ -106,7 +106,7 @@ namespace VectorNet.Server
             }
             if (channel == Channel_Admin)
             {
-                if (UserIsStaff(user) == false)
+                if (UserIsStaff(user) == false && !AllowJoinOverride)
                 {
                     SendServerError(user, "Only staff can enter that channel.");
                     return;
