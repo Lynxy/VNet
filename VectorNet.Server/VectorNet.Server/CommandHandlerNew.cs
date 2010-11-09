@@ -12,10 +12,11 @@ namespace VectorNet.Server
         protected void InitCommandTables()
         {
             cmdtbl_Main = new CommandTable();
-            cmdtbl_Main.Add(new string[] { "admin" }, UserFlags.Normal, "", null, cmd_Admin, 0, null);
-            cmdtbl_Main.Add(new string[] { "mod", "moderator" }, UserFlags.Normal, "", null, cmd_Mod, 0, null);
-            cmdtbl_Main.Add(new string[] { "ban" }, UserFlags.Operator, "Bans a user from the channel", null, cmd_Ban, 1, CommandParameter.Users);
-            cmdtbl_Main.Add(new string[] { "join", "j" }, UserFlags.Normal, "", null, cmd_Join, 1, CommandParameter.Any);
+            cmdtbl_Main.Add(new string[] { "admin" }, CommandType.General, UserFlags.Normal, "", null, cmd_Admin, 0, null);
+            cmdtbl_Main.Add(new string[] { "mod", "moderator" }, CommandType.General, UserFlags.Normal, "", null, cmd_Mod, 0, null);
+            cmdtbl_Main.Add(new string[] { "ban" }, CommandType.Moderation, UserFlags.Operator, "Bans a user from the channel", null, cmd_Ban, 1, CommandParameter.Users);
+            cmdtbl_Main.Add(new string[] { "join", "j" }, CommandType.General, UserFlags.Normal, "", null, cmd_Join, 1, CommandParameter.Rest);
+            
         }
 
 
@@ -98,6 +99,8 @@ namespace VectorNet.Server
                             SendServerError(user, "There is no user by the name \"" + cmds[i] + "\" online.");
                             return;
                         }
+                        if (!RequireModerationRights(user, targetUser, false))
+                            break;
                         specifiedParameters[i - 1] = targetUser;
                         argIdx++;
                         break;
@@ -105,24 +108,36 @@ namespace VectorNet.Server
                     case CommandParameter.Users:
                         List<User> targetUsers = GetUsersFromArgument(user, cmds[i]);
                         if (targetUsers == null) return;
+                        for (int j = targetUsers.Count - 1; j > 0; j--)
+                            if (!RequireModerationRights(user, targetUsers[j], false))
+                                targetUsers.RemoveAt(j);
+                        if (targetUsers.Count == 0)
+                        {
+                            SendServerError(user, "There is no user by the name \"" + cmds[i] + "\" online.");
+                            return;
+                        }
 
                         specifiedParameters[i - 1] = targetUsers;
                         argIdx++;
                         break;
 
-                    case CommandParameter.Channel:
-
-                        break;
-
                     case CommandParameter.Numeric:
-
+                        int num = 0;
+                        if (!int.TryParse(cmds[i], out num))
+                        {
+                            SendServerError(user, "Expected a number for parameter " + i + ".");
+                            return;
+                        }
+                        specifiedParameters[i - 1] = num;
+                        argIdx++;
                         break;
 
                     case CommandParameter.Word:
-
+                        specifiedParameters[i - 1] = cmds[i];
+                        argIdx++;
                         break;
 
-                    case CommandParameter.Any:
+                    case CommandParameter.Rest:
                         specifiedParameters[i - 1] = String.Join(" ", cmds, argIdx + 1, cmds.Length - argIdx - 1);
                         argIdx += cmds.Length - argIdx - 1;
                         break;
@@ -235,6 +250,7 @@ namespace VectorNet.Server
         protected class CommandData
         {
             public string[] CommandName;
+            public CommandType CommandType;
             public UserFlags FlagsRequired;
             public string Description;
             public CommandTable SubCommandTable;
@@ -243,14 +259,19 @@ namespace VectorNet.Server
             public CommandParameter[] ParameterTypes;
         }
 
+        protected enum CommandType
+        {
+            General = 0,
+            Moderation
+        }
+
         protected enum CommandParameter
         {
-            Any = 0,
+            Rest = 0,
             Word,
             Numeric,
             User,
-            Users,
-            Channel
+            Users
         }
 
         protected class CommandTable
@@ -273,12 +294,12 @@ namespace VectorNet.Server
                 }
             }
 
-            public void Add(string[] _Name, UserFlags _FlagsRequired, string _Description, CommandTable _SubCommandTable, Action<User, object[]> _ProcMethod, int _ParameterCount, params CommandParameter[] _ParameterTypes)
+            public void Add(string[] _Name, CommandType _CommandType, UserFlags _FlagsRequired, string _Description, CommandTable _SubCommandTable, Action<User, object[]> _ProcMethod, int _ParameterCount, params CommandParameter[] _ParameterTypes)
             {
                 if (_ParameterCount > 0)
                     if (_ParameterTypes == null || _ParameterTypes.Length != _ParameterCount)
                         throw new ArgumentException("ParameterTypes[] must match length of ParameterCount");
-                CommandData data = new CommandData { CommandName = _Name, FlagsRequired = _FlagsRequired, Description = _Description, SubCommandTable = _SubCommandTable, ProcMethod = _ProcMethod, ParameterCount = _ParameterCount, ParameterTypes = _ParameterTypes };
+                CommandData data = new CommandData { CommandName = _Name, CommandType = _CommandType, FlagsRequired = _FlagsRequired, Description = _Description, SubCommandTable = _SubCommandTable, ProcMethod = _ProcMethod, ParameterCount = _ParameterCount, ParameterTypes = _ParameterTypes };
                 _dict.Add(_Name, data);
             }
         }
