@@ -70,13 +70,20 @@ namespace VectorNet.Server
             return true;
         }
 
-        protected int AttachAccountNumber(string user)
+        protected int GetUsernameNumber(User user)
         {
-            int accNumber = 0;
+            //TODO: Function needs improvement. Eg if 4 users connect,
+            //it will display up to #4. if user #3 disconnects, then reconnects,
+            //he will be assigned #4
+
+            IEnumerable<User> users = Users.Where(u => u.RealUsername.ToLower() == user.RealUsername.ToLower());
+            return users.Count();
+            
+            int accNumber = 1;
 
             foreach (User cu in Users)
-                if (user == cu.RealName)
-                    accNumber += 1;
+                if (user.RealUsername.ToLower() == cu.RealUsername.ToLower())
+                    accNumber++;
             
             return (accNumber + 1);
         }

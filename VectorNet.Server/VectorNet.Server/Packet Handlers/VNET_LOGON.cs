@@ -39,12 +39,12 @@ namespace VectorNet.Server
 
 
 
-            if (GetUserByName(username) != null)
-                user.Username = username + "#" + AttachAccountNumber(username);
-            else
-                user.Username = username;
-
-            user.RealName = username;
+            
+            user.RealUsername = username;
+            user.Username = username;
+            int usernameNumber = GetUsernameNumber(user);
+            if (usernameNumber > 1)
+                user.Username += "#" + usernameNumber.ToString();
             user.Client = client;
             user.IsOnline = true;
             ServerStats.usersOnline++;
@@ -54,7 +54,7 @@ namespace VectorNet.Server
             SendLogonResult(user, LogonResult.Success);
             if (state == AccountState.NewAccount)
                 SendServerInfo(user, "New account created!");
-            JoinUserToChannel(user, Channel_Main, false);
+            JoinUserToChannel(user, Channel_Main);
         }
 
         protected string GetDisconnectMessage(string username, string password, string client)

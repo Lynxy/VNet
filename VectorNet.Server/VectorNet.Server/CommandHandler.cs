@@ -86,7 +86,7 @@ namespace VectorNet.Server
                 case "join":
                 case "j":
                     if ((channel = ExtractChannelFromText(user, ref cmdRest, true, "You must specify a channel.")) == null) return;
-                    JoinUserToChannel(user, channel, false);
+                    JoinUserToChannel(user, channel);
                     break;
 
                 case "w":
