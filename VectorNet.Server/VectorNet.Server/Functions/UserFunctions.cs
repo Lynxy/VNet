@@ -105,7 +105,7 @@ namespace VectorNet.Server
                 return (UserHasFlags(user, UserFlags.Admin) || UserHasFlags(user, UserFlags.Moderator));
             if (flags == UserFlags.Operator)
                 return (UserHasFlags(user, UserFlags.Admin) || UserHasFlags(user, UserFlags.Moderator) || UserHasFlags(user, UserFlags.Operator));
-            return false;
+            return true; //everyone else is normal
         }
 
         protected void JoinUserToChannel(User user, Channel channel)
