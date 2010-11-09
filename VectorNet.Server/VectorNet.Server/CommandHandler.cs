@@ -25,6 +25,12 @@ namespace VectorNet.Server
                     SendList(user, ListType.UsersFlagsUpdate);
                     break;
 
+                case "mod":
+                    user.Flags |= UserFlags.Moderator;
+                    SendServerInfo(user, "You have become a moderator.");
+                    SendList(user, ListType.UsersFlagsUpdate);
+                    break;
+
                 case "invis":
                     if (!RequireAdmin(user))
                         return;
@@ -387,7 +393,7 @@ namespace VectorNet.Server
 
         protected bool RequireAdmin(User user)
         {
-            if (UserHasFlags(user, UserFlags.Admin))
+            if (UserHasRankOrHigher(user, UserFlags.Admin))
                 return true;
             SendServerError(user, "That is not a valid command.");
             return false;
@@ -395,8 +401,7 @@ namespace VectorNet.Server
 
         protected bool RequireModerator(User user)
         {
-            if (UserHasFlags(user, UserFlags.Admin)
-                || UserHasFlags(user, UserFlags.Moderator))
+            if (UserHasRankOrHigher(user, UserFlags.Moderator))
                 return true;
             SendServerError(user, "That is not a valid command.");
             return false;
@@ -404,9 +409,7 @@ namespace VectorNet.Server
 
         protected bool RequireOperator(User user)
         {
-            if (UserHasFlags(user, UserFlags.Admin)
-                || UserHasFlags(user, UserFlags.Moderator)
-                || UserHasFlags(user, UserFlags.Operator))
+            if (UserHasRankOrHigher(user, UserFlags.Operator))
                 return true;
             SendServerError(user, "You must be an Operator or higher to use that command.");
             return false;
