@@ -50,8 +50,7 @@ VNET_LOGON (0x01) Server -> Client
 		0x00: Account logged on successfully
 		0x01: Invalid password
 		0x02: Invalid characters in name
-		0x03: That account is already in use
-		0x04: Account passed, You need to send a challenge to complete logon
+		0x03: Account passed, You need to send a challenge to complete logon
 
 VNET_SERVERCHALLENGE (0x02) Client -> Server
     Data:
