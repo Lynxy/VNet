@@ -72,29 +72,26 @@ namespace VectorNet.Server
 
         protected int GetUsernameNumber(User user)
         {
-
             List<int> accountNumbers = new List<int>();
             foreach (User u in Users.Where(u => u.RealUsername.ToLower() == user.RealUsername.ToLower() && u.AccountNumber != 0))
                 accountNumbers.Add(u.AccountNumber);
             
-            if (accountNumbers.Count() > 0)
-            {
-                // We need to sort the username numbers so that
-                // we can find a break (if it exists) in the pattern
-                accountNumbers.Sort();
-
-                int count = 0;
-                for (count = 0; count < accountNumbers.Count(); count++)
-                {
-                    // If the current account number sequence5 is broken
-                    // I.E. 1, 3, 4, 5, then retureen the next available number, Ex. 2
-                    if ((count + 1) != accountNumbers[count])
-                        return (count + 1);
-                }
-                return (count + 1);
-            }
-            else
+            if (accountNumbers.Count() == 0)
                 return 1;
+
+            // We need to sort the username numbers so that
+            // we can find a break (if it exists) in the pattern
+            accountNumbers.Sort();
+
+            int count = 0;
+            for (count = 0; count < accountNumbers.Count(); count++)
+            {
+                // If the current account number sequence5 is broken
+                // I.E. 1, 3, 4, 5, then retureen the next available number, Ex. 2
+                if ((count + 1) != accountNumbers[count])
+                    return (count + 1);
+            }
+            return (count + 1);
         }
     }
 }
