@@ -76,16 +76,37 @@ namespace VectorNet.Server
             //it will display up to #4. if user #3 disconnects, then reconnects,
             //he will be assigned #4
 
-            IEnumerable<User> users = Users.Where(u => u.RealUsername.ToLower() == user.RealUsername.ToLower());
-            return users.Count();
-            
-            int accNumber = 1;
+            //IEnumerable<User> users = Users.Where(u => u.RealUsername.ToLower() == user.RealUsername.ToLower());
+            //return users.Count();
 
-            foreach (User cu in Users)
-                if (user.RealUsername.ToLower() == cu.RealUsername.ToLower())
-                    accNumber++;
+            List<int> accountNumbers = new List<int>();
+            foreach (User u in Users.Where(u => u.RealUsername.ToLower() == user.RealUsername.ToLower()))
+                if (u.AccountNumber != 0)
+                    accountNumbers.Add(u.AccountNumber);
             
-            return (accNumber + 1);
+            if (accountNumbers.Count() > 0)
+            {
+                int[] aryAccountNumbers = new int[accountNumbers.Count()];
+
+                // We need to sort the username numbers so that
+                // we can find a break (if it exists) in the pattern
+                accountNumbers.Sort();
+                aryAccountNumbers = accountNumbers.ToArray();
+
+                int increment = 1;
+                for (int count = 0; count < aryAccountNumbers.Count(); count++)
+                {
+                    // If the current account number sequence5 is broken
+                    // I.E. 1, 3, 4, 5, then retureen the next available number, Ex. 2
+                    if (increment != aryAccountNumbers[count])
+                        return increment;
+
+                    increment++;
+                }
+                return increment;
+            }
+            else
+                return 1;
         }
     }
 }
