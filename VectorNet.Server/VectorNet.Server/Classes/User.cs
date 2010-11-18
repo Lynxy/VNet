@@ -85,7 +85,15 @@ namespace VectorNet.Server
             public TcpClientWrapper Socket { get { return socket; } }
             public Packet Packet { get { return packet; } }
             public string IPAddress { get { return (socket == null ? null : ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString()); } }
-            public string Username { get; set; }
+            public string Username
+            {
+                get
+                {
+                    if (AccountNumber > 1)
+                        return RealUsername + "#" + AccountNumber;
+                    return RealUsername;
+                }
+            }
             public string RealUsername { get; set; }
             public int AccountNumber { get; set; }
             public string Client { get; set; }

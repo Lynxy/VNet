@@ -38,15 +38,7 @@ namespace VectorNet.Server
             //check challenge (if any)
 
             user.RealUsername = username;
-            user.Username = username;
-            int usernameNumber = GetUsernameNumber(user);
-            if (usernameNumber > 1)
-            {
-                user.AccountNumber = usernameNumber;
-                user.Username += "#" + usernameNumber.ToString();
-            }
-            else
-                user.AccountNumber = 1;
+            user.AccountNumber = GetUsernameNumber(user);
             user.Client = client;
             user.IsOnline = true;
             ServerStats.usersOnline++;

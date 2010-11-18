@@ -54,7 +54,7 @@ namespace VectorNet.Server
             database.Open(Config.DatabaseFilename);
 
             console = new User(null, true);
-            console.Username = "";
+            console.RealUsername = "";
         }
 
         protected void SetupTimers()
