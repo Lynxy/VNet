@@ -12,10 +12,10 @@ namespace VectorNet.Server
         protected void InitCommandTables()
         {
             cmdtbl_Main = new CommandTable();
-            cmdtbl_Main.Add(new string[] { "admin" }, CommandType.General, UserFlags.Normal, "", null, cmd_Admin, 0, null);
-            cmdtbl_Main.Add(new string[] { "mod", "moderator" }, CommandType.General, UserFlags.Normal, "", null, cmd_Mod, 0, null);
-            cmdtbl_Main.Add(new string[] { "ban" }, CommandType.Moderation, UserFlags.Operator, "Bans a user from the channel", null, cmd_Ban, 1, CommandParameter.Users);
-            cmdtbl_Main.Add(new string[] { "join", "j" }, CommandType.General, UserFlags.Normal, "", null, cmd_Join, 1, CommandParameter.Rest);
+            cmdtbl_Main.Add("admin", CommandType.General, UserFlags.Normal, "", null, cmd_Admin, 0, null);
+            cmdtbl_Main.Add("mod", "moderator", CommandType.General, UserFlags.Normal, "", null, cmd_Mod, 0, null);
+            cmdtbl_Main.Add("ban", CommandType.Moderation, UserFlags.Operator, "Bans a user from the channel", null, cmd_Ban, 1, CommandParameter.Users);
+            cmdtbl_Main.Add("join", "j", CommandType.General, UserFlags.Normal, "", null, cmd_Join, 1, CommandParameter.Rest);
             
         }
 
@@ -292,6 +292,21 @@ namespace VectorNet.Server
                         return null;
                     return ret.First().Value;
                 }
+            }
+
+            public void Add(string _Name, CommandType _CommandType, UserFlags _FlagsRequired, string _Description, CommandTable _SubCommandTable, Action<User, object[]> _ProcMethod, int _ParameterCount, params CommandParameter[] _ParameterTypes)
+            {
+                Add(new string[] { _Name }, _CommandType, _FlagsRequired, _Description, _SubCommandTable, _ProcMethod, _ParameterCount, _ParameterTypes);
+            }
+
+            public void Add(string _Name, string _Alias, CommandType _CommandType, UserFlags _FlagsRequired, string _Description, CommandTable _SubCommandTable, Action<User, object[]> _ProcMethod, int _ParameterCount, params CommandParameter[] _ParameterTypes)
+            {
+                Add(new string[] { _Name, _Alias }, _CommandType, _FlagsRequired, _Description, _SubCommandTable, _ProcMethod, _ParameterCount, _ParameterTypes);
+            }
+
+            public void Add(string _Name, string _Alias1, string _Alias2, CommandType _CommandType, UserFlags _FlagsRequired, string _Description, CommandTable _SubCommandTable, Action<User, object[]> _ProcMethod, int _ParameterCount, params CommandParameter[] _ParameterTypes)
+            {
+                Add(new string[] { _Name, _Alias1, _Alias2 }, _CommandType, _FlagsRequired, _Description, _SubCommandTable, _ProcMethod, _ParameterCount, _ParameterTypes);
             }
 
             public void Add(string[] _Name, CommandType _CommandType, UserFlags _FlagsRequired, string _Description, CommandTable _SubCommandTable, Action<User, object[]> _ProcMethod, int _ParameterCount, params CommandParameter[] _ParameterTypes)
