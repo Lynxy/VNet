@@ -80,9 +80,8 @@ namespace VectorNet.Server
             //return users.Count();
 
             List<int> accountNumbers = new List<int>();
-            foreach (User u in Users.Where(u => u.RealUsername.ToLower() == user.RealUsername.ToLower()))
-                if (u.AccountNumber != 0)
-                    accountNumbers.Add(u.AccountNumber);
+            foreach (User u in Users.Where(u => u.RealUsername.ToLower() == user.RealUsername.ToLower() && u.AccountNumber != 0))
+                accountNumbers.Add(u.AccountNumber);
             
             if (accountNumbers.Count() > 0)
             {
