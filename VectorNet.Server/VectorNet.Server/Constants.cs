@@ -53,7 +53,8 @@ namespace VectorNet.Server
             Success         = 0x00,
             InvalidPassword = 0x01,
             InvalidUsername = 0x02,
-            SendChallenge   = 0x03
+            AccountBanned   = 0x03,
+            SendChallenge   = 0x04
         }
 
         protected enum ChatEventType

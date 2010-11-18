@@ -87,6 +87,7 @@ namespace VectorNet.Server
             public string IPAddress { get { return (socket == null ? null : ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString()); } }
             public string Username { get; set; }
             public string RealUsername { get; set; }
+            public int AccountNumber { get; set; }
             public string Client { get; set; }
             public UserFlags Flags
             {

@@ -9,14 +9,24 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
-        protected void HandleAppID(User fromSend, PacketReader reader,  User toSend, AppFlags flag)
+        protected void HandleAppID(User fromSend, PacketReader reader)
         {
 
+            byte getAppID = reader.ReadByte();
 
+            if (getAppID > 0x05)
+            {
+                SendServerError(fromSend, "You have send an invalid app ID.");
+                return;
+            }
 
-            toSend.Packet.Clear().InsertByte((byte)flag)
+            byte getAppFlagStatus = reader.ReadByte();
+            User toSend = GetUserByName(reader.ReadStringNT());
+
+            toSend.Packet.Clear().InsertByte(getAppID)
+                                 .InsertByte(getAppFlagStatus)
                                  .InsertStringNT(fromSend.Username);
-            switch (flag)
+            switch ((AppFlags)getAppID)
             {
                 case AppFlags.Unhandled:
                     toSend.Packet.Send(VNET_APPS);

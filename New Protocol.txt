@@ -2,7 +2,7 @@ VectorNet Protocol Specification v2
 
 2/16/09: The first specification of the VectorNet protocol was written. This was a text based protocol which used values separated by null strings.
 
-12/30/09: The Second revision of the protocol is made. This usitilizes multiple data types for information. In this version, the packets for VectorNet are made of of these parts:
+12/30/09: The Second revision of the protocol is made. This utilizes multiple data types for information. In this version, the packets for VectorNet are made of of these parts:
 
 	BYTE    Packet ID
 	WORD   Packet Length
@@ -50,7 +50,8 @@ VNET_LOGON (0x01) Server -> Client
 		0x00: Account logged on successfully
 		0x01: Invalid password
 		0x02: Invalid characters in name
-		0x03: Account passed, You need to send a challenge to complete logon
+		0x03: Account is banned
+		0x04: Account passed, You need to send a challenge to complete logon
 
 VNET_SERVERCHALLENGE (0x02) Client -> Server
     Data:
