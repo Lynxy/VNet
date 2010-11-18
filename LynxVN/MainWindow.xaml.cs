@@ -113,6 +113,8 @@ namespace LynxVN
         {
             lvChannel.ItemsSource = null;
             lvChannel.ItemsSource = Users;
+            GridView grid = lvChannel.View as GridView;
+            grid.Columns[2].Width = lvChannel.ActualWidth - (grid.Columns[0].ActualWidth + grid.Columns[1].ActualWidth) - 4;
         }
 
         protected void RemoveUser(string username)

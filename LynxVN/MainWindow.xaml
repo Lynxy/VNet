@@ -25,7 +25,7 @@
                 <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
                     <GridViewColumn Width="0" DisplayMemberBinding="{Binding Icon}" Header="Icon" />
                     <GridViewColumn Width="60" DisplayMemberBinding="{Binding Flags}" Header="Flags" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Username}" Header="Username" />
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Username}" Header="Username" />
                 </GridView>
             </ListView.View>
         </ListView>

@@ -97,7 +97,8 @@ namespace LynxVN
                         }
                         else if (id == (byte)ChatEventType.UserJoinedChannel)
                         {
-                            AddUser(new User() { Username = username, Client = text, Flags = (UserFlags)flags, Ping = ping });
+                            user = new User() { Username = username, Client = text, Flags = (UserFlags)flags, Ping = ping };
+                            AddUser(user);
                             AddChat(ChatColors.UserJoinedChannel, "-- ", ChatColors.UserJoinedChannel_Username, username, ChatColors.UserJoinedChannel, " [0x" + flags.ToString("X") + "] has joined the channel --");
                         }
                         else if (id == (byte)ChatEventType.UserLeftChannel)
