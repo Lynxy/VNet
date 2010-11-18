@@ -23,11 +23,14 @@ namespace VectorNet.Server
             SendServerInfo(user, "Commands available to you:");
             for (int i = 0; i < cmdTable.Count; i++)
             {
-                string desc = cmdTable[i].Description;
-                if (desc == "")
-                    SendServerInfo(user, "   /" + cmdTable[i].CommandName[0]);
-                else
-                    SendServerInfo(user, "   /" + cmdTable[i].CommandName[0] + " - " + desc);
+                if (UserHasRankOrHigher(user, cmdTable[i].FlagsRequired))
+                {
+                    string desc = cmdTable[i].Description;
+                    if (desc == "")
+                        SendServerInfo(user, "   /" + cmdTable[i].CommandName[0]);
+                    else
+                        SendServerInfo(user, "   /" + cmdTable[i].CommandName[0] + " - " + desc);
+                }
             }
             SendServerInfo(user, "----------------------------------");
         }
