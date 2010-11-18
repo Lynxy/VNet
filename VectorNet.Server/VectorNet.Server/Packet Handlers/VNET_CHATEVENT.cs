@@ -20,7 +20,7 @@ namespace VectorNet.Server
             }
 
             if (text[0] == '/')
-                HandleCommand(user, text.Substring(1));
+                HandleCommandNew(user, text.Substring(1));
             else
             {
                 Channel chan = user.Channel;
