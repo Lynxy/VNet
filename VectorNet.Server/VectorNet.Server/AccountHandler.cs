@@ -73,7 +73,7 @@ namespace VectorNet.Server
         protected int GetUsernameNumber(User user)
         {
             List<int> accountNumbers = new List<int>();
-            foreach (User u in Users.Where(u => u.RealUsername.ToLower() == user.RealUsername.ToLower() && u.AccountNumber != 0))
+            foreach (User u in Users.Where(u => u.IsOnline == true && u.RealUsername.ToLower() == user.RealUsername.ToLower() && u.AccountNumber != 0))
                 accountNumbers.Add(u.AccountNumber);
             
             if (accountNumbers.Count() == 0)
