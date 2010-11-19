@@ -28,7 +28,7 @@ namespace VectorNet.Server
                 UserBuffers.Add(newUser, new byte[0]);
                 client.DataRead += new TcpClientWrapper.DataReadDelegate(client_DataRead);
                 client.Disconnected += new TcpClientWrapper.DisconnectedDelegate(client_Disconnected);
-                client.AsyncRead(Config.ReadBufferSize, true);
+                client.AsyncRead(Config.Network.ReadBufferSize, true);
                 return newUser;
             }
 

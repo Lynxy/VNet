@@ -53,10 +53,10 @@ namespace VectorNet.Server
 
         protected string GetDisconnectMessage(string username, string password, string client)
         {
-            if (username.Length < Config.UsernameMinLength)
-                return "Your username is too short. Minimum length: " + Config.UsernameMinLength;
-            if (username.Length > Config.UsernameMaxLength)
-                return "Your username is too long. Maximum length: " + Config.UsernameMaxLength;
+            if (username.Length < Config.NamingRules.UsernameMinLength)
+                return "Your username is too short. Minimum length: " + Config.NamingRules.UsernameMinLength;
+            if (username.Length > Config.NamingRules.UsernameMaxLength)
+                return "Your username is too long. Maximum length: " + Config.NamingRules.UsernameMaxLength;
             if (username.Contains('@') || username.Contains('*'))
                 return "Your username cannot contain the characters @ or *.";
             if (ContainsNonPrintable(username))

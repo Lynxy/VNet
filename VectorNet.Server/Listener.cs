@@ -14,14 +14,14 @@ namespace VectorNet.Server
 
         public void StartListening()
         {
-            listener = new TcpListenerWrapper(Config.ListenPort);
+            listener = new TcpListenerWrapper(Config.Network.ListenPort);
             listener.OnClientConnected += new TcpListenerWrapper.ClientConnectedDelegate(listener_OnClientConnected);
 
             clients = new ClientHandler();
             clients.UserPacketReceived += new ClientHandler.UserPacketReceivedDelegate(HandlePacket);
             clients.UserDisconnected += new ClientHandler.UserDisconnectedDelegate(clients_UserDisconnected);
 
-            listener.Listen(Config.MaxConnectionsBacklog, Config.MaxClientSendBacklog);
+            listener.Listen(Config.Network.MaxConnectionsBacklog, Config.Network.MaxClientSendBacklog);
         }
 
         protected void listener_OnClientConnected(TcpClientWrapper client)

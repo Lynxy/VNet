@@ -27,7 +27,7 @@ namespace VectorNet.Server
             }
 
             user.SendBufferNow();
-            user.Socket.Client.Close(Config.ClientCloseWait);
+            user.Socket.Client.Close(Config.Network.ClientCloseWait);
         }
 
         protected void DisconnectUser(User user, string message)

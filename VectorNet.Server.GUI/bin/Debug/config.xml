@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ConfigurationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <ListenPort>4800</ListenPort>
-  <ReadBufferSize>1024</ReadBufferSize>
-  <SendBufferInterval>200</SendBufferInterval>
-  <MaxConnectionsBacklog>20</MaxConnectionsBacklog>
-  <MaxClientSendBacklog>30</MaxClientSendBacklog>
-  <ClientCloseWait>2000</ClientCloseWait>
+<VectorNetServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Strings>
+    <HostedBy />
+    <MOTD />
+  </Strings>
+  <Network>
+    <ListenPort>4800</ListenPort>
+    <ReadBufferSize>1024</ReadBufferSize>
+    <SendBufferInterval>200</SendBufferInterval>
+    <MaxConnectionsBacklog>20</MaxConnectionsBacklog>
+    <MaxClientSendBacklog>30</MaxClientSendBacklog>
+    <ClientCloseWait>2000</ClientCloseWait>
+  </Network>
+  <DefaultChannels>
+    <Main>Main</Main>
+    <Admin>Backstage</Admin>
+    <Void>The Void</Void>
+  </DefaultChannels>
+  <NamingRules>
+    <UsernameMinLength>2</UsernameMinLength>
+    <UsernameMaxLength>14</UsernameMaxLength>
+    <UsernameRegex>^([a-zA-Z0-9]+?[\._\-]{0,1})*?$</UsernameRegex>
+  </NamingRules>
   <DatabaseFilename>vnet.sqlite</DatabaseFilename>
-  <MainChannel>Main</MainChannel>
-  <AdminChannel>Backstage</AdminChannel>
-  <VoidChannel>The Void</VoidChannel>
   <ChannelOwnerTimeout>15</ChannelOwnerTimeout>
-  <HostedBy />
-  <MOTD />
-  <UsernameMinLength>2</UsernameMinLength>
-  <UsernameMaxLength>14</UsernameMaxLength>
-  <UsernameRegex>^([a-zA-Z0-9]+?[\._\-]{0,1})*?$</UsernameRegex>
   <AllowAES>true</AllowAES>
   <UseIdleSystem>false</UseIdleSystem>
   <TimerCheckInterval>1000</TimerCheckInterval>
   <TimerGarbageInterval>5000</TimerGarbageInterval>
   <MaxUsersPerIP>10</MaxUsersPerIP>
   <MaxUsersPerChannel>50</MaxUsersPerChannel>
-</ConfigurationData>
+</VectorNetServer>

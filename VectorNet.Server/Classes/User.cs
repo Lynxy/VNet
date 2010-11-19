@@ -28,7 +28,7 @@ namespace VectorNet.Server
                 packet = new Packet();
                 packet.skipHeaders = isConsole;
                 packet.DataSent += new Packet.SendDataDelegate(packet_SendData);
-                bufferer = new PacketBufferer(SendDataFinal, null, Config.SendBufferInterval);
+                bufferer = new PacketBufferer(SendDataFinal, null, Config.Network.SendBufferInterval);
 
                 Flags = UserFlags.Normal;
             }

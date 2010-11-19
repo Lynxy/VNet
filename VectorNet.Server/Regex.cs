@@ -14,7 +14,7 @@ namespace VectorNet.Server
 
         protected void SetupRegex()
         {
-            rxUsername = new Regex(Config.UsernameRegex);
+            rxUsername = new Regex(Config.NamingRules.UsernameRegex);
         }
 
         protected bool CheckUsernameRegex(string username)
