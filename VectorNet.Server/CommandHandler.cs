@@ -9,11 +9,20 @@ namespace VectorNet.Server
     {
         CommandTable cmdTable;
 
+        /// <summary>
+        /// Handles a command by the console
+        /// </summary>
+        /// <param name="cmd">Command text</param>
         public void HandleConsoleCommand(string cmd)
         {
             HandleCommand(console, cmd);
         }
 
+        /// <summary>
+        /// Handles a command by a user. Browses the command tables to find command and checks permissions to call the command.
+        /// </summary>
+        /// <param name="user">Calling user</param>
+        /// <param name="command">Command text</param>
         protected void HandleCommand(User user, string command)
         {
             string[] cmds = command.Split(' ');
@@ -113,6 +122,11 @@ namespace VectorNet.Server
             cmd.ProcMethod.Invoke(this, specifiedParameters);
         }
 
+        /// <summary>
+        /// Returns true and sends an error to the user if the list contains more than 1 user.
+        /// </summary>
+        /// <param name="user">The calling user</param>
+        /// <param name="users">The list of users to check</param>
         protected bool CheckForMultipleUsersInSingleUserQuery(User user, List<User> users)
         {
             if (users.Count > 1)
@@ -123,6 +137,13 @@ namespace VectorNet.Server
             return false;
         }
 
+        /// <summary>
+        /// Returns true and sends an error to the user if the text is empty.
+        /// </summary>
+        /// <param name="user">The calling user</param>
+        /// <param name="text">The check to check</param>
+        /// <param name="errorMsg">The error to send if text is empty</param>
+        /// <returns></returns>
         protected bool CheckIfParameterIsEmpty(User user, ref string text, string errorMsg)
         {
             if (text.Trim().Length == 0)
@@ -133,6 +154,14 @@ namespace VectorNet.Server
             return false;
         }
 
+        /// <summary>
+        /// Recursively explores children of a command table to return a command that a user can use with their permission.
+        /// Returns null if no command was found.
+        /// </summary>
+        /// <param name="user">The calling user</param>
+        /// <param name="tbl">The parent command table to use</param>
+        /// <param name="args">An array containing the issued command</param>
+        /// <param name="argIdx">The index of the current position in args[]</param>
         protected CommandData GetCommandData(User user, CommandTable tbl, ref string[] args, ref int argIdx)
         {
             CommandData cmd = tbl[args[argIdx].ToLower()];
@@ -154,6 +183,12 @@ namespace VectorNet.Server
             return null;
         }
 
+        /// <summary>
+        /// Returns true if a user can moderate another user, otherwise sends them a error informing them they can't moderate the user.
+        /// </summary>
+        /// <param name="user">The calling user</param>
+        /// <param name="targetUser">The user to check moderation against</param>
+        /// <param name="CanTargetSelf">Whether or not moderation can be applied to yourself</param>
         protected bool RequireModerationRights(User user, User targetUser, bool CanTargetSelf)
         {
             if (user == targetUser && !CanTargetSelf)
@@ -167,6 +202,10 @@ namespace VectorNet.Server
             return false;
         }
 
+        /// <summary>
+        /// Returns true if the strings contains non-printable characters
+        /// </summary>
+        /// <param name="str">The test string</param>
         protected bool ContainsNonPrintable(string str)
         {
             foreach (char c in str)

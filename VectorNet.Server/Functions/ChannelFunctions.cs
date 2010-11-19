@@ -15,6 +15,9 @@ namespace VectorNet.Server
         protected Channel Channel_Admin;
         protected Channel Channel_Void;
 
+        /// <summary>
+        /// Sets up the default channels.
+        /// </summary>
         protected void CreateDefaultChannels()
         {
             Channel_Main = new Channel(Config.DefaultChannels.Main, ChannelFlags.Public, false, console);
@@ -27,6 +30,12 @@ namespace VectorNet.Server
             Channels.Add(Channel_Void);
         }
 
+        /// <summary>
+        /// Returns a channel based off name.
+        /// </summary>
+        /// <param name="user">The calling user</param>
+        /// <param name="channel">The channel name</param>
+        /// <param name="allowCreation">Whether or not to create the channel if it doesn't exist</param>
         protected Channel GetChannelByName(User user, string channel, bool allowCreation)
         {
             Channel ret = Channels.Find(c =>
@@ -45,11 +54,21 @@ namespace VectorNet.Server
             return ret;
         }
 
+        /// <summary>
+        /// Returns true if the channel has the specified flags.
+        /// </summary>
+        /// <param name="chan">The channel to check</param>
+        /// <param name="flags">The flags to check for</param>
         protected bool ChannelHasFlags(Channel chan, ChannelFlags flags)
         {
             return (chan.Flags & flags) == flags;
         }
 
+        /// <summary>
+        /// If no users are left in channel, it will clear the banned list and owner,
+        /// and delete the channel.
+        /// </summary>
+        /// <param name="channel"></param>
         protected void AttemptToCloseChannel(Channel channel)
         {
             if (channel.UserCount == 0)
@@ -63,14 +82,23 @@ namespace VectorNet.Server
                 else
                     Channels.Remove(channel);
             }
-
         }
 
+        /// <summary>
+        /// Gets the entire list of users in a channel.
+        /// </summary>
+        /// <param name="channel">The channel to get the user list of</param>
         protected List<User> GetUsersInChannel(Channel channel)
         {
             return GetUsersInChannel(console, channel, true);
         }
 
+        /// <summary>
+        /// Gets the list of users in a channel from a user's perspective.
+        /// </summary>
+        /// <param name="userPerspective">The user perspective to use</param>
+        /// <param name="channel">The channel to get the user list of</param>
+        /// <param name="excludeUser">Ignore the calling user from the list</param>
         protected List<User> GetUsersInChannel(User userPerspective, Channel channel, bool excludeUser)
         {
             List<User> ret = channel.GetCompleteUserList();
@@ -84,12 +112,25 @@ namespace VectorNet.Server
             return ret;
         }
 
+        /// <summary>
+        /// Sends a server info message to every user in a channel
+        /// </summary>
+        /// <param name="channel">The channel to send to</param>
+        /// <param name="message">The info message</param>
         protected void SendServerInfoToChannel(Channel channel, string message)
         {
             foreach (User user in GetUsersInChannel(channel))
                 SendServerInfo(user, message);
         }
 
+        /// <summary>
+        /// Sends a server info message to every user in a channel,
+        /// with a unique message to a specific user. Unique user does not hear the original message.
+        /// </summary>
+        /// <param name="channel">The channel to send to</param>
+        /// <param name="message">The info message</param>
+        /// <param name="uniqueUser">A unique user that will get a special message</param>
+        /// <param name="uniqueMessage">The special message</param>
         protected void SendServerInfoToChannel(Channel channel, string message, User uniqueUser, string uniqueMessage)
         {
             foreach (User user in GetUsersInChannel(channel))
@@ -99,6 +140,10 @@ namespace VectorNet.Server
                     SendServerInfo(user, message);
         }
 
+        /// <summary>
+        /// Finds a new owner for a channel and informs the channel a new owner was made.
+        /// </summary>
+        /// <param name="chan">The channel in question</param>
         protected User PromoteNewUserToOwner(Channel chan)
         {
             User oldOwner = chan.Owner;
@@ -108,6 +153,12 @@ namespace VectorNet.Server
             return user;
         }
 
+        /// <summary>
+        /// Kicks a user from a channel.
+        /// </summary>
+        /// <param name="user">The user doing the kicking</param>
+        /// <param name="targetUser">The user to kick</param>
+        /// <param name="cmdRest">An optional kick message</param>
         protected void KickUserFromChannel(User user, User targetUser, string cmdRest)
         {
             SendServerInfoToChannel(user.Channel, targetUser.Username + " was kicked out of the channel by " + user.Username + (cmdRest != string.Empty ? " (" + cmdRest + ")" : "") + ".",
@@ -115,6 +166,12 @@ namespace VectorNet.Server
             JoinUserToChannel(targetUser, Channel_Void);
         }
 
+        /// <summary>
+        /// Bans a user from a channel by username.
+        /// </summary>
+        /// <param name="user">The user doing the banning</param>
+        /// <param name="targetUser">The user to ban</param>
+        /// <param name="fromChannel">The channel to ban from</param>
         protected void BanUserByUsername(User user, User targetUser, Channel fromChannel)
         { //TODO: Reason for ban
             if (!fromChannel.BannedUsers.Contains(targetUser.Username))
@@ -130,6 +187,12 @@ namespace VectorNet.Server
             }
         }
 
+        /// <summary>
+        /// Bans a user from a channel by IP address.
+        /// </summary>
+        /// <param name="user">The user doing the banning</param>
+        /// <param name="targetUser">The user to IP ban</param>
+        /// <param name="fromChannel">The channel to IP ban from</param>
         protected void BanUserByIP(User user, User targetUser, Channel fromChannel)
         {
             if (!fromChannel.BannedIPs.Contains(targetUser.IPAddress))
@@ -155,6 +218,13 @@ namespace VectorNet.Server
             }
         }
 
+        /// <summary>
+        /// Unbans a user by username and IP address from a channel.
+        /// </summary>
+        /// <param name="user">The user doing the unbanning</param>
+        /// <param name="targetUser">The user to unban</param>
+        /// <param name="fromChannel">The channel to unban from</param>
+        /// <param name="wasIPBan">Specifies whether or not the ban was an IP ban</param>
         protected void UnbanUser(User user, User targetUser, Channel fromChannel, bool wasIPBan)
         {
             bool wasBanned = fromChannel.IsUserBanned(targetUser);

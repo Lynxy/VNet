@@ -9,6 +9,11 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
+        /// <summary>
+        /// Sends a logon result to a user
+        /// </summary>
+        /// <param name="user">The user to send to</param>
+        /// <param name="result">The logon result</param>
         protected void SendLogonResult(User user, LogonResult result)
         {
             //if (result == LogonResult.SUCCESS)

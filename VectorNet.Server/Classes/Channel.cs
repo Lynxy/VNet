@@ -39,6 +39,9 @@ namespace VectorNet.Server
             }
 
 
+            /// <summary>
+            /// The channel's name. Can never change.
+            /// </summary>
             public string Name
             {
                 get { return _Name; }
@@ -50,6 +53,9 @@ namespace VectorNet.Server
                 set { _Flags = value; }
             }
 
+            /// <summary>
+            /// Whether or not the channel is able to close when no users are in it.
+            /// </summary>
             public bool Closeable
             {
                 get { return _Closeable; }
@@ -62,6 +68,10 @@ namespace VectorNet.Server
             public int UserCount { get { return _Users.Count; } }
             public DateTime OwnerLeft { get; set; }
 
+            /// <summary>
+            /// Adds a user to the member list.
+            /// </summary>
+            /// <param name="user">The user to add</param>
             public void AddUser(User user)
             {
                 if (!_Users.Contains(user))
@@ -75,6 +85,10 @@ namespace VectorNet.Server
                 }
             }
 
+            /// <summary>
+            /// Removes a user from the member list
+            /// </summary>
+            /// <param name="user">The user to remove</param>
             public void RemoveUser(User user)
             {
                 if (_Users.Contains(user))
@@ -85,6 +99,9 @@ namespace VectorNet.Server
                     OwnerLeft = DateTime.Now;
             }
 
+            /// <summary>
+            /// Promotes the oldest user in the channel to the owner.
+            /// </summary>
             public User PromoteNewOwner()
             {
                 if (_Users.Count > 0)
@@ -95,11 +112,18 @@ namespace VectorNet.Server
                 return Owner;
             }
 
+            /// <summary>
+            /// The entire member list. Does not take a user perspective into account.
+            /// </summary>
             public List<User> GetCompleteUserList()
             {
                 return _Users.ToList();
             }
 
+            /// <summary>
+            /// Returns whether or not a user is banned by name or IP.
+            /// </summary>
+            /// <param name="user">The user to check</param>
             public bool IsUserBanned(User user)
             {
                 if (_BannedIPs.Contains(user.IPAddress))

@@ -59,6 +59,11 @@ namespace VectorNet.Server
                 Dispose(false);
             }
 
+            /// <summary>
+            /// An event that fires when a packet is requested to be sent to a user. The packet is queued until next send.
+            /// </summary>
+            /// <param name="packet">The packet that raised the event</param>
+            /// <param name="data">Payload</param>
             protected void packet_SendData(Packet packet, ref byte[] data)
             {
                 if (!_canSendData)
@@ -67,6 +72,9 @@ namespace VectorNet.Server
                     bufferer.QueuePacket(ref data);
             }
 
+            /// <summary>
+            /// Forcibly sends the users packet buffer.
+            /// </summary>
             public void SendBufferNow()
             {
                 if (!_canSendData)
@@ -74,6 +82,11 @@ namespace VectorNet.Server
                 bufferer.SendNow();
             }
 
+            /// <summary>
+            /// An event that fires every so often to send the packet buffer to the user.
+            /// </summary>
+            /// <param name="state">State object</param>
+            /// <param name="data">Payload</param>
             protected void SendDataFinal(object state, ref byte[] data)
             {
                 if (!_canSendData)
@@ -85,6 +98,10 @@ namespace VectorNet.Server
             public TcpClientWrapper Socket { get { return socket; } }
             public Packet Packet { get { return packet; } }
             public string IPAddress { get { return (socket == null ? null : ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString()); } }
+            
+            /// <summary>
+            /// The username of the user. Factors in their account nummber. Is read-only - use RealUsername to set the name.
+            /// </summary>
             public string Username
             {
                 get

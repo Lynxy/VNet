@@ -11,6 +11,11 @@ namespace VectorNet.Server
     {
         //User Functions
         //This class is for methods that deal with a single user, not multiple users
+
+        /// <summary>
+        /// Disconnects the user without warning.
+        /// </summary>
+        /// <param name="user">The user to disconnect</param>
         protected void DisconnectUser(User user)
         {
             if (user.IsOnline)
@@ -30,12 +35,22 @@ namespace VectorNet.Server
             user.Socket.Client.Close(Config.Network.ClientCloseWait);
         }
 
+        /// <summary>
+        /// Sends an error message to the user, then disconnects them.
+        /// </summary>
+        /// <param name="user">The user to disconnect</param>
+        /// <param name="message">The error message</param>
         protected void DisconnectUser(User user, string message)
         {
             SendServerError(user, message);
             DisconnectUser(user);
         }
 
+        /// <summary>
+        /// Returns a single user matching username. Only searches users that are online.
+        /// Returns null if user was not found.
+        /// </summary>
+        /// <param name="username">Username to find</param>
         protected User GetUserByName(string username)
         {
             User ret = Users.Find(u =>
@@ -47,6 +62,13 @@ namespace VectorNet.Server
             return ret;
         }
 
+        /// <summary>
+        /// Returns a list of users matching username. Only searches users that are online.
+        /// Accepts wildcards. DOES NOT CHECK IF USER HAS PERMISSION TO USE WILDCARDS.
+        /// Returns null if no users found.
+        /// </summary>
+        /// <param name="username">Username to find</param>
+        /// <param name="limitChannel">Limit results to this channel. To search all channels, set to null</param>
         protected List<User> GetUsersByName(string username, Channel limitChannel)
         {
             System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex(ConvertStringToRegexSafe(username));
@@ -60,6 +82,14 @@ namespace VectorNet.Server
             return ret;
         }
 
+        /// <summary>
+        /// Returns a list of users matching username. Only searches users that are online.
+        /// Accepts wildcards and performs a check whether or not the user can use wildcards.
+        /// Limits channel to the users channel unless the @ flag is specified.
+        /// Returns null if no users found.
+        /// </summary>
+        /// <param name="user">Calling user</param>
+        /// <param name="username">Username to find</param>
         protected List<User> GetUsersByName(User user, string username)
         {
             Channel targetChan = user.Channel;
@@ -116,6 +146,10 @@ namespace VectorNet.Server
             return ret;
         }
 
+        /// <summary>
+        /// Returns a string safe for regular expressions.
+        /// </summary>
+        /// <param name="str">The string to convert</param>
         protected string ConvertStringToRegexSafe(string str)
         {
             const string metaChars = @"\|()[{^$*+?.<>";
@@ -137,22 +171,42 @@ namespace VectorNet.Server
             return sb.ToString();
         }
 
+
+        /// <summary>
+        /// Returns true if the user has the specified flags.
+        /// </summary>
+        /// <param name="user">The user to check</param>
+        /// <param name="flags">The flags to check for</param>
         protected bool UserHasFlags(User user, UserFlags flags)
         {
             return (user.Flags & flags) == flags;
         }
 
+        /// <summary>
+        /// Removes flags from a user
+        /// </summary>
+        /// <param name="user">The user to remove flags from</param>
+        /// <param name="flags">The flags to remove</param>
         protected void RemoveFlagsFromUser(User user, UserFlags flags)
         {
             if (UserHasFlags(user, flags))
                 user.Flags ^= flags;
         }
 
+        /// <summary>
+        /// Returns true if user is a Moderator or higher
+        /// </summary>
+        /// <param name="user">The user to check</param>
         protected bool UserIsStaff(User user)
         {
             return (UserHasFlags(user, UserFlags.Admin) || UserHasFlags(user, UserFlags.Moderator));
         }
 
+        /// <summary>
+        /// Returns true if the user has the specified rank or higher
+        /// </summary>
+        /// <param name="user">The user to check</param>
+        /// <param name="flags">The minimum flags the user must have</param>
         protected bool UserHasRankOrHigher(User user, UserFlags flags)
         {
             if (flags == UserFlags.Admin)
@@ -164,11 +218,22 @@ namespace VectorNet.Server
             return true; //everyone else is normal
         }
 
+        /// <summary>
+        /// Joins a user to a channel. Will send the user left event to current channel if intenal checks pass.
+        /// </summary>
+        /// <param name="user">The user to join</param>
+        /// <param name="channel">The channel to join the user to</param>
         protected void JoinUserToChannel(User user, Channel channel)
         {
             JoinUserToChannel(user, channel, false);
         }
 
+        /// <summary>
+        /// Joins a user to a channel. Will send the user left event to current channel if intenal checks pass.
+        /// </summary>
+        /// <param name="user">The user to join</param>
+        /// <param name="channel">The channel to join the user to</param>
+        /// <param name="ForceJoin">If true, will ignore all checks and foribly join the user</param>
         protected void JoinUserToChannel(User user, Channel channel, bool ForceJoin)
         {
             if (channel.IsUserBanned(user))
@@ -202,6 +267,10 @@ namespace VectorNet.Server
                 SendServerInfo(user, "This channel does not have any chat privileges.");
         }
 
+        /// <summary>
+        /// Removes the user from a channel. YOU SHOULD NEVER NEED TO CALL THIS FUNCTION.
+        /// </summary>
+        /// <param name="user">The target user</param>
         protected void RemoveUserFromChannel(User user)
         {
             Channel chan = null;
@@ -213,6 +282,9 @@ namespace VectorNet.Server
             AttemptToCloseChannel(chan);
         }
 
+        /// <summary>
+        /// Returns a list of all online users.
+        /// </summary>
         protected List<User> GetAllOnlineUsers()
         {
             List<User> ret = Users.Where(u => u.IsOnline == true).ToList();
@@ -221,6 +293,10 @@ namespace VectorNet.Server
             return ret;
         }
 
+        /// <summary>
+        /// Returns a list of all offline users.
+        /// Note that the server does not store offline users for very long!
+        /// </summary>
         protected List<User> GetAllOfflineUsers()
         {
             List<User> ret = Users.Where(u => u.IsOnline == false).ToList();
@@ -229,6 +305,10 @@ namespace VectorNet.Server
             return ret;
         }
 
+        /// <summary>
+        /// Returns a list of users that have the specified IP address.
+        /// </summary>
+        /// <param name="IPAddress">The IP address</param>
         protected List<User> GetUsersByIP(string IPAddress)
         {
             List<User> ret = Users.Where(u => u.IPAddress == IPAddress).ToList();
@@ -237,6 +317,11 @@ namespace VectorNet.Server
             return ret;
         }
 
+        /// <summary>
+        /// Returns a list of users banned from a channel, from a users perspective.
+        /// </summary>
+        /// <param name="userPerspective">The user perspective to use</param>
+        /// <param name="channel">The channel to get the banned list from</param>
         protected List<User> GetUsersBannedFromChannel(User userPerspective, Channel channel)
         {
             List<User> ret = new List<User>();
@@ -255,6 +340,11 @@ namespace VectorNet.Server
             return ret;
         }
 
+        /// <summary>
+        /// Returns true if a user can see another user.
+        /// </summary>
+        /// <param name="user">The calling user</param>
+        /// <param name="targetUser">The user to test against</param>
         protected bool CanUserSeeUser(User user, User targetUser)
         {
             if (targetUser == null)
@@ -286,6 +376,11 @@ namespace VectorNet.Server
             return true;
         }
 
+        /// <summary>
+        /// Returns true if a user has moderation rights over another user.
+        /// </summary>
+        /// <param name="user">The calling user</param>
+        /// <param name="targetUser">The user to test against</param>
         protected bool CanUserModerateUser(User user, User targetUser)
         {
             if (targetUser == null)

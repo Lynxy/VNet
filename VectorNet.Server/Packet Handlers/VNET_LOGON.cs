@@ -51,6 +51,12 @@ namespace VectorNet.Server
             JoinUserToChannel(user, Channel_Main);
         }
 
+        /// <summary>
+        /// Returns a disconenct message based on parameters
+        /// </summary>
+        /// <param name="username">The username to check</param>
+        /// <param name="password">The password to check</param>
+        /// <param name="client">The client to check</param>
         protected string GetDisconnectMessage(string username, string password, string client)
         {
             if (username.Length < Config.NamingRules.UsernameMinLength)

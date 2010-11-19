@@ -7,6 +7,9 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
+        /// <summary>
+        /// Sets up the command tables
+        /// </summary>
         protected void InitCommandTables()
         {
             cmdTable = new CommandTable();

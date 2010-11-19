@@ -40,6 +40,9 @@ namespace VectorNet.Server
             database.Close();
         }
 
+        /// <summary>
+        /// Server initialization
+        /// </summary>
         protected void ServerInit()
         {
             Users = new List<User>();
@@ -57,6 +60,9 @@ namespace VectorNet.Server
             console.RealUsername = "";
         }
 
+        /// <summary>
+        /// Sets up server timers
+        /// </summary>
         protected void SetupTimers()
         {
             timerCheck = new Timer(Config.TimerCheckInterval);

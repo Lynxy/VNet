@@ -12,11 +12,18 @@ namespace VectorNet.Server
     {
         Regex rxUsername;
 
+        /// <summary>
+        /// Sets up regular expressions
+        /// </summary>
         protected void SetupRegex()
         {
             rxUsername = new Regex(Config.NamingRules.UsernameRegex);
         }
 
+        /// <summary>
+        /// Checks a username against a regular expression
+        /// </summary>
+        /// <param name="username">The username to check</param>
         protected bool CheckUsernameRegex(string username)
         {
             return rxUsername.IsMatch(username);

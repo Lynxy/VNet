@@ -21,6 +21,10 @@ namespace VectorNet.Server
 
             private readonly object _locker = new object();
 
+            /// <summary>
+            /// Creates a new user bound to a socket.
+            /// </summary>
+            /// <param name="client">The socket the user is on</param>
             public User AddNewClient(TcpClientWrapper client)
             {
                 User newUser = new User(client, false);
@@ -32,6 +36,11 @@ namespace VectorNet.Server
                 return newUser;
             }
 
+            /// <summary>
+            /// An event that fires when a socket receives data.
+            /// </summary>
+            /// <param name="sender">Socket that send the data</param>
+            /// <param name="data">Payload</param>
             protected void client_DataRead(TcpClientWrapper sender, byte[] data)
             {
                 ServerStats.bytesRecv += data.Length;
@@ -55,6 +64,10 @@ namespace VectorNet.Server
                 }
             }
 
+            /// <summary>
+            /// An event that fires when a socket has disconnected.
+            /// </summary>
+            /// <param name="sender">The socket the disconnected</param>
             protected void client_Disconnected(TcpClientWrapper sender)
             {
                 lock (_locker)

@@ -9,6 +9,11 @@ namespace VectorNet.Server
 {
     public partial class Server
     {
+        /// <summary>
+        /// Handles a packet sent  by a user.
+        /// </summary>
+        /// <param name="user">The user that sent the packet</param>
+        /// <param name="reader">A packet reader used to read the packet</param>
         protected void HandlePacket(User user, PacketReader reader)
         {
             //try

@@ -25,6 +25,11 @@ namespace VectorNet.Server
                 UserTalk(user, text);
         }
 
+        /// <summary>
+        /// Makes a user talk.
+        /// </summary>
+        /// <param name="user">The user to talk</param>
+        /// <param name="text">The text</param>
         protected void UserTalk(User user, string text)
         {
             if (text.Length == 0)

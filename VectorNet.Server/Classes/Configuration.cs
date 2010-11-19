@@ -101,11 +101,18 @@ namespace VectorNet.Server
         static protected ConfigurationData Config = new ConfigurationData();
         protected string ConfigurationFile = "config.xml";
 
+        /// <summary>
+        /// Saves the current configuration to config.xml
+        /// </summary>
         protected void SaveConfig()
         {
             SaveConfig(ConfigurationFile);
         }
 
+        /// <summary>
+        /// Saves the current configuration to file.
+        /// </summary>
+        /// <param name="filename"></param>
         protected void SaveConfig(string filename)
         {
             XmlSerializer x = new XmlSerializer(Config.GetType());
@@ -116,11 +123,18 @@ namespace VectorNet.Server
             }
         }
 
+        /// <summary>
+        /// Loads the configuration in config.xml
+        /// </summary>
         protected void LoadConfig()
         {
             LoadConfig(ConfigurationFile);
         }
 
+        /// <summary>
+        /// Loads the configuration in a file.
+        /// </summary>
+        /// <param name="filename"></param>
         protected void LoadConfig(string filename)
         {
             XmlSerializer x = new XmlSerializer(Config.GetType());

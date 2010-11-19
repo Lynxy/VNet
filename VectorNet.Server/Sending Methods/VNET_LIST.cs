@@ -10,7 +10,11 @@ namespace VectorNet.Server
     public partial class Server
     {
         
-
+        /// <summary>
+        /// Sends a VNET_LIST packet to a user
+        /// </summary>
+        /// <param name="user">The user to send to</param>
+        /// <param name="listType">The list type</param>
         protected void SendList(User user, ListType listType)
         {
             List<User> users;

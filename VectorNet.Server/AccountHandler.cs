@@ -17,6 +17,11 @@ namespace VectorNet.Server
             AccountBanned
         }
 
+        /// <summary>
+        /// Retreives an account state from the database
+        /// </summary>
+        /// <param name="username">The username to lookup</param>
+        /// <param name="password">Their password</param>
         protected AccountState GetAccountState(string username, string password)
         {
             using (SQLiteDataReader reader = database.Query("SELECT * FROM [Users] WHERE [Username] = @Username")
@@ -32,11 +37,20 @@ namespace VectorNet.Server
             }
         }
 
+        /// <summary>
+        /// Returns a string of the current time in the format: yyyy-MM-dd HH:mm:ss
+        /// </summary>
         protected string GetNow()
         {
             return String.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
         }
 
+        /// <summary>
+        /// Adds a new account to the database
+        /// </summary>
+        /// <param name="username">The username</param>
+        /// <param name="password">The password</param>
+        /// <param name="IP">The registration IP</param>
         protected void CreateNewAccount(string username, string password, string IP)
         {
             database.Query("INSERT INTO [Users] ([Username], [Password], [RegistrationIP], [Banned]) VALUES (@Username, @Password, @IP, 'false')")
@@ -46,6 +60,10 @@ namespace VectorNet.Server
                 .ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Updates the last login time in database for a user. Sets it to the current time.
+        /// </summary>
+        /// <param name="username">The username to update</param>
         protected void UpdateLastLogin(string username)
         {
             database.Query("UPDATE [Users] SET [LastLogin] = @LastLogin WHERE [Username] = @Username")
@@ -70,6 +88,10 @@ namespace VectorNet.Server
             return true;
         }
 
+        /// <summary>
+        /// Gets a number for a username based on how many other users are logged on with that same username.
+        /// </summary>
+        /// <param name="user">The user to checking</param>
         protected int GetUsernameNumber(User user)
         {
             List<int> accountNumbers = new List<int>();
