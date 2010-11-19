@@ -58,40 +58,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="VectorNet.Server\Classes\QueueSharingData.cs" />
-    <Compile Include="VectorNet.Server\CommandHandlerNew.cs" />
-    <Compile Include="VectorNet.Server\Commands.cs" />
-    <Compile Include="VectorNet.Server\Packet Handlers\VNET_QUEUESHARING.cs" />
-    <Compile Include="VectorNet.Server\Classes\ClientHandler.cs" />
-    <Compile Include="VectorNet.Server\Classes\SQLite.cs" />
-    <Compile Include="VectorNet.Server\Constants.cs" />
-    <Compile Include="VectorNet.Server\Regex.cs" />
-    <Compile Include="VectorNet.Server\TimerGarbage.cs" />
-    <Compile Include="VectorNet.Server\TimerCheck.cs" />
-    <Compile Include="VectorNet.Server\Events.cs" />
-    <Compile Include="VectorNet.Server\Packet Handlers\VNET_CHATEVENT.cs" />
-    <Compile Include="VectorNet.Server\Packet Handlers\VNET_SERVERCHALLENGE.cs" />
-    <Compile Include="VectorNet.Server\Packet Handlers\VNET_LOGON.cs" />
-    <Compile Include="VectorNet.Server\Sending Methods\VNET_APPS.cs" />
-    <Compile Include="VectorNet.Server\Classes\ServerStats.cs" />
-    <Compile Include="VectorNet.Server\Classes\Database.cs" />
-    <Compile Include="VectorNet.Server\Functions\ChannelFunctions.cs" />
-    <Compile Include="VectorNet.Server\Functions\UserFunctions.cs" />
-    <Compile Include="VectorNet.Server\PacketHandler.cs" />
+    <Compile Include="Classes\QueueSharingData.cs" />
+    <Compile Include="CommandHandlerNew.cs" />
+    <Compile Include="Commands.cs" />
+    <Compile Include="Packet Handlers\VNET_QUEUESHARING.cs" />
+    <Compile Include="Classes\ClientHandler.cs" />
+    <Compile Include="Classes\SQLite.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Regex.cs" />
+    <Compile Include="TimerGarbage.cs" />
+    <Compile Include="TimerCheck.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="Packet Handlers\VNET_CHATEVENT.cs" />
+    <Compile Include="Packet Handlers\VNET_SERVERCHALLENGE.cs" />
+    <Compile Include="Packet Handlers\VNET_LOGON.cs" />
+    <Compile Include="Sending Methods\VNET_APPS.cs" />
+    <Compile Include="Classes\ServerStats.cs" />
+    <Compile Include="Classes\Database.cs" />
+    <Compile Include="Functions\ChannelFunctions.cs" />
+    <Compile Include="Functions\UserFunctions.cs" />
+    <Compile Include="PacketHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VectorNet.Server\Classes\Configuration.cs" />
-    <Compile Include="VectorNet.Server\Listener.cs" />
-    <Compile Include="VectorNet.Server\Sending Methods\Console.cs" />
-    <Compile Include="VectorNet.Server\Sending Methods\VNET_LIST.cs" />
-    <Compile Include="VectorNet.Server\Sending Methods\VNET_LOGON.cs" />
-    <Compile Include="VectorNet.Server\Server.cs" />
-    <Compile Include="VectorNet.Server\AccountHandler.cs" />
-    <Compile Include="VectorNet.Server\Classes\Channel.cs" />
-    <Compile Include="VectorNet.Server\CommandHandler.cs" />
-    <Compile Include="UNUSED\ConfigurationOLD.cs" />
-    <Compile Include="VectorNet.Server\Classes\QueueSharing.cs" />
-    <Compile Include="VectorNet.Server\Classes\User.cs" />
-    <Compile Include="VectorNet.Server\Sending Methods\VNET_CHATEVENT.cs" />
+    <Compile Include="Classes\Configuration.cs" />
+    <Compile Include="Listener.cs" />
+    <Compile Include="Sending Methods\Console.cs" />
+    <Compile Include="Sending Methods\VNET_LIST.cs" />
+    <Compile Include="Sending Methods\VNET_LOGON.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="AccountHandler.cs" />
+    <Compile Include="Classes\Channel.cs" />
+    <Compile Include="CommandHandler.cs" />
+    <Compile Include="Classes\QueueSharing.cs" />
+    <Compile Include="Classes\User.cs" />
+    <Compile Include="Sending Methods\VNET_CHATEVENT.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LynxyLibrary\LynxyLibrary.csproj">
@@ -104,6 +103,7 @@
       <Link>Data\SQLite_Create_VnetDB.txt</Link>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
