@@ -42,15 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IO\AlternativeStream.cs" />
+    <Compile Include="Serialization\JSON.cs" />
     <Compile Include="Network\PacketBufferer.cs" />
     <Compile Include="Network\Packet.cs" />
     <Compile Include="Network\PacketReader.cs" />
     <Compile Include="Network\TCPClientWrapper.cs" />
     <Compile Include="Network\TCPListenerWrapper.cs" />
+    <Compile Include="Structures\Pair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Registry\Registry.cs" />
     <Compile Include="Security\AESEncryption.cs" />
     <Compile Include="Security\CryptographicScheme.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
