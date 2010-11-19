@@ -116,7 +116,7 @@ namespace VectorNet.Server
         }
 
         protected void BanUserByUsername(User user, User targetUser, Channel fromChannel)
-        {
+        { //TODO: Reason for ban
             if (!fromChannel.BannedUsers.Contains(targetUser.Username))
             {
                 fromChannel.BannedUsers.Add(targetUser.Username.ToLower());
@@ -153,11 +153,6 @@ namespace VectorNet.Server
                     }
                 }
             }
-        }
-
-        protected void UnbanUserByIP(User user, User targetUser, Channel fromChannel)
-        {
-            //no longer used
         }
 
         protected void UnbanUser(User user, User targetUser, Channel fromChannel, bool wasIPBan)

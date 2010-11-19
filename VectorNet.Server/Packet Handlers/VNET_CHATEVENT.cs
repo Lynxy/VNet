@@ -20,7 +20,7 @@ namespace VectorNet.Server
             }
 
             if (text[0] == '/')
-                HandleCommandNew(user, text.Substring(1));
+                HandleCommand(user, text.Substring(1));
             else
                 UserTalk(user, text);
         }

@@ -87,7 +87,6 @@
     <Compile Include="Server.cs" />
     <Compile Include="AccountHandler.cs" />
     <Compile Include="Classes\Channel.cs" />
-    <Compile Include="CommandHandler.cs" />
     <Compile Include="Classes\QueueSharing.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Sending Methods\VNET_CHATEVENT.cs" />

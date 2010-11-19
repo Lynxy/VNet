@@ -47,7 +47,12 @@ namespace VectorNet.Server
 
         protected void SendUserTalkSingle(User user, User targetUser, string message)
         {
-            if (user == targetUser)
+            SendUserTalkSingle(user, targetUser, message, true);
+        }
+
+        protected void SendUserTalkSingle(User user, User targetUser, string message, bool ignoreSelf)
+        {
+            if (ignoreSelf && user == targetUser)
                 return;
 
             targetUser.Packet.Clear()

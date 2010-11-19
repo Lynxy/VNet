@@ -9,7 +9,12 @@ namespace VectorNet.Server
     {
         CommandTable cmdTable;
 
-        protected void HandleCommandNew(User user, string command)
+        public void HandleConsoleCommand(string cmd)
+        {
+            HandleCommand(console, cmd);
+        }
+
+        protected void HandleCommand(User user, string command)
         {
             string[] cmds = command.Split(' ');
             int argIdx = 0;
@@ -174,6 +179,27 @@ namespace VectorNet.Server
                     ret.RemoveAt(i);
             }
             return ret;
+        }
+
+        protected bool RequireModerationRights(User user, User targetUser, bool CanTargetSelf)
+        {
+            if (user == targetUser && !CanTargetSelf)
+            {
+                SendServerError(user, "You cannot perform moderation actions on yourself!");
+                return false;
+            }
+            if (CanUserModerateUser(user, targetUser))
+                return true;
+            SendServerError(user, "You do not have sufficient rights to performs actions on user \"" + targetUser.Username + "\".");
+            return false;
+        }
+
+        protected bool ContainsNonPrintable(string str)
+        {
+            foreach (char c in str)
+                if ((byte)c < 32)
+                    return true;
+            return false;
         }
 
 
