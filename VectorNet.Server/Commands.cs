@@ -32,7 +32,7 @@ namespace VectorNet.Server
             cmdTable.Add("ban", CommandType.Moderation, UserFlags.Operator, "Bans a user from the channel", null, new Action<User, List<User>, string>(cmd_Ban));
             cmdTable.Add("ipban", "banip", CommandType.Moderation, UserFlags.Operator, "Bans a user's IP from the channel", null, new Action<User, List<User>, string>(cmd_IPBan));
             cmdTable.Add("unban", "unipban", "unbanip", CommandType.Moderation, UserFlags.Operator, "Unbans a user & their IP from the channel", null, new Action<User, List<User>, string>(cmd_Unban));
-            cmdTable.Add("op", "operator", CommandType.Moderation, UserFlags.Operator, "Gives up your operator status to another user", null, new Action<User, User, string>(cmd_Op));
+            cmdTable.Add("op", "operator", CommandType.Moderation, UserFlags.Operator, "Gives up your operator status to another user", null, new Action<User, List<User>, string>(cmd_Op));
             cmdTable.Add("resign", CommandType.General, UserFlags.Operator, "Gives up your operator status", null, new Action<User, string>(cmd_Resign));
             
             //moderator
@@ -112,36 +112,42 @@ namespace VectorNet.Server
                     UnbanUser(user, u, user.Channel, false);
         }
 
-        protected void cmd_Op(User user, User targetUser, string rest)
+        protected void cmd_Op(User user, List<User> users, string rest)
         {
-            if (user.Channel != targetUser.Channel)
+            bool isModOrHigher = UserHasRankOrHigher(user, UserFlags.Moderator);
+            if (!isModOrHigher && CheckForMultipleUsersInSingleUserQuery(user, users)) return;
+
+            foreach (User targetUser in users)
             {
-                SendServerError(user, "That user is not in the same channel as you.");
-                return;
+                if (user.Channel != targetUser.Channel)
+                {
+                    SendServerError(user, "That user is not in the same channel as you.");
+                    return;
+                }
+
+                if (isModOrHigher)
+                {
+                    targetUser.Flags |= UserFlags.Operator;
+                    SendList(targetUser, ListType.UsersFlagsUpdate);
+                }
+                else
+                {
+                    RemoveFlagsFromUser(user, UserFlags.Operator);
+                    targetUser.Flags |= UserFlags.Operator;
+
+                    if (user.Channel.Owner == user)
+                        user.Channel.Owner = targetUser;
+
+                    SendList(user, ListType.UsersFlagsUpdate); //tell channel members to update flags for these people
+                    SendList(targetUser, ListType.UsersFlagsUpdate);
+                }
+
+                SendServerInfo(user, "You have given up ops to " + targetUser.Username);
+                SendServerInfo(targetUser, "You have been given ops by " + user.Username);
+                foreach (User cu in GetUsersInChannel(user.Channel))
+                    if (cu != user && cu != targetUser)
+                        SendServerInfo(cu, user.Username + " has given Operator to " + targetUser.Username + ".");
             }
-
-            if (UserHasRankOrHigher(user, UserFlags.Moderator))
-            {
-                targetUser.Flags |= UserFlags.Operator;
-                SendList(targetUser, ListType.UsersFlagsUpdate);
-            }
-            else
-            {
-                RemoveFlagsFromUser(user, UserFlags.Operator);
-                targetUser.Flags |= UserFlags.Operator;
-
-                if (user.Channel.Owner == user)
-                    user.Channel.Owner = targetUser;
-
-                SendList(user, ListType.UsersFlagsUpdate); //tell channel members to update flags for these people
-                SendList(targetUser, ListType.UsersFlagsUpdate);
-            }
-
-            SendServerInfo(user, "You have given up ops to " + targetUser.Username);
-            SendServerInfo(targetUser, "You have been given ops by " + user.Username);
-            foreach (User cu in GetUsersInChannel(user.Channel))
-                if (cu != user && cu != targetUser)
-                    SendServerInfo(cu, user.Username + " has given Operator to " + targetUser.Username + ".");
         }
 
         protected void cmd_Resign(User user, string rest)
@@ -153,12 +159,7 @@ namespace VectorNet.Server
 
         protected void cmd_Join(User user, string rest)
         {
-            if (rest.Trim().Length == 0)
-            {
-                SendServerError(user, "You must specify a channel.");
-                return;
-            }
-
+            if (CheckIfParameterIsEmpty(user, ref rest, "You must specify a channel.")) return;
             Channel chan = GetChannelByName(user, (string)rest, true);
             JoinUserToChannel(user, chan);
         }
@@ -175,11 +176,7 @@ namespace VectorNet.Server
 
         protected void cmd_Whisper(User user, List<User> targetUsers, string rest)
         {
-            if (rest.Trim().Length == 0)
-            {
-                SendServerError(user, "What do you want to say?");
-                return;
-            }
+            if (CheckIfParameterIsEmpty(user, ref rest, "What do you want to say?")) return;
 
             foreach (User targ in targetUsers)
             {
@@ -190,11 +187,7 @@ namespace VectorNet.Server
 
         protected void cmd_Talk(User user, string rest)
         {
-            if (rest.Trim().Length == 0)
-            {
-                SendServerError(user, "What do you want to say?");
-                return;
-            }
+            if (CheckIfParameterIsEmpty(user, ref rest, "What do you want to say?")) return;
 
             SendUserTalkSingle(user, user, rest, false);
             UserTalk(user, rest);
@@ -202,11 +195,7 @@ namespace VectorNet.Server
 
         protected void cmd_Emote(User user, string rest)
         {
-            if (rest.Trim().Length == 0)
-            {
-                SendServerError(user, "What do you want to emote?");
-                return;
-            }
+            if (CheckIfParameterIsEmpty(user, ref rest, "What do you want to emote?")) return;
 
             foreach (User cu in GetUsersInChannel(user.Channel))
                 cu.Packet.Clear().InsertByte((byte)ChatEventType.UserEmote)
@@ -219,11 +208,7 @@ namespace VectorNet.Server
 
         protected void cmd_Who(User user, string rest)
         {
-            if (rest.Trim().Length == 0)
-            {
-                SendServerError(user, "What channel do you want to check?");
-                return;
-            }
+            if (CheckIfParameterIsEmpty(user, ref rest, "What channel do you want to check?")) return;
 
             Channel channel = GetChannelByName(user, rest, false);
             if (channel == null)
@@ -254,7 +239,7 @@ namespace VectorNet.Server
         }
 
         protected void cmd_Invisible(User user, string rest)
-        {
+        { //TODO: Allow making a target user invisible
             if (UserHasFlags(user, UserFlags.Invisible))
             {
                 SendServerError(user, "You are already invisible.");
@@ -293,11 +278,7 @@ namespace VectorNet.Server
 
         protected void cmd_Pop(User user, List<User> targetUsers, string rest)
         {
-            if (rest.Trim().Length == 0)
-            {
-                SendServerError(user, "Where do you want to pop?");
-                return;
-            }
+            if (CheckIfParameterIsEmpty(user, ref rest, "Where do you want to pop?")) return;
 
             Channel channel = GetChannelByName(user, rest, true);
             foreach (User cu in targetUsers)

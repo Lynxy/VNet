@@ -54,7 +54,16 @@ namespace VectorNet.Server
 
                 if (paramType == typeof(User))
                 {
-                    User targetUser = GetUserByName(cmds[i]);
+                    List<User> targetUsers = GetUsersByName(user, cmds[i]);
+                    if (targetUsers == null) return;
+                    if (CheckForMultipleUsersInSingleUserQuery(user, targetUsers)) return;
+                    for (int j = targetUsers.Count - 1; j >= 0; j--)
+                        if (cmd.CommandType == CommandType.Moderation && !RequireModerationRights(user, targetUsers[j], false))
+                            targetUsers.RemoveAt(j);
+                    if (targetUsers.Count == 0) return;
+
+
+                    User targetUser = targetUsers[0];
                     if (targetUser == null)
                     {
                         SendServerError(user, "There is no user by the name \"" + cmds[i] + "\" online.");
@@ -68,7 +77,7 @@ namespace VectorNet.Server
                 }
                 else if (paramType == typeof(List<User>))
                 {
-                    List<User> targetUsers = GetUsersFromArgument(user, cmds[i]);
+                    List<User> targetUsers = GetUsersByName(user, cmds[i]);
                     if (targetUsers == null) return;
                     for (int j = targetUsers.Count - 1; j >= 0; j--)
                         if (cmd.CommandType == CommandType.Moderation && !RequireModerationRights(user, targetUsers[j], false))
@@ -104,6 +113,26 @@ namespace VectorNet.Server
             cmd.ProcMethod.Invoke(this, specifiedParameters);
         }
 
+        protected bool CheckForMultipleUsersInSingleUserQuery(User user, List<User> users)
+        {
+            if (users.Count > 1)
+            {
+                SendServerError(user, "Your user search returned multiple users. This parameter only accepts one user.");
+                return true;
+            }
+            return false;
+        }
+
+        protected bool CheckIfParameterIsEmpty(User user, ref string text, string errorMsg)
+        {
+            if (text.Trim().Length == 0)
+            {
+                SendServerError(user, errorMsg);
+                return true;
+            }
+            return false;
+        }
+
         protected CommandData GetCommandData(User user, CommandTable tbl, ref string[] args, ref int argIdx)
         {
             CommandData cmd = tbl[args[argIdx].ToLower()];
@@ -123,62 +152,6 @@ namespace VectorNet.Server
                     return cmd;
             }
             return null;
-        }
-
-        protected List<User> GetUsersFromArgument(User user, string username)
-        {
-            Channel targetChan = user.Channel;
-            if (username.Contains('*'))
-            {
-                if (UserIsStaff(user) == false)
-                {
-                    SendServerError(user, "You do not have permission to use the * flag in usernames.");
-                    return null;
-                }
-            }
-            if (username.Contains('@'))
-            {
-                if (UserIsStaff(user) == false)
-                {
-                    SendServerError(user, "You do not have permission to use the @ flag in usernames.");
-                    return null;
-                }
-                string channel = username.Substring(username.IndexOf('@') + 1);
-                Channel chan = null;
-                if (channel == "*")
-                {
-                    if (!UserHasFlags(user, UserFlags.Admin))
-                    {
-                        SendServerError(user, "You do not have permission to use * as the channel name.");
-                        return null;
-                    }
-                }
-                else
-                {
-                    chan = GetChannelByName(user, channel, false);
-                    if (chan == null)
-                    {
-                        SendServerError(user, "The channel " + channel + " was not found.");
-                        return null;
-                    }
-                }
-                targetChan = chan;
-                username = username.Substring(0, username.IndexOf('@'));
-            }
-
-            List<User> ret = GetUsersByName(username, targetChan);
-            if (ret.Count == 0)
-            {
-                SendServerError(user, "There is no user by the name \"" + username + "\" online.");
-                return null;
-            }
-
-            for (int i = ret.Count - 1; i >= 0; i--)
-            {
-                if (CanUserSeeUser(user, ret[i]) == false)
-                    ret.RemoveAt(i);
-            }
-            return ret;
         }
 
         protected bool RequireModerationRights(User user, User targetUser, bool CanTargetSelf)

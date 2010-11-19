@@ -60,6 +60,62 @@ namespace VectorNet.Server
             return ret;
         }
 
+        protected List<User> GetUsersByName(User user, string username)
+        {
+            Channel targetChan = user.Channel;
+            if (username.Contains('*'))
+            {
+                if (UserIsStaff(user) == false)
+                {
+                    SendServerError(user, "You do not have permission to use the * flag in usernames.");
+                    return null;
+                }
+            }
+            if (username.Contains('@'))
+            {
+                if (UserIsStaff(user) == false)
+                {
+                    SendServerError(user, "You do not have permission to use the @ flag in usernames.");
+                    return null;
+                }
+                string channel = username.Substring(username.IndexOf('@') + 1);
+                Channel chan = null;
+                if (channel == "*")
+                {
+                    if (!UserHasFlags(user, UserFlags.Admin))
+                    {
+                        SendServerError(user, "You do not have permission to use * as the channel name.");
+                        return null;
+                    }
+                }
+                else
+                {
+                    chan = GetChannelByName(user, channel, false);
+                    if (chan == null)
+                    {
+                        SendServerError(user, "The channel " + channel + " was not found.");
+                        return null;
+                    }
+                }
+                targetChan = chan;
+                username = username.Substring(0, username.IndexOf('@'));
+            }
+
+            List<User> ret = GetUsersByName(username, targetChan);
+            if (ret.Count == 0)
+            {
+                SendServerError(user, "There is no user by the name \"" + username + "\" online.");
+                return null;
+            }
+
+            for (int i = ret.Count - 1; i >= 0; i--)
+            {
+                if (CanUserSeeUser(user, ret[i]) == false)
+                    ret.RemoveAt(i);
+            }
+            return ret;
+        }
+
         protected string ConvertStringToRegexSafe(string str)
         {
             const string metaChars = @"\|()[{^$*+?.<>";
