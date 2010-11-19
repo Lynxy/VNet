@@ -157,15 +157,7 @@ namespace VectorNet.Server
 
         protected void UnbanUserByIP(User user, User targetUser, Channel fromChannel)
         {
-            if (fromChannel.BannedIPs.Contains(targetUser.IPAddress))
-            {
-                fromChannel.BannedIPs.Remove(targetUser.IPAddress);
-                foreach (User u in GetUsersByIP(targetUser.IPAddress))
-                {
-                    //Unban every user in specified channel
-                    UnbanUser(user, u, fromChannel, true);
-                }
-            }
+            //no longer used
         }
 
         protected void UnbanUser(User user, User targetUser, Channel fromChannel, bool wasIPBan)
@@ -175,7 +167,11 @@ namespace VectorNet.Server
             if (fromChannel.BannedUsers.Contains(targetUser.Username.ToLower()))
                 fromChannel.BannedUsers.Remove(targetUser.Username.ToLower());
             if (fromChannel.BannedIPs.Contains(targetUser.IPAddress))
+            {
                 fromChannel.BannedIPs.Remove(targetUser.IPAddress);
+                foreach (User u in GetUsersByIP(targetUser.IPAddress))
+                    UnbanUser(user, u, fromChannel, true);
+            }
 
             if (wasBanned)
             {
