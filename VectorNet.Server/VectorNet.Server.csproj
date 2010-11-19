@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\QueueSharingData.cs" />
-    <Compile Include="CommandHandlerNew.cs" />
+    <Compile Include="CommandHandler.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="Packet Handlers\VNET_QUEUESHARING.cs" />
     <Compile Include="Classes\ClientHandler.cs" />
