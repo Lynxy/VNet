@@ -40,18 +40,20 @@ namespace VectorNet.Server
             if (UserIsStaff(user))
                 SendUserTalk(user, text); //when staff talk, all can always hear
             else
+            {
                 if (ChannelHasFlags(chan, ChannelFlags.Silent) == true)
                     userCt = 0;
 
-            if (ChannelHasFlags(chan, ChannelFlags.Administrative) == true
-                || ChannelHasFlags(chan, ChannelFlags.Silent) == true)
-            {
-                foreach (User u in GetUsersInChannel(chan))
-                    if (UserIsStaff(u))
-                        SendUserTalkSingle(user, u, text);
+                if (ChannelHasFlags(chan, ChannelFlags.Administrative) == true
+                    || ChannelHasFlags(chan, ChannelFlags.Silent) == true)
+                {
+                    foreach (User u in GetUsersInChannel(chan))
+                        if (UserIsStaff(u))
+                            SendUserTalkSingle(user, u, text);
+                }
+                else
+                    SendUserTalk(user, text); //send it always incase invis users
             }
-            else
-                SendUserTalk(user, text); //send it always incase invis users
 
             if (userCt == 0)
                 SendServerInfo(user, "No one hears you.");
