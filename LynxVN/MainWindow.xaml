@@ -17,7 +17,7 @@
         <RichTextBox Margin="12,29,8,44" Name="rtbChat" VerticalScrollBarVisibility="Auto" Background="Black" Foreground="White" BorderBrush="{x:Null}" />
         <TextBox Height="23" Margin="12,0,12,12" Name="txtSend" Grid.ColumnSpan="2" VerticalAlignment="Bottom" KeyUp="txtSend_KeyUp" Background="Black" Foreground="White" BorderBrush="{x:Null}" />
         <Menu Height="23" Name="menu1" VerticalAlignment="Top" Grid.ColumnSpan="2">
-            <MenuItem Header="Connect" Name="mnuConnect" Click="mnuConnect_Click" />
+            <MenuItem Header="_Connect" Name="mnuConnect" Click="mnuConnect_Click" />
         </Menu>
         <Separator Margin="12,273,12,0" Name="separator1" VerticalAlignment="Top" Grid.ColumnSpan="2" />
         <ListView Background="Black" BorderBrush="{x:Null}" Foreground="White" Margin="8,29,12,44" Name="lvChannel" Grid.Column="1">
