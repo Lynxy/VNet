@@ -265,6 +265,16 @@ namespace VectorNet.Server
                 Add(new string[] { _Name, _Alias1, _Alias2 }, _CommandType, _FlagsRequired, _Description, _SubCommandTable, _ProcMethod);
             }
 
+            public void Add(string _Name, string _Alias1, string _Alias2, string _Alias3, CommandType _CommandType, UserFlags _FlagsRequired, string _Description, CommandTable _SubCommandTable, Delegate _ProcMethod)
+            {
+                Add(new string[] { _Name, _Alias1, _Alias2, _Alias3 }, _CommandType, _FlagsRequired, _Description, _SubCommandTable, _ProcMethod);
+            }
+
+            public void Add(string _Name, string _Alias1, string _Alias2, string _Alias3, string _Alias4, CommandType _CommandType, UserFlags _FlagsRequired, string _Description, CommandTable _SubCommandTable, Delegate _ProcMethod)
+            {
+                Add(new string[] { _Name, _Alias1, _Alias2, _Alias3, _Alias4 }, _CommandType, _FlagsRequired, _Description, _SubCommandTable, _ProcMethod);
+            }
+
             public void Add(string[] _Name, CommandType _CommandType, UserFlags _FlagsRequired, string _Description, CommandTable _SubCommandTable, Delegate _ProcMethod)
             {
                 System.Reflection.MethodInfo mi = _ProcMethod.Method;
