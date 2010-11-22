@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.lvVNUsers = new System.Windows.Forms.TreeView();
             this.tmrTest = new System.Windows.Forms.Timer(this.components);
             this.txtStatus = new System.Windows.Forms.TextBox();
@@ -79,6 +80,7 @@
             this.Controls.Add(this.txtChat);
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.lvVNUsers);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmMain";
             this.Text = "VectorNet Server Listener";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
