@@ -19,7 +19,7 @@
         <Menu Height="23" Name="menu1" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem Header="_Connect" Name="mnuConnect" Click="mnuConnect_Click" />
         </Menu>
-        <Separator Margin="12,273,12,0" Name="separator1" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+        <Separator Margin="12,0,12,37" Name="separator1" VerticalAlignment="Bottom" Grid.ColumnSpan="2" />
         <ListView Background="Black" BorderBrush="{x:Null}" Foreground="White" Margin="8,29,12,44" Name="lvChannel" Grid.Column="1">
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
