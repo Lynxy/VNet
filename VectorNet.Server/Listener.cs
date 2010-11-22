@@ -34,6 +34,15 @@ namespace VectorNet.Server
         protected void listener_OnClientConnected(TcpClientWrapper client)
         {
             ServerStats.totalConnections++;
+
+            string IP = EndpointToIP(client.Client.RemoteEndPoint);
+            if (CheckFloodingConnection(IP))
+            {
+                client.Client.Shutdown(System.Net.Sockets.SocketShutdown.Both);
+                return;
+            }
+            IncrementFloodingConnection(IP);
+
             Users.Add(clients.AddNewClient(client));
         }
 
@@ -45,6 +54,15 @@ namespace VectorNet.Server
         {
             DisconnectUser(user);
             Users.Remove(user);
+        }
+
+        /// <summary>
+        /// Converts an EndPoint to a string (IP address, no port)
+        /// </summary>
+        /// <param name="point">The EndPoint to convert</param>
+        protected string EndpointToIP(System.Net.EndPoint point)
+        {
+            return ((System.Net.IPEndPoint)point).Address.ToString();
         }
     }
 }

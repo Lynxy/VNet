@@ -18,6 +18,8 @@ namespace VectorNet.Server
             public NetworkSettings Network;
             public DefaultChannelSettings DefaultChannels;
             public NamingRulesSettings NamingRules;
+            public TimerSettings Timers;
+            public FloodConditionsSettings FloodConditions;
 
             public ConfigurationData()
             {
@@ -25,6 +27,8 @@ namespace VectorNet.Server
                 Network = new NetworkSettings();
                 DefaultChannels = new DefaultChannelSettings();
                 NamingRules = new NamingRulesSettings();
+                Timers = new TimerSettings();
+                FloodConditions = new FloodConditionsSettings();
             }
 
             protected string _DatabaseFilename = "vnet.sqlite";
@@ -32,8 +36,6 @@ namespace VectorNet.Server
             protected bool _AllowAES = true;
             protected bool _AllowChallenges = true;
             protected bool _UseIdleSystem = false;
-            protected int _TimerCheckInterval = 1000;
-            protected int _TimerGarbageInterval = 5000;
             protected int _MaxUsersPerIP = 10;
             protected int _MaxUsersPerChannel = 50;
 
@@ -42,8 +44,6 @@ namespace VectorNet.Server
             public int ChannelOwnerTimeout { get { return _ChannelOwnerTimeout; } set { _ChannelOwnerTimeout = value; } }
             public bool AllowAES { get { return _AllowAES; } set { _AllowAES = value; } }
             public bool UseIdleSystem { get { return _UseIdleSystem; } set { _UseIdleSystem = value; } }
-            public int TimerCheckInterval { get { return _TimerCheckInterval; } set { _TimerCheckInterval = value; } }
-            public int TimerGarbageInterval { get { return _TimerGarbageInterval; } set { _TimerGarbageInterval = value; } }
             public int MaxUsersPerIP { get { return _MaxUsersPerIP; } set { _MaxUsersPerIP = value; } }
             public int MaxUsersPerChannel { get { return _MaxUsersPerChannel; } set { _MaxUsersPerChannel = value; } }
 
@@ -95,6 +95,24 @@ namespace VectorNet.Server
                 public int UsernameMinLength { get { return _UsernameMinLength; } set { _UsernameMinLength = value; } }
                 public int UsernameMaxLength { get { return _UsernameMaxLength; } set { _UsernameMaxLength = value; } }
                 public string UsernameRegex { get { return _UsernameRegex; } set { _UsernameRegex = value; } }
+            }
+
+            public class TimerSettings
+            {
+                protected int _CheckInterval = 1000;
+                protected int _GarbageInterval = 5000;
+                protected int _FloodDecrementInterval = 1000;
+
+                public int CheckInterval { get { return _CheckInterval; } set { _CheckInterval = value; } }
+                public int GarbageInterval { get { return _GarbageInterval; } set { _GarbageInterval = value; } }
+                public int FloodDecrementInterval { get { return _FloodDecrementInterval; } set { _FloodDecrementInterval = value; } }
+            }
+
+            public class FloodConditionsSettings
+            {
+                protected int _UserConnectionThreshold = 2;
+
+                public int UserConnectionThreshold { get { return _UserConnectionThreshold; } set { _UserConnectionThreshold = value; } }
             }
         }
 

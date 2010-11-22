@@ -14,8 +14,11 @@ namespace VectorNet.Server
 
         protected List<User> Users;
         protected List<Channel> Channels;
+
+        //Timers
         protected Timer timerCheck;
         protected Timer timerGarbage;
+        protected Timer timerFloodDecrement;
 
         protected User console;
 
@@ -49,6 +52,7 @@ namespace VectorNet.Server
             Channels = new List<Channel>();
 
             SetupRegex();
+            SetupFloodDictionaries();
             SetupTimers();
             CreateDefaultChannels();
             InitCommandTables();
@@ -65,13 +69,17 @@ namespace VectorNet.Server
         /// </summary>
         protected void SetupTimers()
         {
-            timerCheck = new Timer(Config.TimerCheckInterval);
+            timerCheck = new Timer(Config.Timers.CheckInterval);
             timerCheck.Elapsed += new ElapsedEventHandler(timerCheck_Elapsed);
             timerCheck.Start();
 
-            timerGarbage = new Timer(Config.TimerGarbageInterval);
+            timerGarbage = new Timer(Config.Timers.GarbageInterval);
             timerGarbage.Elapsed += new ElapsedEventHandler(timerGarbage_Elapsed);
             timerGarbage.Start();
+
+            timerFloodDecrement = new Timer(Config.Timers.FloodDecrementInterval);
+            timerFloodDecrement.Elapsed += new ElapsedEventHandler(timerFloodDecrement_Elapsed);
+            timerFloodDecrement.Start();
         }
     }
 }

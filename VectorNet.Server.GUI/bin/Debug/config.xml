@@ -22,12 +22,18 @@
     <UsernameMaxLength>14</UsernameMaxLength>
     <UsernameRegex>^([a-zA-Z0-9]+?[\._\-]{0,1})*?$</UsernameRegex>
   </NamingRules>
+  <Timers>
+    <CheckInterval>1000</CheckInterval>
+    <GarbageInterval>5000</GarbageInterval>
+    <FloodDecrementInterval>1000</FloodDecrementInterval>
+  </Timers>
+  <FloodConditions>
+    <UserConnectionThreshold>2</UserConnectionThreshold>
+  </FloodConditions>
   <DatabaseFilename>vnet.sqlite</DatabaseFilename>
   <ChannelOwnerTimeout>15</ChannelOwnerTimeout>
   <AllowAES>true</AllowAES>
   <UseIdleSystem>false</UseIdleSystem>
-  <TimerCheckInterval>1000</TimerCheckInterval>
-  <TimerGarbageInterval>5000</TimerGarbageInterval>
   <MaxUsersPerIP>10</MaxUsersPerIP>
   <MaxUsersPerChannel>50</MaxUsersPerChannel>
 </VectorNetServer>
