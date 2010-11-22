@@ -307,7 +307,14 @@ namespace Lynxy.Network
                     return;
                 }
 
-                GetStream().BeginWrite(data, 0, size, new AsyncCallback(EndASSend), null);
+                NetworkStream str = GetStream();
+                if (!str.CanWrite)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
+                str.BeginWrite(data, 0, size, new AsyncCallback(EndASSend), null);
             }
             catch (IOException)
             {
@@ -330,7 +337,14 @@ namespace Lynxy.Network
                     return;
                 }
 
-                GetStream().EndWrite(ar);
+                NetworkStream str = GetStream();
+                if (!str.CanWrite)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
+                str.EndWrite(ar);
                 OnDataSent();
             }
             catch (IOException)
