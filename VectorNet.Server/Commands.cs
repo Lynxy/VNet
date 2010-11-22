@@ -20,7 +20,8 @@ namespace VectorNet.Server
             //testing commands (temp?)
             cmdTable.Add("admin", CommandType.General, UserFlags.Normal, "", null, new Action<User, string>(cmd_Admin));
             cmdTable.Add("mod", "moderator", CommandType.General, UserFlags.Normal, "", null, new Action<User, string>(cmd_Mod));
-
+            cmdTable.Add("thread", "threads", CommandType.General, UserFlags.Normal, "", null, new Action<User, string>(cmd_Thread));
+            
             //normal user
             cmdTable.Add("join", "j", CommandType.General, UserFlags.Normal, "Joins a channel", null, new Action<User, string>(cmd_Join));
             cmdTable.Add("stats", CommandType.General, UserFlags.Normal, "", null, new Action<User, string>(cmd_Stats));
@@ -77,6 +78,24 @@ namespace VectorNet.Server
             user.Flags |= UserFlags.Moderator;
             SendServerInfo(user, "You have become a moderator.");
             SendList(user, ListType.UsersFlagsUpdate);
+        }
+
+        protected void cmd_Thread(User user, string rest)
+        {
+            System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+
+            int curID = AppDomain.GetCurrentThreadId();
+            string appendMsg = "";
+
+            SendServerInfo(user, "-----------------------------------------------------");
+            for (int i = 0; i < p.Threads.Count; i++)
+            {
+                appendMsg = "";
+                if (p.Threads[i].Id == curID)
+                    appendMsg = " <-- Current thread";
+
+                SendServerInfo(user, "Thread #" + i + " ID = " + p.Threads[i].Id + appendMsg);
+            }
         }
 
         protected void cmd_Kick(User user, List<User> users, string reason)
