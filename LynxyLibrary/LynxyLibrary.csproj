@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="IO\AlternativeStream.cs" />
     <Compile Include="Serialization\JSON.cs" />
-    <Compile Include="Network\PacketBufferer.cs" />
+    <Compile Include="Network\PacketSendBufferer.cs" />
     <Compile Include="Network\Packet.cs" />
     <Compile Include="Network\PacketReader.cs" />
     <Compile Include="Network\TCPClientWrapper.cs" />
