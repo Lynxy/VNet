@@ -15,7 +15,6 @@ namespace VectorNet.Server
             private bool disposed = false;
             protected TcpClientWrapper socket;
             protected Packet packet;
-            protected PacketSendBufferer sendBufferer;
             protected PacketBuffer recvBufferer;
             protected UserFlags _Flags;
             protected bool _isConsole = false;
@@ -25,11 +24,10 @@ namespace VectorNet.Server
             {
                 socket = clientSocket;
                 _isConsole = isConsole;
-
                 packet = new Packet();
                 packet.skipHeaders = isConsole;
                 packet.DataSent += new Packet.SendDataDelegate(packet_SendData);
-                sendBufferer = new PacketSendBufferer(SendDataFinal, null, Config.Network.SendBufferInterval);
+                PacketSendBufferer.AddSendHandler(this, SendDataFinal);
                 recvBufferer = new PacketBuffer();
 
                 Flags = UserFlags.Normal;
@@ -50,7 +48,7 @@ namespace VectorNet.Server
                         socket.Client.Dispose();
                         socket = null;
                         packet = null;
-                        sendBufferer = null;
+                        PacketSendBufferer.RemoveSendHandler(this);
                         recvBufferer = null;
                         Channel = null;
                     }
@@ -73,7 +71,7 @@ namespace VectorNet.Server
                 if (!_canSendData)
                     return;
                 if (!_isConsole)
-                    sendBufferer.QueuePacket(ref data);
+                    PacketSendBufferer.QueuePacket(this, ref data);
             }
 
             /// <summary>
@@ -83,7 +81,8 @@ namespace VectorNet.Server
             {
                 if (!_canSendData)
                     return;
-                sendBufferer.SendNow();
+
+                PacketSendBufferer.SendNow(this);
             }
 
             /// <summary>
@@ -91,7 +90,7 @@ namespace VectorNet.Server
             /// </summary>
             /// <param name="state">State object</param>
             /// <param name="data">Payload</param>
-            protected void SendDataFinal(object state, ref byte[] data)
+            protected void SendDataFinal(object state, byte[] data)
             {
                 if (!_canSendData)
                     return;

@@ -51,6 +51,8 @@ namespace VectorNet.Server
             Users = new List<User>();
             Channels = new List<Channel>();
 
+            PacketSendBufferer.Init(Config.Network.SendBufferInterval);
+
             SetupRegex();
             SetupFloodDictionaries();
             SetupTimers();
