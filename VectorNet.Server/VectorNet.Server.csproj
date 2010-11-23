@@ -63,7 +63,6 @@
     <Compile Include="Commands.cs" />
     <Compile Include="Flood.cs" />
     <Compile Include="Packet Handlers\VNET_QUEUESHARING.cs" />
-    <Compile Include="Classes\ClientHandler.cs" />
     <Compile Include="Classes\SQLite.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Regex.cs" />

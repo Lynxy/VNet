@@ -15,7 +15,8 @@ namespace VectorNet.Server
             private bool disposed = false;
             protected TcpClientWrapper socket;
             protected Packet packet;
-            protected PacketBufferer bufferer;
+            protected PacketSendBufferer sendBufferer;
+            protected PacketRecvBufferer recvBufferer;
             protected UserFlags _Flags;
             protected bool _isConsole = false;
             protected bool _canSendData = true;
@@ -28,7 +29,8 @@ namespace VectorNet.Server
                 packet = new Packet();
                 packet.skipHeaders = isConsole;
                 packet.DataSent += new Packet.SendDataDelegate(packet_SendData);
-                bufferer = new PacketBufferer(SendDataFinal, null, Config.Network.SendBufferInterval);
+                sendBufferer = new PacketSendBufferer(SendDataFinal, null, Config.Network.SendBufferInterval);
+                recvBufferer = new PacketRecvBufferer();
 
                 Flags = UserFlags.Normal;
             }
@@ -45,9 +47,11 @@ namespace VectorNet.Server
                 {
                     if (disposing)
                     {
+                        socket.Client.Dispose();
                         socket = null;
                         packet = null;
-                        bufferer = null;
+                        sendBufferer = null;
+                        recvBufferer = null;
                         Channel = null;
                     }
                     disposed = true;
@@ -69,7 +73,7 @@ namespace VectorNet.Server
                 if (!_canSendData)
                     return;
                 if (!_isConsole)
-                    bufferer.QueuePacket(ref data);
+                    sendBufferer.QueuePacket(ref data);
             }
 
             /// <summary>
@@ -79,7 +83,7 @@ namespace VectorNet.Server
             {
                 if (!_canSendData)
                     return;
-                bufferer.SendNow();
+                sendBufferer.SendNow();
             }
 
             /// <summary>
@@ -95,6 +99,7 @@ namespace VectorNet.Server
                 socket.AsyncSend(data, data.Length);
             }
 
+            public PacketRecvBufferer RecvBufferer { get { return recvBufferer; } }
             public TcpClientWrapper Socket { get { return socket; } }
             public Packet Packet { get { return packet; } }
             public string IPAddress { get { return (socket == null ? null : ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString()); } }
