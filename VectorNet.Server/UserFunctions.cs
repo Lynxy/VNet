@@ -241,9 +241,11 @@ namespace VectorNet.Server
                 SendServerError(user, "You are banned from that channel.");
                 return;
             }
-            if (channel == Channel_Admin)
-            {
-                if (UserIsStaff(user) == false && !ForceJoin)
+            if (ForceJoin == false)
+            { //all restrictive stuff goes in here
+                if (user.Channel == channel)
+                    return; //dont allow them to join their channel again
+                if (channel == Channel_Admin && UserIsStaff(user) == false)
                 {
                     SendServerError(user, "Only staff can enter that channel.");
                     return;
