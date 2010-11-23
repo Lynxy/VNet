@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using System.Threading;
-
 namespace Lynxy.Network
 {
-    public class PacketRecvBufferer
+    public class PacketBuffer
     {
         protected byte[] _buffer;
-        private readonly object _locker = new object();
+        private readonly object _lockerInstance = new object();
+        static private readonly object _lockerStatic = new object();
 
-        public PacketRecvBufferer()
+        public PacketBuffer()
         {
             _buffer = new byte[0];
         }
 
         public void AppendData(ref byte[] data)
         {
-            lock (_locker)
+            lock (_lockerInstance)
             {
                 int oldLen = _buffer.Length;
                 Array.Resize(ref _buffer, oldLen + data.Length);
@@ -29,7 +28,7 @@ namespace Lynxy.Network
 
         public PacketReader GetNextPacket()
         {
-            lock (_locker)
+            lock (_lockerInstance)
             {
                 byte[] completePacket = PacketBuffer.GetNextPacket(ref _buffer);
                 if (completePacket == null) return null;
@@ -37,5 +36,17 @@ namespace Lynxy.Network
             }
         }
 
+        static public byte[] GetNextPacket(ref byte[] packet)
+        {
+            lock (_lockerStatic)
+            {
+                byte[] ret = Packet.Parse(packet);
+                if (ret == null)
+                    return null;
+                Array.Copy(packet, ret.Length + 4, packet, 0, packet.Length - ret.Length - 4);
+                Array.Resize(ref packet, packet.Length - ret.Length - 4);
+                return ret;
+            }
+        }
     }
 }

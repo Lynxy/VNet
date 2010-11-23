@@ -16,7 +16,7 @@ namespace VectorNet.Server
             protected TcpClientWrapper socket;
             protected Packet packet;
             protected PacketSendBufferer sendBufferer;
-            protected PacketRecvBufferer recvBufferer;
+            protected PacketBuffer recvBufferer;
             protected UserFlags _Flags;
             protected bool _isConsole = false;
             protected bool _canSendData = true;
@@ -30,7 +30,7 @@ namespace VectorNet.Server
                 packet.skipHeaders = isConsole;
                 packet.DataSent += new Packet.SendDataDelegate(packet_SendData);
                 sendBufferer = new PacketSendBufferer(SendDataFinal, null, Config.Network.SendBufferInterval);
-                recvBufferer = new PacketRecvBufferer();
+                recvBufferer = new PacketBuffer();
 
                 Flags = UserFlags.Normal;
             }
@@ -99,7 +99,7 @@ namespace VectorNet.Server
                 socket.AsyncSend(data, data.Length);
             }
 
-            public PacketRecvBufferer RecvBufferer { get { return recvBufferer; } }
+            public PacketBuffer RecvBufferer { get { return recvBufferer; } }
             public TcpClientWrapper Socket { get { return socket; } }
             public Packet Packet { get { return packet; } }
             public string IPAddress { get { return (socket == null ? null : ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString()); } }
