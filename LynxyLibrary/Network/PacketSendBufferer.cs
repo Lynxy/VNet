@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Lynxy.Network
 {
-    public class PacketBufferer
+    public class PacketSendBufferer
     {
         public delegate void SendDataDelegate(object state, ref byte[] data);
         protected SendDataDelegate _SendData;
@@ -17,11 +17,11 @@ namespace Lynxy.Network
         protected Timer ticker;
         private readonly object _locker = new object();
 
-        public PacketBufferer(SendDataDelegate SendData, object state)
+        public PacketSendBufferer(SendDataDelegate SendData, object state)
             : this(SendData, state, 100)
         {
         }
-        public PacketBufferer(SendDataDelegate SendData, object state, int interval)
+        public PacketSendBufferer(SendDataDelegate SendData, object state, int interval)
         {
             _SendData = SendData;
             _state = state;

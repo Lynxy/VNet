@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IO\AlternativeStream.cs" />
+    <Compile Include="Network\PacketRecvBufferer.cs" />
     <Compile Include="Serialization\JSON.cs" />
     <Compile Include="Network\PacketSendBufferer.cs" />
     <Compile Include="Network\Packet.cs" />
