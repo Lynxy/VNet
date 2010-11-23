@@ -63,7 +63,6 @@
     <Compile Include="Commands.cs" />
     <Compile Include="Flood.cs" />
     <Compile Include="Packet Handlers\VNET_QUEUESHARING.cs" />
-    <Compile Include="Classes\ClientHandler.cs" />
     <Compile Include="Classes\SQLite.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Regex.cs" />
@@ -81,7 +80,7 @@
     <Compile Include="PacketHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Configuration.cs" />
-    <Compile Include="Listener.cs" />
+    <Compile Include="ClientHandler.cs" />
     <Compile Include="Sending Methods\Console.cs" />
     <Compile Include="Sending Methods\VNET_LIST.cs" />
     <Compile Include="Sending Methods\VNET_LOGON.cs" />

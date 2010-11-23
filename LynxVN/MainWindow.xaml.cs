@@ -34,7 +34,7 @@ namespace LynxVN
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            txtSend.Focus();
         }
 
         protected string GetProcessorID()

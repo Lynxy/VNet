@@ -29,7 +29,7 @@ namespace VectorNet.Server.GUI
         {
             VNet = new Server("config.xml");
 
-            VNet.StartListening();
+            VNet.StartListeningForClients();
 
             VNet.EventServerException += new Server.ServerExceptionDelegate(VNet_EventServerException);
 

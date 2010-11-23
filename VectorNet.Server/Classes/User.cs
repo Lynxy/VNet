@@ -15,7 +15,7 @@ namespace VectorNet.Server
             private bool disposed = false;
             protected TcpClientWrapper socket;
             protected Packet packet;
-            protected PacketBufferer bufferer;
+            protected PacketBuffer recvBufferer;
             protected UserFlags _Flags;
             protected bool _isConsole = false;
             protected bool _canSendData = true;
@@ -24,11 +24,11 @@ namespace VectorNet.Server
             {
                 socket = clientSocket;
                 _isConsole = isConsole;
-
                 packet = new Packet();
                 packet.skipHeaders = isConsole;
                 packet.DataSent += new Packet.SendDataDelegate(packet_SendData);
-                bufferer = new PacketBufferer(SendDataFinal, null, Config.Network.SendBufferInterval);
+                PacketSendBufferer.AddSendHandler(this, SendDataFinal);
+                recvBufferer = new PacketBuffer();
 
                 Flags = UserFlags.Normal;
             }
@@ -45,9 +45,11 @@ namespace VectorNet.Server
                 {
                     if (disposing)
                     {
+                        socket.Client.Dispose();
                         socket = null;
                         packet = null;
-                        bufferer = null;
+                        PacketSendBufferer.RemoveSendHandler(this);
+                        recvBufferer = null;
                         Channel = null;
                     }
                     disposed = true;
@@ -69,7 +71,7 @@ namespace VectorNet.Server
                 if (!_canSendData)
                     return;
                 if (!_isConsole)
-                    bufferer.QueuePacket(ref data);
+                    PacketSendBufferer.QueuePacket(this, ref data);
             }
 
             /// <summary>
@@ -79,7 +81,8 @@ namespace VectorNet.Server
             {
                 if (!_canSendData)
                     return;
-                bufferer.SendNow();
+
+                PacketSendBufferer.SendNow(this);
             }
 
             /// <summary>
@@ -87,7 +90,7 @@ namespace VectorNet.Server
             /// </summary>
             /// <param name="state">State object</param>
             /// <param name="data">Payload</param>
-            protected void SendDataFinal(object state, ref byte[] data)
+            protected void SendDataFinal(object state, byte[] data)
             {
                 if (!_canSendData)
                     return;
@@ -95,6 +98,7 @@ namespace VectorNet.Server
                 socket.AsyncSend(data, data.Length);
             }
 
+            public PacketBuffer RecvBufferer { get { return recvBufferer; } }
             public TcpClientWrapper Socket { get { return socket; } }
             public Packet Packet { get { return packet; } }
             public string IPAddress { get { return (socket == null ? null : ((IPEndPoint)socket.Client.RemoteEndPoint).Address.ToString()); } }

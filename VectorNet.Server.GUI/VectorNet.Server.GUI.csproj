@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>server.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -89,7 +92,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="server.ico" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LynxyLibrary\LynxyLibrary.csproj">
       <Project>{6D7E9160-813C-4EA1-8A4B-CD9428CA7BA4}</Project>

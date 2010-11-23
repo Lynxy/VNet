@@ -75,7 +75,7 @@ namespace Lynxy.Network
         /// Data has been read asynchronously and is available.
         /// </summary>
         /// <remarks>Raised when an Asynchronous read has completed and data is available.</remarks>
-        public delegate void DataReadDelegate(TcpClientWrapper sender, byte[] data);
+        public delegate void DataReadDelegate(TcpClientWrapper sender, ref byte[] data);
         public event DataReadDelegate DataRead;
 
         /// <summary>
@@ -110,41 +110,31 @@ namespace Lynxy.Network
             if (Client != null && Connected)
                 Close();
             if (Disconnected != null)
-            {
                 Disconnected(this);
-            }
         }
 
-        protected virtual void OnDataRead(byte[] e)
+        protected virtual void OnDataRead(ref byte[] e)
         {
             if (DataRead != null)
-            {
-                DataRead(this, e);
-            }
+                DataRead(this, ref e);
         }
 
         protected virtual void OnDataSent()
         {
             if (DataSent != null)
-            {
                 DataSent(this);
-            }
         }
 
         protected virtual void OnConnectionEstablished()
         {
             if (ConnectionEstablished != null)
-            {
                 ConnectionEstablished(this);
-            }
         }
 
         protected virtual void OnConnectionRefused()
         {
             if (ConnectionRefused != null)
-            {
                 ConnectionRefused(this);
-            }
         }
 
         #endregion
@@ -307,7 +297,14 @@ namespace Lynxy.Network
                     return;
                 }
 
-                GetStream().BeginWrite(data, 0, size, new AsyncCallback(EndASSend), null);
+                NetworkStream str = GetStream();
+                if (!str.CanWrite)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
+                str.BeginWrite(data, 0, size, new AsyncCallback(EndASSend), null);
             }
             catch (IOException)
             {
@@ -330,7 +327,14 @@ namespace Lynxy.Network
                     return;
                 }
 
-                GetStream().EndWrite(ar);
+                NetworkStream str = GetStream();
+                if (!str.CanWrite)
+                {
+                    OnDisconnected();
+                    return;
+                }
+
+                str.EndWrite(ar);
                 OnDataSent();
             }
             catch (IOException)
@@ -452,7 +456,7 @@ namespace Lynxy.Network
                 //Let's put our stuff into a read result, and pass it back in the DataRead event.
                 byte[] result = new byte[intCount];
                 Array.Copy(asReadBuffer, 0, result, 0, intCount);
-                OnDataRead(result);
+                OnDataRead(ref result);
 
                 // Continuously Reading Asynchronously.
                 if (asContReads)
