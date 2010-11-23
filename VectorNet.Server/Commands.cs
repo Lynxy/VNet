@@ -24,6 +24,7 @@ namespace VectorNet.Server
             
             //normal user
             cmdTable.Add("join", "j", CommandType.General, UserFlags.Normal, "Joins a channel", null, new Action<User, string>(cmd_Join));
+            cmdTable.Add("rejoin", "rj", CommandType.General, UserFlags.Normal, "Rejoins your current channel", null, new Action<User, string>(cmd_Rejoin));
             cmdTable.Add("stats", CommandType.General, UserFlags.Normal, "", null, new Action<User, string>(cmd_Stats));
             cmdTable.Add("users", CommandType.General, UserFlags.Normal, "", null, new Action<User, string>(cmd_Users));
             cmdTable.Add("whisper", "w", "message", "msg", "m", CommandType.General, UserFlags.Normal, "", null, new Action<User, List<User>, string>(cmd_Whisper));
@@ -184,6 +185,11 @@ namespace VectorNet.Server
             if (CheckIfParameterIsEmpty(user, ref rest, "You must specify a channel.")) return;
             Channel chan = GetChannelByName(user, (string)rest, true);
             JoinUserToChannel(user, chan);
+        }
+
+        protected void cmd_Rejoin(User user, string rest)
+        {
+            JoinUserToChannel(user, user.Channel, true); //force rejoin because they are already here, so allow rejoin
         }
 
         protected void cmd_Stats(User user, string rest)
