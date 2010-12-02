@@ -10,15 +10,18 @@ namespace VectorNet.Server
         protected class QueueSharingData
         {
             protected List<User> QueueUsers;
+            protected string _master;
             protected string _channel;
             protected bool PoolStatus;
             
             public string channel { get { return _channel; } }
+            public string master  { get { return _master; } }
 
-            public QueueSharingData(string channel)
+            public QueueSharingData(string master, string channel)
             {
                 PoolStatus = true;
                 _channel = channel;
+                _master = master;
             }
 
             /// <summary>
@@ -30,9 +33,7 @@ namespace VectorNet.Server
             {
                 User ret = QueueUsers.Find(f => f.IPAddress == IP);
 
-                if (ret != null)
-                    return true;
-                return false;
+                return (ret != null);
             }
 
             /// <summary>
@@ -44,10 +45,7 @@ namespace VectorNet.Server
             {
                 User ret = QueueUsers.Find(f => f.Username.ToLower() == name.ToLower());
 
-                if (ret != null)
-                    return true;
-
-                return false;
+                return (ret != null);
             }
 
             /// <summary>
@@ -64,6 +62,7 @@ namespace VectorNet.Server
             /// Removes a user from this queue pool
             /// </summary>
             /// <param name="user">User object to remove from the queue</param>
+            /// <param name="isIPRequest">Indicates whether the search looks for the person's IP instead</param>
             public void RemUserFromQueue(User user, bool isIPRequest)
             {
                 if (isIPRequest)

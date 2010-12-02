@@ -23,13 +23,13 @@ namespace VectorNet.Server
             /// Adds a queue, or includes a user into that queue
             /// </summary>
             /// <param name="user">The user to add to the queue</param>
-            public void AddQueue(User user)
+            public void AddOrModifyQueue(User user)
             {
                 QueueSharingData ret = QSQueues.Find(f => f.channel == user.BattleNetChannel);
 
                 if (ret == null)
                 {
-                    QueueSharingData temp = new QueueSharingData(user.BattleNetChannel);
+                    QueueSharingData temp = new QueueSharingData(user.Username, user.BattleNetChannel);
                     
                     temp.AddUserToQueue(user);
                     QSQueues.Add(temp);
@@ -39,13 +39,28 @@ namespace VectorNet.Server
             }
 
             /// <summary>
+            /// Returns a boolean indicating whether or not a specific queue exists
+            /// </summary>
+            /// <param name="user"></param>
+            public bool QueueExists(User user)
+            {
+                return (QSQueues.Find(f => f.channel == user.BattleNetChannel) != null ? true : false);
+            }
+
+            /// <summary>
             /// Removes a user from the queue pool
             /// </summary>
             /// <param name="user">The user object to remove from the queue</param>
-            public void RemQueue(User user)
+            public void RemOrModifyQueue(User user)
              {
                 QueueSharingData ret = QSQueues.Find(f => f.channel == user.BattleNetChannel);
-                if (ret != null) QSQueues.Remove(ret);
+                if (ret != null)
+                    // Let's make sure this user is the channel master
+                    // If so, remove the queue, else remove the user
+                    if (ret.master == user.Username)
+                        QSQueues.Remove(ret);
+                    else
+                        ret.RemUserFromQueue(user, false);
             }
         }
     }

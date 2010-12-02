@@ -12,10 +12,18 @@ namespace VectorNet.Server
         protected void HandleVNET_QUEUESHARING(User user, PacketReader reader)
         {
             byte getQueueId = reader.ReadByte();
+            byte getQueueStatus = reader.ReadByte();
 
-            switch (getQueueId)
+            switch ((QueueSharingID)getQueueId)
             { 
+                case QueueSharingID.QueuePoolToggle:
 
+                    if (getQueueStatus == 0x01)
+                        Queues.AddOrModifyQueue(user);
+                    else
+                        Queues.RemOrModifyQueue(user);
+
+                    break;
             }
         }
     }

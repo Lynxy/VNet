@@ -78,7 +78,7 @@ namespace VectorNet.Server
             UsersFlagsUpdate = 0x04
         }
 
-        protected enum QueueSharingIDs
+        protected enum QueueSharingID
         { 
             QueueToggle             = 0x01,
             QueueSend               = 0x02,

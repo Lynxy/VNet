@@ -21,6 +21,7 @@ namespace VectorNet.Server
         protected Timer timerFloodDecrement;
 
         protected User console;
+        protected QueueSharing Queues;
 
         public Server(string XMLConfigFile)
         {
