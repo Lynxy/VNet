@@ -233,12 +233,9 @@ VNET_QUEUESHARE (0x06) Client -> Server
 
 	For ID 0x03:
 	    STRING   New queue master
-
 	For ID 0x04:
-	    STRING   Sets Battle.Net Channel
-	For ID 0x05:
 	    BYTE     IP pool status (0x01 = on, 0x00 = off)
-	For ID 0x06:
+	For ID 0x05:
 	    STRING   User to remove from pool (can only be done by channel master)
 
 	Remarks for the specified IDs:
@@ -252,13 +249,10 @@ VNET_QUEUESHARE (0x06) Client -> Server
                               a reply of who the current channel master is.
 			      Also note that only the channel master may change
 			      the current channel master, or a VectorNet admin
-
 		0x04:
-			This just changes the client's Battle.Net channel variable.
-		0x05:
 			This opens or closes your IP pool, if you are channel master
 			so no other users may join your pool
-		0x06:
+		0x05:
 			This removes a user from your pool, so they can no longer
 			take part in queue sharing
 
