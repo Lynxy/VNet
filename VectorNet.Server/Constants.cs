@@ -83,9 +83,8 @@ namespace VectorNet.Server
             QueueToggle             = 0x01,
             QueueSend               = 0x02,
             QueueMasterChange       = 0x03,
-            QueueNewChannel         = 0x04,
-            QueuePoolToggle         = 0x05,
-            QueueRemoveUser         = 0x06
+            QueuePoolToggle         = 0x04,
+            QueueRemoveUser         = 0x05
         }
     }
 }

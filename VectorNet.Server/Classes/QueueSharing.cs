@@ -39,6 +39,30 @@ namespace VectorNet.Server
             }
 
             /// <summary>
+            /// Returns a queue by channel name
+            /// </summary>
+            /// <param name="channel">The channel whose queue you wish to search for</param>
+            public QueueSharingData GetQueueByName(string channel)
+            {
+                return QSQueues.Find(f => f.channel.ToLower() == channel.ToLower());
+            }
+
+            /// <summary>
+            /// Returns a boolean indicating if the specified user is the queue master
+            /// </summary>
+            /// <param name="username">Name of the user being checked</param>
+            /// <param name="channel">String which represents the channel for the queue</param>
+            public bool isQueueMaster(string username, string channel)
+            {
+                QueueSharingData ret = QSQueues.Find(f => f.channel.ToLower() == channel.ToLower());
+
+                if (ret != null && ret.master == username)
+                    return true;
+    
+                return false;
+            }
+
+            /// <summary>
             /// Returns a boolean indicating whether or not a specific queue exists
             /// </summary>
             /// <param name="user"></param>
@@ -51,16 +75,10 @@ namespace VectorNet.Server
             /// Removes a user from the queue pool
             /// </summary>
             /// <param name="user">The user object to remove from the queue</param>
-            public void RemOrModifyQueue(User user)
+            public void RemQueue(User user)
              {
                 QueueSharingData ret = QSQueues.Find(f => f.channel == user.BattleNetChannel);
-                if (ret != null)
-                    // Let's make sure this user is the channel master
-                    // If so, remove the queue, else remove the user
-                    if (ret.master == user.Username)
-                        QSQueues.Remove(ret);
-                    else
-                        ret.RemUserFromQueue(user, false);
+                if (ret != null) QSQueues.Remove(ret);
             }
         }
     }

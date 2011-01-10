@@ -21,7 +21,7 @@ namespace VectorNet.Server
                     if (getQueueStatus == 0x01)
                         Queues.AddOrModifyQueue(user);
                     else
-                        Queues.RemOrModifyQueue(user);
+                        Queues.RemQueue(user);
 
                     break;
             }
